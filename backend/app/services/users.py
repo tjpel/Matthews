@@ -9,6 +9,11 @@ async def get_by_email(session: AsyncSession, email: str) -> User | None:
     return await session.scalar(stmt)
 
 
+async def get_by_google_id(session: AsyncSession, google_id: str) -> User | None:
+    stmt = select(User).where(User.google_id == google_id)
+    return await session.scalar(stmt)
+
+
 def create_with_google(
     session: AsyncSession, email: str, name: str, google_id: int
 ) -> User:

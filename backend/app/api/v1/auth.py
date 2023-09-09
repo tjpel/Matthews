@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
 from app.auth.google import client, get_user_info
@@ -24,12 +24,7 @@ async def google(session: SessionDep, code: str | None = None):
     tokens = await client.get_access_token(code, REDIRECT)
     info = await get_user_info(tokens["access_token"])
 
-    user = await users.get_by_email(session, info["email"])
-    if user and info["sub"] != user.google_id:
-        #
-        # idk why this would happen, but it seems like an issue
-        raise HTTPException(status.HTTP_409_CONFLICT, "google account id conflict")
-
+    user = await users.get_by_google_id(session, info["sub"])
     if not user:
         user = users.create_with_google(
             session, name=info["name"], email=info["email"], google_id=info["sub"]
