@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from fastapi.responses import RedirectResponse
 
 from app.auth.google import client, get_user_info
 from app.core.config import config
@@ -15,12 +14,13 @@ SCOPES = [
 routes = APIRouter(prefix="/auth")
 
 
-@routes.get("/google")
-async def google(session: SessionDep, code: str | None = None):
-    if not code:
-        url = await client.get_authorization_url(REDIRECT, scope=SCOPES)
-        return RedirectResponse(url)
+@routes.get("/google_url")
+async def google_url() -> str:
+    return await client.get_authorization_url(REDIRECT, scope=SCOPES)
 
+
+@routes.get("/google")
+async def google_token(session: SessionDep, code: str):
     tokens = await client.get_access_token(code, REDIRECT)
     info = await get_user_info(tokens["access_token"])
 
