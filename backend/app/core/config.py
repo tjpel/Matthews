@@ -12,6 +12,8 @@ class Config(BaseSettings):
     server_url: str
     api_v1_route: str
 
+    cors_allowed_origins: list[str]
+
     session_secret: str
     session_max_age_days: int
 
