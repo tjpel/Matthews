@@ -1,3 +1,14 @@
+# Python
+.venv
+__pycache__
+
+# Intellij IDEA
+.idea
+*.iml
+
+# Personal API keys are present in .env
+# Refer to example.env
+.env
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
