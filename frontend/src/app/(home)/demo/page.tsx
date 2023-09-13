@@ -161,12 +161,8 @@ export default function DemoPage() {
                     className="space-y-4"
                   >
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                      Add your home address
+                      Search for an address
                     </h2>
-                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                      We have hundreds of questions from top tech companies.
-                      Choose a type to get started.
-                    </p>
                     <div>
                       {/* <RadioGroup value={selected} onChange={setSelected}>
                         <RadioGroup.Label className="sr-only">
@@ -306,7 +302,6 @@ export default function DemoPage() {
                             <Label>Address<span className="text-red-500">*</span></Label>
                             <FormControl>
                               <Input
-                                placeholder="Enter your first name"
                                 className="h-10"
                                 {...field}
                               />
