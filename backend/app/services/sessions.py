@@ -1,6 +1,6 @@
 import datetime
 
-from jose import jwt
+from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import config
@@ -18,7 +18,10 @@ def create_token(user: User) -> str:
 
 
 async def verify_token(session: AsyncSession, token: str) -> User | None:
-    claims = jwt.decode(token, config.session_secret)
+    try:
+        claims = jwt.decode(token, config.session_secret)
+    except JWTError:
+        return None
     if "user" not in claims or "cycle" not in claims:
         return
 
