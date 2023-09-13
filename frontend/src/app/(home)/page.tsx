@@ -58,8 +58,8 @@ export default function Home() {
             }}
             className="relative md:ml-[-10px] md:mb-[37px] font-extrabold text-[16vw] md:text-[130px] font-inter text-[#1E2B3A] leading-[0.9] tracking-[-2px] z-[100]"
           >
-            Elevate your <br />
-            tech <span className="text-[#407BBF]">interviews</span>
+            Find your <br />
+            home <span className="text-[#407BBF]">valuation</span>
             <span className="font-inter text-[#407BBF]">.</span>
           </motion.h1>
           <motion.div
@@ -74,20 +74,20 @@ export default function Home() {
           >
             <div className="w-1/2">
               <h2 className="flex items-center font-semibold text-[1em] text-[#1a2b3b]">
-                Platform
+                Valuator
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
-                Full access to our platform, including all questions and
-                solutions.
+                Get a free estimate on your home value,
+                using AI to give powerful insights.
               </p>
             </div>
             <div className="w-1/2">
               <h2 className="flex items-center font-semibold text-[1em] text-[#1a2b3b]">
-                Community
+                Connect
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
-                Join a community of like-minded individuals, and learn from each
-                other.
+                Connect with us to gain invaluable insights 
+                from industry leaders and experts.
               </p>
             </div>
           </motion.div>
@@ -103,7 +103,7 @@ export default function Home() {
               }}
             >
               <Link
-                href="https://github.com/Tameyer41/liftoff"
+                href="mailto:example@email.com"
                 target="_blank"
                 className="group rounded-full pl-[8px] min-w-[180px] pr-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                 style={{
@@ -133,7 +133,7 @@ export default function Home() {
                     ></path>
                   </svg>
                 </span>
-                Star on Github
+                Contact Us
               </Link>
             </motion.div>
             <motion.div
@@ -208,7 +208,7 @@ export default function Home() {
         ></motion.canvas>
         <div className="h-[60px] bg-[#1D2B3A] fixed bottom-0 z-20 w-full flex flex-row items-center justify-evenly">
           <p className="text-white/80 text-base md:text-lg font-semibold md:leading-[60px] whitespace-nowrap flex flex-row">
-            Interviews from
+            Our Partners
           </p>
           <svg
             className="w-[20px] opacity-80"
