@@ -1,5 +1,3 @@
-import './globals.css';
-
 import { Analytics } from '@vercel/analytics/react';
 import Nav from './nav';
 import Toast from './toast';
@@ -11,21 +9,21 @@ export const metadata = {
     'A user admin dashboard configured with Next.js, PlanetScale, NextAuth, Tailwind CSS, TypeScript, ESLint, and Prettier.'
 };
 
-export default async function RootLayout({
+export default async function DashboardLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full bg-gray-50">
-      <body className="h-full">
+    <html lang="en">
+      <main className="h-full bg-gray-50">
         <Suspense>
           <Nav />
         </Suspense>
         {children}
         <Analytics />
         <Toast />
-      </body>
+      </main>
     </html>
   );
 }
