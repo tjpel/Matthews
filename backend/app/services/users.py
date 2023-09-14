@@ -6,13 +6,7 @@ from app.auth import password
 from app.model import User
 
 
-class Signup(BaseModel):
-    name: str
-    email: str
-    password: str
-
-
-class Login(BaseModel):
+class Credentials(BaseModel):
     email: str
     password: str
 
@@ -27,28 +21,28 @@ async def get_by_google_id(session: AsyncSession, google_id: str) -> User | None
     return await session.scalar(stmt)
 
 
-async def verify_login(session: AsyncSession, login: Login) -> User | None:
-    user = await get_by_email(session, login.email)
+async def verify_login(session: AsyncSession, cred: Credentials) -> User | None:
+    user = await get_by_email(session, cred.email)
     if (
         not user
         or not user.password_hash
-        or not await password.verify(user.password_hash, login.password)
+        or not await password.verify(user.password_hash, cred.password)
     ):
         return
 
     if password.needs_rehash(user.password_hash):
-        user.password_hash = password.hash(login.password)
+        user.password_hash = password.hash(cred.password)
         await session.commit()
 
     return user
 
 
-async def create_with_password(session: AsyncSession, signup: Signup) -> User | None:
-    if await get_by_email(session, signup.email):
-        return
+async def create_with_password(session: AsyncSession, cred: Credentials) -> User | None:
+    if await get_by_email(session, cred.email):
+        return None
 
-    hash = await password.hash(signup.password)
-    user = User(email=signup.email, name=signup.name, password_hash=hash)
+    hash = password.hash(cred.password)
+    user = User(name=cred.email, email=cred.email, password_hash=hash)
 
     session.add(user)
     await session.commit()
