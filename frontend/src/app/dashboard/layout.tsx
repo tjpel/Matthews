@@ -1,3 +1,5 @@
+import '../globals.css'
+
 import { Analytics } from '@vercel/analytics/react';
 import Nav from './nav';
 import Toast from './toast';
