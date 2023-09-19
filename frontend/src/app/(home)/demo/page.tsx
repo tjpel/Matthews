@@ -209,6 +209,8 @@ export default function DemoPage() {
 
   const handleAutocomplete = async (incompleteAddress: string) => {
     try {
+      console.log(incompleteAddress)
+
       const result = await Radar.autocomplete({
         query: incompleteAddress,
         near: { latitude: 39.8283, longitude: -98.5795 },
@@ -308,12 +310,12 @@ export default function DemoPage() {
                                       ...field.value,
                                       formattedAddress: e.target.value
                                     });
-                                    if (field.value.formattedAddress) {
-                                      handleAutocomplete(field.value.formattedAddress);
-                                      setAddressSuggestionsOpen(true);
-                                    } else {
-                                      setSuggestions([]);
-                                    }
+                                    // if (field.value.formattedAddress) {
+                                    //   handleAutocomplete(field.value.formattedAddress);
+                                    //   setAddressSuggestionsOpen(true);
+                                    // } else {
+                                    //   setSuggestions([]);
+                                    // }
                                   }}
                                   onKeyUp={(e) => {
                                     if (field.value.formattedAddress) {
