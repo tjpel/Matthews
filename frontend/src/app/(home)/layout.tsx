@@ -1,4 +1,6 @@
 import "../globals.css";
+import 'radar-sdk-js/dist/radar.css';
+
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
