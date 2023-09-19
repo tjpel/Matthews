@@ -1,11 +1,12 @@
-import sqlite3
 import json
+import sqlite3
+
 from redfin import Redfin
 
 
 def autocomplete_address(address_input, x=5):
     # Connect to SQLite database
-    conn = sqlite3.connect("../../addressdb_autocomplete.sqlite")
+    conn = sqlite3.connect("../addressdb_autocomplete.sqlite")
     cursor = conn.cursor()
 
     # Split the input into number and street
@@ -45,11 +46,11 @@ def autocomplete_address(address_input, x=5):
 
 def filter_california_addresses():
     # Connect to the existing SQLite database
-    conn_source = sqlite3.connect("../../addressdb_autocomplete.sqlite")
+    conn_source = sqlite3.connect("../addressdb_autocomplete.sqlite")
     cursor_source = conn_source.cursor()
 
     # Create a new SQLite database for California addresses
-    conn_dest = sqlite3.connect("../../addressdb_california.sqlite")
+    conn_dest = sqlite3.connect("../addressdb_california.sqlite")
     cursor_dest = conn_dest.cursor()
 
     # Create the addresses table in the new database
@@ -88,7 +89,7 @@ def filter_california_addresses():
 
 
 def fetch_addresses_from_db():
-    conn = sqlite3.connect("../../addressdb_california.sqlite")
+    conn = sqlite3.connect("../addressdb_california.sqlite")
     cursor = conn.cursor()
     cursor.execute("SELECT number, street, city, state, zipcode FROM addresses;")
     addresses = cursor.fetchall()
