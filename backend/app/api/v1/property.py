@@ -5,14 +5,10 @@ TODO:
 - restrict account creation to pre-authorized users
 """
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
 
-from app.auth import UserAuth
-from app.auth.google import client, get_user_info
 from app.core.config import config
-from app.db.session import AsyncSessionDep
 from app.services import properties
-
 
 REDIRECT = f"{config.server_url}{config.api_v1_route}/property"
 SCOPES = [
@@ -22,8 +18,11 @@ SCOPES = [
 
 routes = APIRouter(prefix="/property")
 
+
 @routes.get("/predict")
-async def predict_property_value(property: properties.Property, user_inputs: properties.User_inputs) -> str:
+async def predict_property_value(
+    property: properties.Property, user_inputs: properties.UserInputs
+) -> str:
     # Gather data from property using APIs
     # Store data in database
 
@@ -32,6 +31,7 @@ async def predict_property_value(property: properties.Property, user_inputs: pro
     # Return predicted value
 
     return {"message": "Hello World"}
+
 
 # Password Credentials
 @routes.post("/contact")

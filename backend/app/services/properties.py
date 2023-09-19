@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+
 
 class Property(BaseModel):
     state: str
@@ -8,7 +7,8 @@ class Property(BaseModel):
     zipcode: int
     address: str
 
-class User_inputs(BaseModel):
+
+class UserInputs(BaseModel):
     gross_revenue: float  # Gross revenue from the property
     square_footage: float  # Total square footage of the property
     bedrooms: int  # Number of bedrooms
