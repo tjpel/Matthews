@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  features: {
-    serverActions: true,
-  },
   experimental: {
     appDir: true,
   },
@@ -15,11 +12,11 @@ const nextConfig = {
             ? 'http://127.0.0.1:8000/api/:path*'
             : '/api/',
       },
-    ]
+    ];
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
-  }
+    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh'],
+  },
 };
 
 module.exports = nextConfig;
