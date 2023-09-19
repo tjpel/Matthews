@@ -5,3 +5,6 @@ __pycache__
 # Personal API keys are present in .env
 # Refer to example.env
 .env
+
+# Exclude all sqlite files
+*.sqlite
