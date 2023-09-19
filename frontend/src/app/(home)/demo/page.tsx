@@ -288,6 +288,9 @@ export default function DemoPage() {
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
                       Find out what your home is really worth
                     </h2>
+                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                      Our AI will do the rest. Search for an address and profit
+                    </p>
                     <div>
                       <FormField
                         control={addressForm.control}
