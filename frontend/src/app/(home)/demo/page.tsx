@@ -202,14 +202,9 @@ export default function DemoPage() {
 
     setMap(map);
 
-    // const marker = Radar.ui.marker({ text: 'Radar HQ' })
-    //   .setLngLat([-73.9910078, 40.7342465])
-    //   .addTo(map);
-
     // Cleanup function to run when the component unmounts
     return () => {
       map.remove();  // Remove the map to prevent memory leaks
-      // marker.remove()
     };
   }, []);
 
@@ -217,7 +212,8 @@ export default function DemoPage() {
     try {
       const result = await Radar.autocomplete({
         query: incompleteAddress,
-        limit: 5
+        layers: ["address"],
+        limit: 5,
       });
 
       const { addresses } = result;
