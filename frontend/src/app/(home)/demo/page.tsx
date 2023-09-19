@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 
 const questions = [
   {
@@ -212,6 +212,7 @@ export default function DemoPage() {
     try {
       const result = await Radar.autocomplete({
         query: incompleteAddress,
+        near: { latitude: 39.8283, longitude: -98.5795 },
         layers: ["address"],
         limit: 5,
       });
@@ -320,7 +321,7 @@ export default function DemoPage() {
                         render={({ field }) => (
                           <FormItem className="space-y-1 w-full">
                             <FormControl>
-                              <div>
+                              <div className="relative">
                                 <Input
                                   className="h-14"
                                   placeholder='Enter your address'
@@ -347,22 +348,25 @@ export default function DemoPage() {
                                   }}
                                 />
                                 {addressSuggestionsOpen && (
-                                  <Command className="w-[600px] p-0">
-                                    <CommandEmpty>No address found.</CommandEmpty>
-                                    <CommandGroup>
-                                      {suggestions.map((suggestion) => (
-                                        <CommandItem
-                                          key={suggestion.formattedAddress}
-                                          onSelect={() => {
-                                            field.onChange(suggestion);
-                                            setAddressSuggestionsOpen(false);
-                                          }}
-                                        >
-                                          {suggestion.formattedAddress}
-                                        </CommandItem>
-                                      ))}
-                                    </CommandGroup>
-                                  </Command>
+                                  <div style={{ position: 'absolute', zIndex: 1, backgroundColor: '#FFFFFF' }} className="z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
+                                    <Command className="w-full p-0">
+                                      <CommandEmpty>No address found.</CommandEmpty>
+                                      <CommandGroup>
+                                        {suggestions.map((suggestion) => (
+                                          <CommandItem
+                                            className="h-10 rounded-md"
+                                            key={suggestion.formattedAddress}
+                                            onSelect={() => {
+                                              field.onChange(suggestion);
+                                              setAddressSuggestionsOpen(false);
+                                            }}
+                                          >
+                                            {suggestion.formattedAddress}
+                                          </CommandItem>
+                                        ))}
+                                      </CommandGroup>
+                                    </Command>
+                                  </div>
                                 )}
                               </div>
                             </FormControl>
