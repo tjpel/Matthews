@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.auth import password
+from app.auth import passwords
 from app.model import User
 
 
@@ -26,12 +26,12 @@ async def verify_login(session: AsyncSession, cred: Credentials) -> User | None:
     if (
         not user
         or not user.password_hash
-        or not await password.verify(user.password_hash, cred.password)
+        or not await passwords.verify(user.password_hash, cred.password)
     ):
         return
 
-    if password.needs_rehash(user.password_hash):
-        user.password_hash = password.hash(cred.password)
+    if passwords.needs_rehash(user.password_hash):
+        user.password_hash = passwords.hash(cred.password)
         await session.commit()
 
     return user
@@ -41,7 +41,7 @@ async def create_with_password(session: AsyncSession, cred: Credentials) -> User
     if await get_by_email(session, cred.email):
         return None
 
-    hash = password.hash(cred.password)
+    hash = passwords.hash(cred.password)
     user = User(name=cred.email, email=cred.email, password_hash=hash)
 
     session.add(user)
