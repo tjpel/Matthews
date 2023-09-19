@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:types": "eslint \"src/**/*.{ts,tsx}\" --quiet --fix"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -26,7 +27,6 @@
     "autoprefixer": "^10.4.15",
     "class-variance-authority": "^0.7.0",
     "cmdk": "^0.2.0",
-    "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.4",
     "js-cookie": "^3.0.5",
@@ -52,5 +52,10 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.49.0"
   }
 }
