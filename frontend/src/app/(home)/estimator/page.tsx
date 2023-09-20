@@ -812,7 +812,7 @@ export default function DemoPage() {
                             boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
                           }}
                         >
-                          Previous step
+                          Back to predictions
                         </button>
                       </div>
                       <div>
