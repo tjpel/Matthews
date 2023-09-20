@@ -6,6 +6,12 @@ from app.auth import passwords
 from app.model import User
 
 
+class UserData(BaseModel):
+    id: int
+    email: str
+    name: str
+
+
 class Credentials(BaseModel):
     email: str
     password: str
