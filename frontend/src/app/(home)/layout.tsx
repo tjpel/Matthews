@@ -4,7 +4,7 @@ import 'radar-sdk-js/dist/radar.css';
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Liftoff - AI-Powered Property Valuator",
+  title: "Taylor Avakain - AI-Powered Property Valuator",
   // openGraph: {
   //   title: "Liftoff - AI-Powered Mock Interviews",
   //   description:
