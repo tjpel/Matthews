@@ -52,7 +52,7 @@ export default function Home() {
             }}
             className="relative md:ml-[-10px] md:mb-[37px] font-extrabold text-[16vw] md:text-[130px] font-inter text-[#1E2B3A] leading-[0.9] tracking-[-2px] z-[100]"
           >
-            Find your <br />
+            Find Your <br />
             Multifamily <span className="text-[#407BBF]">Valuation</span>
             <span className="font-inter text-[#407BBF]">.</span>
           </motion.h1>
