@@ -2,6 +2,11 @@ import "../globals.css";
 import 'radar-sdk-js/dist/radar.css';
 
 import { Metadata } from "next";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import Providers from "@/contexts/providers";
 
 export const metadata: Metadata = {
   title: "Taylor Avakain - AI-Powered Property Valuator",
@@ -32,10 +37,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className="scroll-smooth antialiased [font-feature-settings:'ss01']">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
