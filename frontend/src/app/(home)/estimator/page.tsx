@@ -2,6 +2,8 @@
 
 import Radar from 'radar-sdk-js';
 
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import { AnimatePresence, motion } from "framer-motion";
 import { RadioGroup } from "@headlessui/react";
 import Link from "next/link";
@@ -259,9 +261,9 @@ export default function DemoPage() {
       console.log(data.initial_info)
       console.log(data.mls_data)
       console.log(data.avm_details)
-      propertyForm.setValue("grossIncome", data.grossIncome ?? 0);
-      propertyForm.setValue("bedrooms", data.bedrooms ?? 0);
-      propertyForm.setValue("bathrooms", data.bathrooms ?? 0);
+      propertyForm.setValue("grossIncome", data.mls_data.grossIncome ?? 0);
+      propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
+      propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
       console.log(propertyForm.getValues())
     },
     retry: false,
@@ -473,7 +475,57 @@ export default function DemoPage() {
                           </FormItem>
                         )}
                       />
-                      <RadioGroup value={selected} onChange={setSelected}>
+                      <FormField
+                        control={propertyForm.control}
+                        name="bathrooms"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1 w-full">
+                            <Label># Bathrooms</Label>
+                            <FormControl>
+                              <div className="py-1">
+                                <Slider
+                                  aria-label="Temperature"
+                                  value={field.value}
+                                  onChange={(e) => field.onChange(e)}
+                                  // getAriaValueText={valuetext}
+                                  valueLabelDisplay="auto"
+                                  step={1}
+                                  marks
+                                  min={1}
+                                  max={10}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={propertyForm.control}
+                        name="bedrooms"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1 w-full">
+                            <Label># Bedrooms</Label>
+                            <FormControl>
+                              <div className="py-1">
+                                <Slider
+                                  aria-label="Temperature"
+                                  value={field.value}
+                                  onChange={(e) => field.onChange(e)}
+                                  // getAriaValueText={valuetext}
+                                  valueLabelDisplay="auto"
+                                  step={1}
+                                  marks
+                                  min={1}
+                                  max={10}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {/* <RadioGroup value={selected} onChange={setSelected}>
                         <RadioGroup.Label className="sr-only">
                           # Bedrooms
                         </RadioGroup.Label>
@@ -570,9 +622,9 @@ export default function DemoPage() {
                                         </svg>
                                       )}
                                     </span>
-                                    {/* <span className="font-medium text-gray-900">
+                                    <span className="font-medium text-gray-900">
                                       {question.difficulty}
-                                    </span> */}
+                                    </span>
                                   </RadioGroup.Description>
                                   <span
                                     className={classNames(
@@ -589,7 +641,7 @@ export default function DemoPage() {
                             </RadioGroup.Option>
                           ))}
                         </div>
-                      </RadioGroup>
+                      </RadioGroup> */}
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>
