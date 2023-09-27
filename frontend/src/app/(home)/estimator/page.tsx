@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const questions = [
   {
@@ -144,7 +146,6 @@ const propertySchema = z.object({
   }),
 });
 
-
 const contactSchema = z.object({
   firstName: z.string().min(1, { message: "Required" }),
   lastName: z.string().min(1, { message: "Required" }),
@@ -156,35 +157,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-type RadarGeocodeLayer = 'place' | 'address' | 'intersection' | 'street' | 'neighborhood' | 'postalCode' | 'locality' | 'county' | 'state' | 'country' | 'coarse' | 'fine';
-interface RadarAddress {
-  addressLabel?: string;
-  borough?: string;
-  city?: string;
-  confidence?: 'exact' | 'interpolated' | 'fallback';
-  country?: string;
-  countryCode?: string;
-  countryFlag?: string;
-  county?: string;
-  distance?: number;
-  dma?: string;
-  dmaCode?: string;
-  formattedAddress?: string;
-  geometry: GeoJSON.Point;
-  latitude: number;
-  longitude: number;
-  layer?: RadarGeocodeLayer;
-  neighborhood?: string;
-  number?: string;
-  placeLabel?: string;
-  postalCode?: string;
-  state?: string;
-  stateCode?: string;
-  street?: string;
-}
-interface RadarAutocompleteAddress extends RadarAddress {
-  unit?: string;
-}
+const getAddressData = async (address: string): Promise<any> => {
+  const encodedAddress = encodeURIComponent(address);
+  const response = await axios.get(`http://127.0.0.1:8000/api/v1/property/get-property-data?address=${encodedAddress}`);
+  console.log(response.data)
+  return response.data;
+};
 
 export default function DemoPage() {
   const [selected, setSelected] = useState<{ id: number, name: string, description: string, difficulty: number }>(questions[0]);
@@ -224,9 +202,10 @@ export default function DemoPage() {
 
       const result = await Radar.autocomplete({
         query: incompleteAddress,
-        near: { latitude: 39.8283, longitude: -98.5795 },
+        // near: { latitude: 37.8272, longitude: -122.2913 },
         layers: ["address"],
         limit: 5,
+        countryCode: "US",
       });
 
       const { addresses } = result;
@@ -265,6 +244,22 @@ export default function DemoPage() {
   });
 
   const watchedAddressForm = addressForm.watch();
+  const watchedPropertyForm = propertyForm.watch();
+
+  const {
+    isLoading,
+    error,
+  } = useQuery(['addressData', { "latitude": watchedAddressForm.address.latitude, "longitude": watchedAddressForm.address.longitude }], async () => {
+    console.log(watchedAddressForm.address.formattedAddress)
+    return getAddressData(watchedAddressForm.address.formattedAddress)
+  }, {
+    enabled: !!watchedAddressForm.address.latitude && !!watchedAddressForm.address.longitude,
+    onSuccess: data => {
+      console.log("query success")
+      console.log(data)
+    },
+  });
+
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
 
@@ -282,6 +277,8 @@ export default function DemoPage() {
         center: newCoords,
         zoom: 15,
       });
+
+      console.log("done")
     }
   }, [addressForm, watchedAddressForm, map]);
 
