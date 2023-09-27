@@ -81,5 +81,5 @@ def predict_property_value(
 
 # Password Credentials
 @routes.post("/contact")
-async def add_contact_info(property: properties.Property) -> dict[str, any]:
+async def add_contact_info(property: properties.Property):
     return {"property": property}
