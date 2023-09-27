@@ -140,12 +140,27 @@ const addressSchema = z.object({
 
 const propertySchema = z.object({
   grossIncome: z.number().refine(value => value > 0, { message: "Required" }),
-  bedrooms: z.number().refine(value => !isNaN(value), {
-    message: "Required"
-  }),
-  bathrooms: z.number().refine(value => !isNaN(value), {
-    message: "Required"
-  }),
+  bedrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
+  bathrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
+  size: z.number().refine(value => value > 0, { message: "Required" }),
+  buildingSF: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfUnits: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfFloors: z.number().refine(value => value > 0, { message: "Required" }),
+  pricePerACLand: z.number().refine(value => value > 0, { message: "Required" }),
+  pricePerSFLand: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf1BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  numberOf2BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  floorAreaRatio: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfParkingSpaces: z.number().refine(value => value >= 0, { message: "Required" }),
+  numberOfStudiosUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  typicalFloorSF: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf3BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  landAreaAC: z.number().refine(value => value > 0, { message: "Required" }),
+  landAreaSF: z.number().refine(value => value > 0, { message: "Required" }),
+  starRating: z.number().refine(value => value >= 0 && value <= 5, { message: "Rating must be between 0 and 5" }),
+  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
+  yearBuilt: z.number().refine(value => value > 0, { message: "Required" }),
+  age: z.number().refine(value => value >= 0, { message: "Required" }),
 });
 
 const contactSchema = z.object({
@@ -225,6 +240,25 @@ export default function DemoPage() {
       grossIncome: 0,
       bedrooms: 0,
       bathrooms: 0,
+      size: 0,
+      buildingSF: 0,
+      numberOfUnits: 0,
+      numberOfFloors: 0,
+      pricePerACLand: 0,
+      pricePerSFLand: 0,
+      numberOf1BedroomsUnits: 0,
+      numberOf2BedroomsUnits: 0,
+      floorAreaRatio: 0,
+      numberOfParkingSpaces: 0,
+      numberOfStudiosUnits: 0,
+      typicalFloorSF: 0,
+      numberOf3BedroomsUnits: 0,
+      landAreaAC: 0,
+      landAreaSF: 0,
+      starRating: 0,
+      netIncome: 0,
+      yearBuilt: 0,
+      age: 0,
     },
   });
 
