@@ -520,7 +520,7 @@ export default function DemoPage() {
                                 <Slider
                                   aria-label="Temperature"
                                   value={field.value}
-                                  onChange={(e: number) => field.onChange(e)}
+                                  onChange={(e, value) => field.onChange(value)}
                                   // getAriaValueText={valuetext}
                                   valueLabelDisplay="auto"
                                   step={1}
@@ -545,7 +545,7 @@ export default function DemoPage() {
                                 <Slider
                                   aria-label="Temperature"
                                   value={field.value}
-                                  onChange={(e: number) => field.onChange(e)}
+                                  onChange={(e, value) => field.onChange(value)}
                                   // getAriaValueText={valuetext}
                                   valueLabelDisplay="auto"
                                   step={1}
