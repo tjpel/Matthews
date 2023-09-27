@@ -157,13 +157,6 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const getAddressData = async (address: string): Promise<any> => {
-  const encodedAddress = encodeURIComponent(address);
-  const response = await axios.get(`http://127.0.0.1:8000/api/v1/property/get-property-data?address=${encodedAddress}`);
-  console.log(response.data)
-  return response.data;
-};
-
 export default function DemoPage() {
   const [selected, setSelected] = useState<{ id: number, name: string, description: string, difficulty: number }>(questions[0]);
   const [selectedBathroom, setSelectedBathroom] = useState(Bathrooms[0]);  // No type specified as per your request
@@ -246,18 +239,32 @@ export default function DemoPage() {
   const watchedAddressForm = addressForm.watch();
   const watchedPropertyForm = propertyForm.watch();
 
+  const getAddressData = async (address: string): Promise<any> => {
+    const encodedAddress = encodeURIComponent(address);
+    const response = await axios.get(`/api/v1/property/get-property-data?address=${encodedAddress}`);
+    return response.data;
+  };
+
   const {
     isLoading,
     error,
-  } = useQuery(['addressData', { "latitude": watchedAddressForm.address.latitude, "longitude": watchedAddressForm.address.longitude }], async () => {
+  } = useQuery(['addressData', { "latitude": watchedAddressForm.address?.latitude, "longitude": watchedAddressForm.address?.longitude }], async () => {
     console.log(watchedAddressForm.address.formattedAddress)
     return getAddressData(watchedAddressForm.address.formattedAddress)
   }, {
     enabled: !!watchedAddressForm.address.latitude && !!watchedAddressForm.address.longitude,
     onSuccess: data => {
       console.log("query success")
-      console.log(data)
+      console.log(data.response)
+      console.log(data.initial_info)
+      console.log(data.mls_data)
+      console.log(data.avm_details)
+      propertyForm.setValue("grossIncome", data.grossIncome ?? 0);
+      propertyForm.setValue("bedrooms", data.bedrooms ?? 0);
+      propertyForm.setValue("bathrooms", data.bathrooms ?? 0);
+      console.log(propertyForm.getValues())
     },
+    retry: false,
   });
 
   useEffect(() => {
@@ -655,7 +662,7 @@ export default function DemoPage() {
                       Here is an AI predicted home estimate based off your property information.
                     </p>
                     <div className="space-y-4">
-                      
+
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>
