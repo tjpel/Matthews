@@ -3,7 +3,7 @@ from redfin import Redfin
 from fastapi import APIRouter, HTTPException
 
 from app.services import properties
-from app.ai import load_model
+import app.ai as ai
 
 routes = APIRouter(prefix="/property")
 
@@ -63,7 +63,7 @@ def predict_property_value(
     # Store data in database
 
     # Call ML model
-    model = load_model("../../ai/gradient_boosting_model.pkl")
+    model = ai.gradient_boosting
 
     # Return predicted value
     prediction = model.predict(user_inputs)
