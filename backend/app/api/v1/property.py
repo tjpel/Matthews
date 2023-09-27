@@ -1,8 +1,11 @@
+from imp import load_module
 from redfin import Redfin
 
 from fastapi import APIRouter, HTTPException
 
 from app.services import properties
+
+import json
 
 routes = APIRouter(prefix="/property")
 
@@ -52,31 +55,22 @@ def get_property_data(address: str):
     }
 
 
-@routes.post("/predict")
+@routes.get("/predict")
 def predict_property_value(
     address: str, property: properties.Property, user_inputs: properties.UserInputs
 ):
-    # Gather data from property using APIs
-    client = Redfin()
-
-    response = client.search(address)
-    url = response["payload"]["exactMatch"]["url"]
-    initial_info = client.initial_info(url)
-
-    property_id = initial_info["payload"]["propertyId"]
-
-    mls_data = client.below_the_fold(property_id)
-
-    listing_id = initial_info["payload"]["listingId"]
-    avm_details = client.avm_details(property_id, listing_id)
+    # Get user inputs from request body
+    print(user_inputs)
 
     # Store data in database
 
     # Call ML model
+    model = load_module("../../ai/gradient_boosting_model.pkl")
 
     # Return predicted value
+    prediction = model.predict(user_inputs)
 
-    return {"mls_data": mls_data["payload"], "avm_details": avm_details["payload"]}
+    return {"prediction": prediction}
 
 
 # Password Credentials
