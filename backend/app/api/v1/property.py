@@ -7,7 +7,7 @@ from app.services import properties
 routes = APIRouter(prefix="/property")
 
 
-@routes.get("/get-property-data")
+@routes.post("/get-property-data")
 def get_property_data(address: str):
     # Initialize Redfin API client
     client = Redfin()
@@ -52,7 +52,7 @@ def get_property_data(address: str):
     }
 
 
-@routes.get("/predict")
+@routes.post("/predict")
 def predict_property_value(
     address: str, property: properties.Property, user_inputs: properties.UserInputs
 ):
