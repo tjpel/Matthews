@@ -7,7 +7,7 @@ from app.services import properties
 routes = APIRouter(prefix="/property")
 
 
-@routes.post("/get-property-data")
+@routes.get("/get-property-data")
 def get_property_data(address: str):
     # Initialize Redfin API client
     client = Redfin()
