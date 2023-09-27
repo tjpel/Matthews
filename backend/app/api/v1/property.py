@@ -1,11 +1,9 @@
-from imp import load_module
 from redfin import Redfin
 
 from fastapi import APIRouter, HTTPException
 
 from app.services import properties
-
-import json
+from app.ai import load_model
 
 routes = APIRouter(prefix="/property")
 
@@ -30,16 +28,16 @@ def get_property_data(address: str):
     initial_info = client.initial_info(url)
 
     # Check if 'propertyId' exists in the payload
-    property_id = initial_info.get("payload", {}).get("propertyId")
+    property_id = initial_info["payload"]["propertyId"]
     if not property_id:
         raise HTTPException(status_code=404, detail="Property ID not found")
 
     # Fetch MLS data
     mls_data = client.below_the_fold(property_id)
-    mls_payload = mls_data.get("payload", {})
+    mls_payload = mls_data["payload"]
 
     # Check if 'listingId' exists in the payload
-    listing_id = initial_info.get("payload", {}).get("listingId")
+    listing_id = initial_info["payload"]["listingId"]
     if listing_id:
         avm_details = client.avm_details(property_id, listing_id)
         avm_payload = avm_details.get("payload", {})
@@ -65,7 +63,7 @@ def predict_property_value(
     # Store data in database
 
     # Call ML model
-    model = load_module("../../ai/gradient_boosting_model.pkl")
+    model = load_model("../../ai/gradient_boosting_model.pkl")
 
     # Return predicted value
     prediction = model.predict(user_inputs)
