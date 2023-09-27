@@ -1,20 +1,7 @@
-"""
-TODO:
-
-- allow for the registration of multiple methods (should first request auth with an existing method)
-- restrict account creation to pre-authorized users
-"""
-
-import sys
-import json
-import os
-from pathlib import Path
-
 from redfin import Redfin
 
 from fastapi import APIRouter, HTTPException
 
-from app.core.config import config
 from app.services import properties
 
 routes = APIRouter(prefix="/property")
