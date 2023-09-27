@@ -17,55 +17,58 @@ from fastapi import APIRouter, HTTPException
 from app.core.config import config
 from app.services import properties
 
-REDIRECT = f"{config.server_url}{config.api_v1_route}/property"
-
 routes = APIRouter(prefix="/property")
 
+
 @routes.get("/get-property-data")
-async def get_property_data(
-    address: str
-) -> str:
-  # Initialize Redfin API client
-  client = Redfin()
+def get_property_data(address: str):
+    # Initialize Redfin API client
+    client = Redfin()
 
-  print(address)
+    print(address)
 
-  # Search for the property by address
-  response = client.search(address)
+    # Search for the property by address
+    response = client.search(address)
 
-  # Check if 'exactMatch' exists in the payload
-  if 'payload' in response and 'exactMatch' in response['payload']:
-    url = response["payload"]["exactMatch"]["url"]
-  else:
-    raise HTTPException(status_code=404, detail="Exact match not found")
+    # Check if 'exactMatch' exists in the payload
+    if "payload" in response and "exactMatch" in response["payload"]:
+        url = response["payload"]["exactMatch"]["url"]
+    else:
+        raise HTTPException(status_code=404, detail="Exact match not found")
 
-  # Fetch initial property info
-  initial_info = client.initial_info(url)
+    # Fetch initial property info
+    initial_info = client.initial_info(url)
 
-  # Check if 'propertyId' exists in the payload
-  property_id = initial_info.get('payload', {}).get('propertyId')
-  if not property_id:
-    raise HTTPException(status_code=404, detail="Property ID not found")
+    # Check if 'propertyId' exists in the payload
+    property_id = initial_info.get("payload", {}).get("propertyId")
+    if not property_id:
+        raise HTTPException(status_code=404, detail="Property ID not found")
 
-  # Fetch MLS data
-  mls_data = client.below_the_fold(property_id)
-  mls_payload = mls_data.get('payload', {})
+    # Fetch MLS data
+    mls_data = client.below_the_fold(property_id)
+    mls_payload = mls_data.get("payload", {})
 
-  # Check if 'listingId' exists in the payload
-  listing_id = initial_info.get('payload', {}).get('listingId')
-  if listing_id:
-    avm_details = client.avm_details(property_id, listing_id)
-    avm_payload = avm_details.get('payload', {})
-  else:
-    print("listingId not found")
-    avm_payload = {}
+    # Check if 'listingId' exists in the payload
+    listing_id = initial_info.get("payload", {}).get("listingId")
+    if listing_id:
+        avm_details = client.avm_details(property_id, listing_id)
+        avm_payload = avm_details.get("payload", {})
+    else:
+        print("listingId not found")
+        avm_payload = {}
 
-  return {"response": response, "initial_info": initial_info, "mls_data": mls_payload, "avm_details": avm_payload}
+    return {
+        "response": response,
+        "initial_info": initial_info,
+        "mls_data": mls_payload,
+        "avm_details": avm_payload,
+    }
+
 
 @routes.get("/predict")
-async def predict_property_value(
+def predict_property_value(
     address: str, property: properties.Property, user_inputs: properties.UserInputs
-) -> str:
+):
     # Gather data from property using APIs
     client = Redfin()
 
@@ -91,5 +94,5 @@ async def predict_property_value(
 
 # Password Credentials
 @routes.post("/contact")
-async def add_contact_info(property: properties.Property) -> str:
+async def add_contact_info(property: properties.Property) -> dict[str, any]:
     return {"property": property}
