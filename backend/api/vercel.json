@@ -1,0 +1,11 @@
+{
+  "builds": [
+    {
+      "src": "app/main.py",
+      "use": "@vercel/python",
+      "config": {
+        "cmd": "poetry install && uvicorn app.main:app --host 0.0.0.0 --port 8080"
+      }
+    }
+  ]
+}
