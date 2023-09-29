@@ -28,7 +28,7 @@ def get_property_data(address: str):
     initial_info = client.initial_info(url)
 
     # Check if 'propertyId' exists in the payload
-    property_id = initial_info["payload"]["propertyId"]
+    property_id = initial_info["payload"].get("propertyId")
     if not property_id:
         raise HTTPException(status_code=404, detail="Property ID not found")
 
@@ -37,7 +37,7 @@ def get_property_data(address: str):
     mls_payload = mls_data["payload"]
 
     # Check if 'listingId' exists in the payload
-    listing_id = initial_info["payload"]["listingId"]
+    listing_id = initial_info["payload"].get("listingId")
     if listing_id:
         avm_details = client.avm_details(property_id, listing_id)
         avm_payload = avm_details.get("payload", {})
