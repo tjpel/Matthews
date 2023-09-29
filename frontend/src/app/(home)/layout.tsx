@@ -2,11 +2,10 @@ import "../globals.css";
 import 'radar-sdk-js/dist/radar.css';
 
 import { Metadata } from "next";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
 import Providers from "@/contexts/providers";
+import GoogleAnalytics from '@/components/google-analytics';
+
+const GA_ID = process.env["NEXT_PUBLIC_GA_ID"]!;
 
 export const metadata: Metadata = {
   title: "Taylor Avakain - AI-Powered Property Valuator",
@@ -44,6 +43,8 @@ export default async function RootLayout({
         <Providers>
           {children}
         </Providers>
+
+        <GoogleAnalytics ga_id={GA_ID} />
       </body>
     </html>
   );
