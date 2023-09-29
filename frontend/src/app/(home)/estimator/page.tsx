@@ -25,7 +25,7 @@ import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { bridge } from '@/lib/bridge';
 
 const questions = [
   {
@@ -275,11 +275,8 @@ export default function DemoPage() {
   const watchedAddressForm = addressForm.watch();
   const watchedPropertyForm = propertyForm.watch();
 
-  const getAddressData = async (address: string): Promise<any> => {
-    const encodedAddress = encodeURIComponent(address);
-    const response = await axios.get(`/api/v1/property/get-property-data?address=${encodedAddress}`);
-    return response.data;
-  };
+  const getAddressData = async (address: string): Promise<any> =>
+    await bridge.getPropertyData({ address });
 
   const {
     isLoading,

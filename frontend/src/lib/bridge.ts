@@ -1,44 +1,72 @@
 const BACKEND_URL = process.env['NEXT_PUBLIC_API_URL']!;
 
-type Method = 'get' | 'post' | 'put' | 'delete';
-
-type Route<R, T> = { (payload: R): Promise<T> };
-type BlankRoute<T> = { (): Promise<T> };
-
 class Bridge {
-  private define<R, T>(method: Method, path: string): Route<R, T> {
-    const url = path.startsWith('/')
-      ? BACKEND_URL + path
-      : BACKEND_URL + '/' + path;
+  // Testing
+  ping = define_blank<string>('get', '/ping');
 
-    return async (data: R): Promise<T> => {
-      const requestData = data !== undefined ? {
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      } : {};
-
-      const response = await fetch(url, {
-        method,
-        ...requestData
-      });
-
-      const responseData = await response.json();
-      if (response.ok) {
-        return responseData;
-      } else {
-        throw responseData;
-      }
-    };
-  }
-
-  private define_blank<T>(method: Method, path: string): BlankRoute<T> {
-    const route = this.define<undefined, T>(method, path);
-    return async () => await route(undefined);
-  }
-
-  ping = this.define_blank<string>('get', '/ping');
+  // Properties
+  getPropertyData = define<{ address: string }, Record<string, any>>('get', '/property/get-property-data', ['address']);
 }
 
 export const bridge = new Bridge();
+
+
+export type Method = 'get' | 'post' | 'put' | 'delete';
+
+export type Route<R, T> = { (payload: R): Promise<T> };
+export type BlankRoute<T> = { (): Promise<T> };
+
+/**
+ * Defines a strongly-types request method.
+ *
+ * @param method HTTP verb to use for the request
+ * @param path path to append to the configured API route
+ * @param queryParams List of keys to be placed in the URL query instead of the body
+ */
+function define<R, T>(method: Method, path: string, queryParams: string[] = []): Route<R, T> {
+  const url = path.startsWith('/')
+    ? BACKEND_URL + path
+    : BACKEND_URL + '/' + path;
+
+  return async (data: R): Promise<T> => {
+    const params = new URLSearchParams();
+    if (typeof data == "object") {
+      for (const param of queryParams) {
+        // @ts-ignore
+        params.set(param, data[param]);
+        // @ts-ignore
+        delete data[param];
+      }
+    }
+    const query = params.size > 0 ? `?${params}` : "";
+
+    // @ts-ignore
+    const dataHasKeys = typeof data == "object" && data !== null && Object.keys(data).length > 0
+    let requestInit: RequestInit = dataHasKeys ? {
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    } : {};
+
+    const response = await fetch(url + query, {
+      method,
+      ...requestInit
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      return responseData;
+    } else {
+      throw responseData;
+    }
+  };
+}
+
+/**
+ * Helper method for defining a request without a body.
+ */
+function define_blank<T>(method: Method, path: string): BlankRoute<T> {
+  const route = define<undefined, T>(method, path);
+  return async () => await route(undefined);
+}
