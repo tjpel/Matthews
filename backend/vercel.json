@@ -4,7 +4,7 @@
       "src": "api/app/index.py",
       "use": "@vercel/python",
       "config": {
-        "cmd": "cd ../ && poetry install && cd app && uvicorn index:app --host 0.0.0.0 --port 8080"
+        "cmd": "cd ./api && poetry install && cd app && uvicorn index:app --host 0.0.0.0 --port 8080"
       }
     }
   ]
