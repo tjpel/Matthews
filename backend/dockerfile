@@ -1,0 +1,21 @@
+# Use Python 3.11 as the base image
+FROM python:3.11
+
+# Set the working directory in the container to /backend
+WORKDIR /backend
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy pyproject.toml and poetry.lock to the container
+COPY ./backend/pyproject.toml ./backend/poetry.lock* /backend/
+
+# Install dependencies using Poetry
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-dev --no-interaction --no-ansi
+
+# Copy the app code to the container
+COPY ./backend/app /backend/app
+
+# Run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
