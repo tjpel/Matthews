@@ -1,11 +1,15 @@
 {
+  "devCommand": "uvicorn main:app --host 0.0.0.0 --port 3000",
   "builds": [
-    {
-      "src": "api/app/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "cmd": "cd ./api && poetry install && cd app && uvicorn index:app --host 0.0.0.0 --port 8080"
+      {
+          "src": "app/main.py",
+          "use": "@vercel/python"
       }
-    }
+  ],
+  "routes": [
+      {
+          "src": "/(.*)",
+          "dest": "app/main.py"
+      }
   ]
 }

@@ -3,6 +3,15 @@ name = "app"
 version = "0.1.0"
 description = ""
 authors = ["Diego Sesmas <diegos7167@gmail.com>"]
+maintainers = ["Diego Sesmas <diegos7167@gmail.com>"]
+repository = "https://github.com/your-repo-url"  # Update this with your repository URL
+license = "MIT"  # Update this if you have a different license
+readme = "Readme.md"  # Update this if you have a different readme file
+keywords = []  # Add keywords if needed
+packages = [{ include = "app", from = "." }]
+
+[tool.poetry.scripts]
+# Add any entry points if needed
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -18,9 +27,11 @@ httpx-oauth = "^0.13.0"
 python-jose = { extras = ["cryptography"], version = "^3.3.0" }
 redfin = "^0.1.1"
 
-
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
+
+[tool.ruff]
+line-length = 120  # Update this if you have a different line length
 
 [build-system]
 requires = ["poetry-core"]
