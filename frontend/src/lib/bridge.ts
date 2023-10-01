@@ -49,6 +49,11 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
       }
     } : {};
 
+    console.debug(`data (${typeof data}):`, data);
+    console.debug("requestInit:", requestInit);
+    console.debug("params:", params);
+    console.debug(`query: ${query}`);
+
     const response = await fetch(url + query, {
       method,
       ...requestInit

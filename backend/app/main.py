@@ -21,3 +21,4 @@ async def lifetime(_app: FastAPI):
 app = FastAPI(middleware=middleware, lifetime=lifetime)
 
 app.include_router(api_routes)
+
