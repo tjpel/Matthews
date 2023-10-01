@@ -279,12 +279,6 @@ export default function DemoPage() {
   const getAddressData = async (address: string): Promise<any> =>
     await bridge.getPropertyData({ address });
 
-  // const getAddressData = async (address: string): Promise<any> => {
-  //   const encodedAddress = encodeURIComponent(address);
-  //   const response = await axios.get(`/api/v1/property/get-property-data?address=${encodedAddress}`);
-  //   return response.data;
-  // };
-
   const {
     isLoading,
     error,
