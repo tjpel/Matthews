@@ -13,4 +13,4 @@ def load_model(filename: str) -> any:
 
 
 gradient_boosting: GradientBoostingRegressor = load_model("Gradient Boosting_model.pkl")
-random_forest: RandomForestRegressor = load_model("Random Forest_model.pkl")
+# random_forest: RandomForestRegressor = load_model("Random Forest_model.pkl")
