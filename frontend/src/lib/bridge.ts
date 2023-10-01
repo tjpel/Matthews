@@ -29,9 +29,12 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
     : BACKEND_URL + '/' + path;
 
   return async (data: R): Promise<T> => {
+    console.debug("input data:", data);
     const params = new URLSearchParams();
     if (typeof data == "object") {
       for (const param of queryParams) {
+        // @ts-ignore
+        console.debug(`adding "${param}"="${data[param]}" to query`);
         // @ts-ignore
         params.set(param, data[param]);
         // @ts-ignore
@@ -49,7 +52,6 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
       }
     } : {};
 
-    console.debug(`data (${typeof data}):`, data);
     console.debug("requestInit:", requestInit);
     console.debug("params:", params);
     console.debug(`query: ${query}`);
