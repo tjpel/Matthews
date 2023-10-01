@@ -30,18 +30,18 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
 
   return async (data: R): Promise<T> => {
     console.debug("input data:", data);
-    const params = new URLSearchParams();
+    const params: Record<string, any> = {}
     if (typeof data == "object") {
       for (const param of queryParams) {
         // @ts-ignore
         console.debug(`adding "${param}"="${data[param]}" to query`);
         // @ts-ignore
-        params.set(param, data[param]);
+        params[param] = data[param];
         // @ts-ignore
         delete data[param];
       }
     }
-    const query = params.size > 0 ? `?${params}` : "";
+    const query = Object.keys(params).length > 0 ? formatQuery(params) : "";
 
     // @ts-ignore
     const dataHasKeys = typeof data == "object" && data !== null && Object.keys(data).length > 0
@@ -77,3 +77,6 @@ function define_blank<T>(method: Method, path: string): BlankRoute<T> {
   const route = define<undefined, T>(method, path);
   return async () => await route(undefined);
 }
+
+const formatQuery = (query: Record<string, any>): string =>
+  "?" + Object.keys(query).map(key => `${key}=${query[key]}`).join("&")
