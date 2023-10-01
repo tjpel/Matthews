@@ -2,6 +2,8 @@
 
 import Radar from 'radar-sdk-js';
 
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import { AnimatePresence, motion } from "framer-motion";
 import { RadioGroup } from "@headlessui/react";
 import Link from "next/link";
@@ -22,6 +24,8 @@ import { Input } from "@/components/ui/input";
 import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { useQuery } from '@tanstack/react-query';
+import { bridge } from '@/lib/bridge';
 
 const questions = [
   {
@@ -136,14 +140,28 @@ const addressSchema = z.object({
 
 const propertySchema = z.object({
   grossIncome: z.number().refine(value => value > 0, { message: "Required" }),
-  bedrooms: z.number().refine(value => !isNaN(value), {
-    message: "Required"
-  }),
-  bathrooms: z.number().refine(value => !isNaN(value), {
-    message: "Required"
-  }),
+  bedrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
+  bathrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
+  size: z.number().refine(value => value > 0, { message: "Required" }),
+  buildingSF: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfUnits: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfFloors: z.number().refine(value => value > 0, { message: "Required" }),
+  pricePerACLand: z.number().refine(value => value > 0, { message: "Required" }),
+  pricePerSFLand: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf1BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  numberOf2BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  floorAreaRatio: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfParkingSpaces: z.number().refine(value => value >= 0, { message: "Required" }),
+  numberOfStudiosUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  typicalFloorSF: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf3BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
+  landAreaAC: z.number().refine(value => value > 0, { message: "Required" }),
+  landAreaSF: z.number().refine(value => value > 0, { message: "Required" }),
+  starRating: z.number().refine(value => value >= 0 && value <= 5, { message: "Rating must be between 0 and 5" }),
+  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
+  yearBuilt: z.number().refine(value => value > 0, { message: "Required" }),
+  age: z.number().refine(value => value >= 0, { message: "Required" }),
 });
-
 
 const contactSchema = z.object({
   firstName: z.string().min(1, { message: "Required" }),
@@ -154,36 +172,6 @@ const contactSchema = z.object({
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
-}
-
-type RadarGeocodeLayer = 'place' | 'address' | 'intersection' | 'street' | 'neighborhood' | 'postalCode' | 'locality' | 'county' | 'state' | 'country' | 'coarse' | 'fine';
-interface RadarAddress {
-  addressLabel?: string;
-  borough?: string;
-  city?: string;
-  confidence?: 'exact' | 'interpolated' | 'fallback';
-  country?: string;
-  countryCode?: string;
-  countryFlag?: string;
-  county?: string;
-  distance?: number;
-  dma?: string;
-  dmaCode?: string;
-  formattedAddress?: string;
-  geometry: GeoJSON.Point;
-  latitude: number;
-  longitude: number;
-  layer?: RadarGeocodeLayer;
-  neighborhood?: string;
-  number?: string;
-  placeLabel?: string;
-  postalCode?: string;
-  state?: string;
-  stateCode?: string;
-  street?: string;
-}
-interface RadarAutocompleteAddress extends RadarAddress {
-  unit?: string;
 }
 
 export default function DemoPage() {
@@ -224,9 +212,10 @@ export default function DemoPage() {
 
       const result = await Radar.autocomplete({
         query: incompleteAddress,
-        near: { latitude: 39.8283, longitude: -98.5795 },
+        // near: { latitude: 37.8272, longitude: -122.2913 },
         layers: ["address"],
         limit: 5,
+        countryCode: "US",
       });
 
       const { addresses } = result;
@@ -251,6 +240,25 @@ export default function DemoPage() {
       grossIncome: 0,
       bedrooms: 0,
       bathrooms: 0,
+      size: 0,
+      buildingSF: 0,
+      numberOfUnits: 0,
+      numberOfFloors: 0,
+      pricePerACLand: 0,
+      pricePerSFLand: 0,
+      numberOf1BedroomsUnits: 0,
+      numberOf2BedroomsUnits: 0,
+      floorAreaRatio: 0,
+      numberOfParkingSpaces: 0,
+      numberOfStudiosUnits: 0,
+      typicalFloorSF: 0,
+      numberOf3BedroomsUnits: 0,
+      landAreaAC: 0,
+      landAreaSF: 0,
+      starRating: 0,
+      netIncome: 0,
+      yearBuilt: 0,
+      age: 0,
     },
   });
 
@@ -265,6 +273,33 @@ export default function DemoPage() {
   });
 
   const watchedAddressForm = addressForm.watch();
+  const watchedPropertyForm = propertyForm.watch();
+
+  const getAddressData = async (address: string): Promise<any> =>
+    await bridge.getPropertyData({ address });
+
+  const {
+    isLoading,
+    error,
+  } = useQuery(['addressData', { "latitude": watchedAddressForm.address?.latitude, "longitude": watchedAddressForm.address?.longitude }], async () => {
+    console.log(watchedAddressForm.address.formattedAddress)
+    return getAddressData(watchedAddressForm.address.formattedAddress)
+  }, {
+    enabled: !!watchedAddressForm.address.latitude && !!watchedAddressForm.address.longitude,
+    onSuccess: data => {
+      console.log("query success")
+      console.log(data.response)
+      console.log(data.initial_info)
+      console.log(data.mls_data)
+      console.log(data.avm_details)
+      propertyForm.setValue("grossIncome", data.mls_data.grossIncome ?? 0);
+      propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
+      propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
+      console.log(propertyForm.getValues())
+    },
+    retry: false,
+  });
+
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
 
@@ -282,6 +317,8 @@ export default function DemoPage() {
         center: newCoords,
         zoom: 15,
       });
+
+      console.log("done")
     }
   }, [addressForm, watchedAddressForm, map]);
 
@@ -469,7 +506,57 @@ export default function DemoPage() {
                           </FormItem>
                         )}
                       />
-                      <RadioGroup value={selected} onChange={setSelected}>
+                      <FormField
+                        control={propertyForm.control}
+                        name="bathrooms"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1 w-full">
+                            <Label># Bathrooms</Label>
+                            <FormControl>
+                              <div className="py-1">
+                                <Slider
+                                  aria-label="Temperature"
+                                  value={field.value}
+                                  onChange={(e, value) => field.onChange(value)}
+                                  // getAriaValueText={valuetext}
+                                  valueLabelDisplay="auto"
+                                  step={1}
+                                  marks
+                                  min={1}
+                                  max={10}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={propertyForm.control}
+                        name="bedrooms"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1 w-full">
+                            <Label># Bedrooms</Label>
+                            <FormControl>
+                              <div className="py-1">
+                                <Slider
+                                  aria-label="Temperature"
+                                  value={field.value}
+                                  onChange={(e, value) => field.onChange(value)}
+                                  // getAriaValueText={valuetext}
+                                  valueLabelDisplay="auto"
+                                  step={1}
+                                  marks
+                                  min={1}
+                                  max={10}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {/* <RadioGroup value={selected} onChange={setSelected}>
                         <RadioGroup.Label className="sr-only">
                           # Bedrooms
                         </RadioGroup.Label>
@@ -566,9 +653,9 @@ export default function DemoPage() {
                                         </svg>
                                       )}
                                     </span>
-                                    {/* <span className="font-medium text-gray-900">
+                                    <span className="font-medium text-gray-900">
                                       {question.difficulty}
-                                    </span> */}
+                                    </span>
                                   </RadioGroup.Description>
                                   <span
                                     className={classNames(
@@ -585,7 +672,7 @@ export default function DemoPage() {
                             </RadioGroup.Option>
                           ))}
                         </div>
-                      </RadioGroup>
+                      </RadioGroup> */}
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>
@@ -658,7 +745,7 @@ export default function DemoPage() {
                       Here is an AI predicted home estimate based off your property information.
                     </p>
                     <div className="space-y-4">
-                      
+
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>

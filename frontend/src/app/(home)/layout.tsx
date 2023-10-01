@@ -2,9 +2,13 @@ import "../globals.css";
 import 'radar-sdk-js/dist/radar.css';
 
 import { Metadata } from "next";
+import Providers from "@/contexts/providers";
+import GoogleAnalytics from '@/components/google-analytics';
+
+const GA_ID = process.env["NEXT_PUBLIC_GA_ID"]!;
 
 export const metadata: Metadata = {
-  title: "Liftoff - AI-Powered Property Valuator",
+  title: "Taylor Avakain - AI-Powered Property Valuator",
   // openGraph: {
   //   title: "Liftoff - AI-Powered Mock Interviews",
   //   description:
@@ -32,10 +36,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className="scroll-smooth antialiased [font-feature-settings:'ss01']">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
+
+        <GoogleAnalytics ga_id={GA_ID} />
       </body>
     </html>
   );
