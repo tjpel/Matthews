@@ -71,7 +71,7 @@ export default function Home() {
                 Valuator
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
-                Use our AI-based system for a free estimate 
+                Use our AI for for free to get an estimate
                 on your home value.
               </p>
             </div>
