@@ -27,10 +27,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { useQuery } from '@tanstack/react-query';
 import { bridge } from '@/lib/bridge';
 import axios from 'axios';
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { getDistance, isPointWithinRadius } from 'geolib';
 import * as turf from '@turf/turf'
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const questions = [
   {
@@ -503,662 +503,662 @@ export default function DemoPage() {
                 }}
                 className="max-w-lg mx-auto px-4 lg:px-0"
               >
-                {/* <ScrollArea> */}
-                  <Form {...propertyForm}>
-                    <form
-                      onSubmit={propertyForm.handleSubmit((e) => setStep(3))}
-                      className="space-y-4"
-                    >
-                      <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                        More Information
-                      </h2>
-                      <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                        Add your property information so we can provide you with an accurate property estimation report.
-                      </p>
-                      <div className="space-y-4">
-                        <FormField
-                          control={propertyForm.control}
-                          name="grossIncome"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>$ Gross Income</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder='Enter your property gross income'
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={propertyForm.control}
-                          name="bathrooms"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label># Bathrooms</Label>
-                              <FormControl>
-                                <div className="py-1">
-                                  <Slider
-                                    aria-label="Temperature"
+                <Form {...propertyForm}>
+                  <form
+                    onSubmit={propertyForm.handleSubmit((e) => setStep(3))}
+                    className="space-y-4"
+                  >
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                      More Information
+                    </h2>
+                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                      Add your property information so we can provide you with an accurate property estimation report.
+                    </p>
+                      <ScrollArea className="w-full h-[50vh] rounded overflow-hidden bg-white">
+                        <div className="space-y-4 space-x-4">
+                          <FormField
+                            control={propertyForm.control}
+                            name="grossIncome"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>$ Gross Income</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder='Enter your property gross income'
+                                    type="number"
                                     value={field.value}
-                                    onChange={(e, value) => field.onChange(value)}
-                                    // getAriaValueText={valuetext}
-                                    valueLabelDisplay="auto"
-                                    step={1}
-                                    marks
-                                    min={1}
-                                    max={10}
+                                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
                                   />
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={propertyForm.control}
-                          name="bedrooms"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label># Bedrooms</Label>
-                              <FormControl>
-                                <div className="py-1">
-                                  <Slider
-                                    aria-label="Temperature"
-                                    value={field.value}
-                                    onChange={(e, value) => field.onChange(value)}
-                                    // getAriaValueText={valuetext}
-                                    valueLabelDisplay="auto"
-                                    step={1}
-                                    marks
-                                    min={1}
-                                    max={10}
-                                  />
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={propertyForm.control}
-                          name="size"
-                          render={({ field }) => (
-                              <FormItem className="space-y-1 w-full">
-                                  <Label>Size (sq ft)</Label>
-                                  <FormControl>
-                                      <Input
-                                          className="h-14"
-                                          placeholder='Enter the size in sq ft'
-                                          type="number"
-                                          value={field.value}
-                                          onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                      />
-                                  </FormControl>
-                                  <FormMessage />
+                                </FormControl>
+                                <FormMessage />
                               </FormItem>
-                          )}
-                        />
-
-                        {/* New FormField for buildingSF */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="buildingSF"
-                          render={({ field }) => (
+                            )}
+                          />
+                          <FormField
+                            control={propertyForm.control}
+                            name="bathrooms"
+                            render={({ field }) => (
                               <FormItem className="space-y-1 w-full">
-                                  <Label>Building Size (sq ft)</Label>
-                                  <FormControl>
-                                      <Input
-                                          className="h-14"
-                                          placeholder='Enter the building size in sq ft'
-                                          type="number"
-                                          value={field.value}
-                                          onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                      />
-                                  </FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                          )}
-                        />
-
-                        {/* New FormField for numberOfUnits */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOfUnits"
-                          render={({ field }) => (
-                              <FormItem className="space-y-1 w-full">
-                                  <Label># Units</Label>
-                                  <FormControl>
-                                      <div className="py-1">
-                                          <Slider
-                                              aria-label="Number of Units"
-                                              value={field.value}
-                                              onChange={(e, value) => field.onChange(value)}
-                                              valueLabelDisplay="auto"
-                                              step={1}
-                                              marks
-                                              min={1}
-                                              max={100}
-                                          />
-                                      </div>
-                                  </FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                          )}
-                        />
-
-                        {/* FormField for numberOfFloors */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOfFloors"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of Floors</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of floors'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for pricePerACLand */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="pricePerACLand"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Price Per Acre of Land</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the price per acre of land'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for pricePerSFLand */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="pricePerSFLand"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Price Per Square Foot of Land</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the price per square foot of land'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for numberOf1BedroomsUnits */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOf1BedroomsUnits"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of 1 Bedroom Units</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of 1 bedroom units'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for numberOf2BedroomsUnits */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOf2BedroomsUnits"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of 2 Bedroom Units</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of 2 bedroom units'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for floorAreaRatio */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="floorAreaRatio"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Floor Area Ratio</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the floor area ratio'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for numberOfParkingSpaces */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOfParkingSpaces"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of Parking Spaces</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of parking spaces'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for numberOfStudiosUnits */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOfStudiosUnits"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of Studio Units</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of studio units'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for typicalFloorSF */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="typicalFloorSF"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Typical Floor Square Footage</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the typical floor square footage'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for numberOf3BedroomsUnits */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="numberOf3BedroomsUnits"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Number of 3 Bedroom Units</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the number of 3 bedroom units'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for landAreaAC */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="landAreaAC"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Land Area in Acres</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the land area in acres'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for landAreaSF */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="landAreaSF"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Land Area in Square Feet</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the land area in square feet'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for starRating */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="starRating"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Star Rating</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the star rating'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for netIncome */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="netIncome"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Net Income</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the net income of the property'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-                        {/* FormField for yearBuilt */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="yearBuilt"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Year Built</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the year the property was built'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* FormField for age */}
-                        <FormField
-                            control={propertyForm.control}
-                            name="age"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                    <Label>Age of Property</Label>
-                                    <FormControl>
-                                        <Input
-                                            className="h-14"
-                                            placeholder='Enter the age of the property'
-                                            type="number"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        {/* <RadioGroup value={selected} onChange={setSelected}>
-                          <RadioGroup.Label className="sr-only">
-                            # Bedrooms
-                          </RadioGroup.Label>
-                          <Label># Bedrooms</Label>
-                          <div className="space-y-4">
-                            {questions.map((question) => (
-                              <RadioGroup.Option
-                                key={question.name}
-                                value={question}
-                                className={({ checked, active }) =>
-                                  classNames(
-                                    checked
-                                      ? "border-transparent"
-                                      : "border-gray-300",
-                                    active
-                                      ? "border-blue-500 ring-2 ring-blue-200"
-                                      : "",
-                                    "relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between"
-                                  )
-                                }
-                              >
-                                {({ active, checked }) => (
-                                  <>
-                                    <span className="flex items-center">
-                                      <span className="flex flex-col text-sm">
-                                        <RadioGroup.Label
-                                          as="span"
-                                          className="font-medium text-gray-900"
-                                        >
-                                          {question.name}
-                                        </RadioGroup.Label>
-                                        <RadioGroup.Description
-                                          as="span"
-                                          className="text-gray-500"
-                                        >
-                                          <span className="block">
-                                            {question.description}
-                                          </span>
-                                        </RadioGroup.Description>
-                                      </span>
-                                    </span>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
-                                    >
-                                      <span className=" text-gray-500">
-                                        {question.difficulty === 1 ? (
-                                          <svg
-                                            className="h-full w-[16px]"
-                                            viewBox="0 0 28 25"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
-                                            <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#E1E1E1" />
-                                            <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
-                                            <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
-                                          </svg>
-                                        ) : question.difficulty === 2 ? (
-                                          <svg
-                                            className="h-full w-[16px]"
-                                            viewBox="0 0 28 25"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
-                                            <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
-                                            <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
-                                            <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
-                                          </svg>
-                                        ) : question.difficulty === 3 ? (
-                                          <svg
-                                            className="h-full w-[16px]"
-                                            viewBox="0 0 28 25"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
-                                            <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
-                                            <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
-                                            <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
-                                          </svg>
-                                        ) : (
-                                          <svg
-                                            className="h-full w-[16px]"
-                                            viewBox="0 0 28 25"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
-                                            <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
-                                            <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
-                                            <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#4E7BBA" />
-                                          </svg>
-                                        )}
-                                      </span>
-                                      <span className="font-medium text-gray-900">
-                                        {question.difficulty}
-                                      </span>
-                                    </RadioGroup.Description>
-                                    <span
-                                      className={classNames(
-                                        active ? "border" : "border-2",
-                                        checked
-                                          ? "border-blue-500"
-                                          : "border-transparent",
-                                        "pointer-events-none absolute -inset-px rounded-lg"
-                                      )}
-                                      aria-hidden="true"
+                                <Label># Bathrooms</Label>
+                                <FormControl>
+                                  <div className="py-1">
+                                    <Slider
+                                      aria-label="Temperature"
+                                      value={field.value}
+                                      onChange={(e, value) => field.onChange(value)}
+                                      // getAriaValueText={valuetext}
+                                      valueLabelDisplay="auto"
+                                      step={1}
+                                      marks
+                                      min={1}
+                                      max={10}
                                     />
-                                  </>
-                                )}
-                              </RadioGroup.Option>
-                            ))}
-                          </div>
-                        </RadioGroup> */}
-                      </div>
-                      <div className="flex gap-[15px] justify-end mt-8">
-                        <div>
-                          <button
-                            onClick={() => setStep(1)}
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
-                            }}
-                          >
-                            Previous step
-                          </button>
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={propertyForm.control}
+                            name="bedrooms"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label># Bedrooms</Label>
+                                <FormControl>
+                                  <div className="py-1">
+                                    <Slider
+                                      aria-label="Temperature"
+                                      value={field.value}
+                                      onChange={(e, value) => field.onChange(value)}
+                                      // getAriaValueText={valuetext}
+                                      valueLabelDisplay="auto"
+                                      step={1}
+                                      marks
+                                      min={1}
+                                      max={10}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={propertyForm.control}
+                            name="size"
+                            render={({ field }) => (
+                                <FormItem className="space-y-1 w-full">
+                                    <Label>Size (sq ft)</Label>
+                                    <FormControl>
+                                        <Input
+                                            className="h-14"
+                                            placeholder='Enter the size in sq ft'
+                                            type="number"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                          />
+
+                          {/* New FormField for buildingSF */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="buildingSF"
+                            render={({ field }) => (
+                                <FormItem className="space-y-1 w-full">
+                                    <Label>Building Size (sq ft)</Label>
+                                    <FormControl>
+                                        <Input
+                                            className="h-14"
+                                            placeholder='Enter the building size in sq ft'
+                                            type="number"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                          />
+
+                          {/* New FormField for numberOfUnits */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOfUnits"
+                            render={({ field }) => (
+                                <FormItem className="space-y-1 w-full">
+                                    <Label># Units</Label>
+                                    <FormControl>
+                                        <div className="py-1">
+                                            <Slider
+                                                aria-label="Number of Units"
+                                                value={field.value}
+                                                onChange={(e, value) => field.onChange(value)}
+                                                valueLabelDisplay="auto"
+                                                step={1}
+                                                marks
+                                                min={1}
+                                                max={100}
+                                            />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                          />
+
+                          {/* FormField for numberOfFloors */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOfFloors"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of Floors</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of floors'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for pricePerACLand */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="pricePerACLand"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Price Per Acre of Land</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the price per acre of land'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for pricePerSFLand */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="pricePerSFLand"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Price Per Square Foot of Land</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the price per square foot of land'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for numberOf1BedroomsUnits */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOf1BedroomsUnits"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of 1 Bedroom Units</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of 1 bedroom units'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for numberOf2BedroomsUnits */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOf2BedroomsUnits"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of 2 Bedroom Units</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of 2 bedroom units'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for floorAreaRatio */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="floorAreaRatio"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Floor Area Ratio</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the floor area ratio'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for numberOfParkingSpaces */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOfParkingSpaces"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of Parking Spaces</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of parking spaces'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for numberOfStudiosUnits */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOfStudiosUnits"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of Studio Units</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of studio units'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for typicalFloorSF */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="typicalFloorSF"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Typical Floor Square Footage</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the typical floor square footage'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for numberOf3BedroomsUnits */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="numberOf3BedroomsUnits"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Number of 3 Bedroom Units</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of 3 bedroom units'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for landAreaAC */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="landAreaAC"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Land Area in Acres</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the land area in acres'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for landAreaSF */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="landAreaSF"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Land Area in Square Feet</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the land area in square feet'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for starRating */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="starRating"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Star Rating</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the star rating'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for netIncome */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="netIncome"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Net Income</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the net income of the property'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+
+                          {/* FormField for yearBuilt */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="yearBuilt"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Year Built</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the year the property was built'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* FormField for age */}
+                          <FormField
+                              control={propertyForm.control}
+                              name="age"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Age of Property</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the age of the property'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+
+                          {/* <RadioGroup value={selected} onChange={setSelected}>
+                            <RadioGroup.Label className="sr-only">
+                              # Bedrooms
+                            </RadioGroup.Label>
+                            <Label># Bedrooms</Label>
+                            <div className="space-y-4">
+                              {questions.map((question) => (
+                                <RadioGroup.Option
+                                  key={question.name}
+                                  value={question}
+                                  className={({ checked, active }) =>
+                                    classNames(
+                                      checked
+                                        ? "border-transparent"
+                                        : "border-gray-300",
+                                      active
+                                        ? "border-blue-500 ring-2 ring-blue-200"
+                                        : "",
+                                      "relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between"
+                                    )
+                                  }
+                                >
+                                  {({ active, checked }) => (
+                                    <>
+                                      <span className="flex items-center">
+                                        <span className="flex flex-col text-sm">
+                                          <RadioGroup.Label
+                                            as="span"
+                                            className="font-medium text-gray-900"
+                                          >
+                                            {question.name}
+                                          </RadioGroup.Label>
+                                          <RadioGroup.Description
+                                            as="span"
+                                            className="text-gray-500"
+                                          >
+                                            <span className="block">
+                                              {question.description}
+                                            </span>
+                                          </RadioGroup.Description>
+                                        </span>
+                                      </span>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
+                                      >
+                                        <span className=" text-gray-500">
+                                          {question.difficulty === 1 ? (
+                                            <svg
+                                              className="h-full w-[16px]"
+                                              viewBox="0 0 28 25"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                              <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#E1E1E1" />
+                                              <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
+                                              <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                            </svg>
+                                          ) : question.difficulty === 2 ? (
+                                            <svg
+                                              className="h-full w-[16px]"
+                                              viewBox="0 0 28 25"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                              <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                              <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
+                                              <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                            </svg>
+                                          ) : question.difficulty === 3 ? (
+                                            <svg
+                                              className="h-full w-[16px]"
+                                              viewBox="0 0 28 25"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                              <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                              <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
+                                              <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                            </svg>
+                                          ) : (
+                                            <svg
+                                              className="h-full w-[16px]"
+                                              viewBox="0 0 28 25"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                              <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                              <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
+                                              <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#4E7BBA" />
+                                            </svg>
+                                          )}
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                          {question.difficulty}
+                                        </span>
+                                      </RadioGroup.Description>
+                                      <span
+                                        className={classNames(
+                                          active ? "border" : "border-2",
+                                          checked
+                                            ? "border-blue-500"
+                                            : "border-transparent",
+                                          "pointer-events-none absolute -inset-px rounded-lg"
+                                        )}
+                                        aria-hidden="true"
+                                      />
+                                    </>
+                                  )}
+                                </RadioGroup.Option>
+                              ))}
+                            </div>
+                          </RadioGroup> */}
                         </div>
-                        <div>
-                          <button
-                            // onClick={() => {
-                            //   setStep(3);
-                            // }}
-                            type="submit"
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
-                            }}
-                          >
-                            <span> Submit </span>
-                            <svg
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M13.75 6.75L19.25 12L13.75 17.25"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M19 12H4.75"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
+                      </ScrollArea>
+                    <div className="flex gap-[15px] justify-end mt-8">
+                      <div>
+                        <button
+                          onClick={() => setStep(1)}
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
+                          }}
+                        >
+                          Previous step
+                        </button>
                       </div>
-                    </form>
-                  </Form>
-                {/* </ScrollArea> */}
+                      <div>
+                        <button
+                          // onClick={() => {
+                          //   setStep(3);
+                          // }}
+                          type="submit"
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow:
+                              "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
+                          }}
+                        >
+                          <span> Submit </span>
+                          <svg
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M13.75 6.75L19.25 12L13.75 17.25"
+                              stroke="#FFF"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M19 12H4.75"
+                              stroke="#FFF"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </Form>
               </motion.div>
             ) : step === 3 ? (
               <motion.div
