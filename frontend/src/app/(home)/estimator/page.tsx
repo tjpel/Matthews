@@ -515,7 +515,7 @@ export default function DemoPage() {
                       Add your property information so we can provide you with an accurate property estimation report.
                     </p>
                       <ScrollArea className="w-full h-[50vh] rounded overflow-hidden bg-white">
-                        <div className="space-y-4 space-x-4">
+                        <div className="space-y-4 px-4">
                           <FormField
                             control={propertyForm.control}
                             name="grossIncome"
