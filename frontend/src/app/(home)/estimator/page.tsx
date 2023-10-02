@@ -349,7 +349,7 @@ export default function DemoPage() {
                       Find out what your home is really worth
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                      Enter an adress, and our AI will do the rest. 
+                      Enter an address, and our AI will do the rest. 
                     </p>
                     <div>
                       <FormField
