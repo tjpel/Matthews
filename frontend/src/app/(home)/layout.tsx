@@ -8,7 +8,7 @@ import GoogleAnalytics from '@/components/google-analytics';
 const GA_ID = process.env["NEXT_PUBLIC_GA_ID"]!;
 
 export const metadata: Metadata = {
-  title: "Taylor Avakain - AI-Powered Property Valuator",
+  title: "Multifamily Valuation - Taylor Avakain",
   // openGraph: {
   //   title: "Liftoff - AI-Powered Mock Interviews",
   //   description:
