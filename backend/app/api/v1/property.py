@@ -55,7 +55,7 @@ def get_property_data(address: str):
 
 @routes.get("/predict")
 def predict_property_value(
-    address: str, property: properties.Property, user_inputs: properties.UserInputs
+   property: properties.Address, user_inputs: properties.UserInputs
 ):
     # Get user inputs from request body
     print(user_inputs)
@@ -63,7 +63,7 @@ def predict_property_value(
     # Store data in database
 
     # Call ML model
-    model = ai.gradient_boosting
+    model = ai.gradient_boosting_best
 
     # Return predicted value
     prediction = model.predict(user_inputs)
@@ -71,7 +71,7 @@ def predict_property_value(
     return {"prediction": prediction}
 
 
-# Password Credentials
+# Route to store contact info in google analytics
 @routes.post("/contact")
 async def add_contact_info(property: properties.Property):
     return {"property": property}
