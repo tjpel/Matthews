@@ -34,12 +34,9 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
     : BACKEND_URL + '/' + path;
 
   return async (data: R): Promise<T> => {
-    console.debug("input data:", data);
     const params: Record<string, any> = {}
     if (typeof data == "object") {
       for (const param of queryParams) {
-        // @ts-ignore
-        console.debug(`adding "${param}"="${data[param]}" to query`);
         // @ts-ignore
         params[param] = data[param];
         // @ts-ignore
@@ -56,10 +53,6 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
         'Content-Type': 'application/json'
       }
     } : {};
-
-    console.debug("requestInit:", requestInit);
-    console.debug("params:", params);
-    console.debug(`query: ${query}`);
 
     const response = await fetch(url + query, {
       method,
