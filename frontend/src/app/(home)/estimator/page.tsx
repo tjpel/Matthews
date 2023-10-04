@@ -31,6 +31,7 @@ import { Separator } from "@/components/ui/separator"
 import { getDistance, isPointWithinRadius } from 'geolib';
 import * as turf from '@turf/turf'
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
 
 const questions = [
   {
@@ -113,67 +114,6 @@ const Bathrooms = [
     level: "L4",
   },
 ];
-
-const geometrySchema = z.object({
-  type: z.string(),
-  coordinates: z.array(z.number())
-});
-
-const addressSchema = z.object({
-  address: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-    geometry: geometrySchema,
-    country: z.string(),
-    countryCode: z.string(),
-    countryFlag: z.string(),
-    county: z.string(),
-    distance: z.number(),
-    city: z.string(),
-    stateCode: z.string(),
-    state: z.string(),
-    layer: z.string(),
-    formattedAddress: z.string(),
-  })
-  .refine(
-    data => !!data.latitude && !!data.longitude, // Add your own validation logic here
-    {
-      message: "You must add a valid address", // Custom error message
-    }
-  ),
-});
-
-const propertySchema = z.object({
-  grossIncome: z.number().refine(value => value > 0, { message: "Required" }),
-  bedrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
-  bathrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
-  size: z.number().refine(value => value > 0, { message: "Required" }),
-  buildingSF: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOfUnits: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOfFloors: z.number().refine(value => value > 0, { message: "Required" }),
-  pricePerACLand: z.number().refine(value => value > 0, { message: "Required" }),
-  pricePerSFLand: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOf1BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
-  numberOf2BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
-  floorAreaRatio: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOfParkingSpaces: z.number().refine(value => value >= 0, { message: "Required" }),
-  numberOfStudiosUnits: z.number().refine(value => value >= 0, { message: "Required" }),
-  typicalFloorSF: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOf3BedroomsUnits: z.number().refine(value => value >= 0, { message: "Required" }),
-  landAreaAC: z.number().refine(value => value > 0, { message: "Required" }),
-  landAreaSF: z.number().refine(value => value > 0, { message: "Required" }),
-  starRating: z.number().refine(value => value >= 0 && value <= 5, { message: "Rating must be between 0 and 5" }),
-  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
-  yearBuilt: z.number().refine(value => value > 0, { message: "Required" }),
-  age: z.number().refine(value => value >= 0, { message: "Required" }),
-});
-
-const contactSchema = z.object({
-  firstName: z.string().min(1, { message: "Required" }),
-  lastName: z.string().min(1, { message: "Required" }),
-  email: z.string().email({ message: "Required" }),
-  phone: z.string().min(1, { message: "Required" }),
-});
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -305,6 +245,25 @@ export default function DemoPage() {
       propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
       propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
       console.log(propertyForm.getValues())
+    },
+    retry: false,
+  });
+
+  const predictionQuery = useQuery(['prediction', { "latitude": watchedAddressForm.address?.latitude, "longitude": watchedAddressForm.address?.longitude }, { property: watchedPropertyForm }], async () => {
+    console.log(watchedAddressForm.address.formattedAddress)
+    if (watchedAddressForm && watchedPropertyForm) {
+      console.log("querying")
+      console.log(watchedAddressForm.address)
+      console.log(watchedPropertyForm)
+      return await axios.post('/api/v1/property/predict', { address: watchedAddressForm.address, user_inputs: watchedPropertyForm })
+      // return await bridge.getPrediction({ address: { address: watchedAddressForm.address }, property: watchedPropertyForm })
+    }
+    return null;
+  }, {
+    enabled: !!watchedAddressForm.address.latitude && !!watchedAddressForm.address.longitude && !!watchedPropertyForm,
+    onSuccess: data => {
+      console.log("query success")
+      console.log(data)
     },
     retry: false,
   });
