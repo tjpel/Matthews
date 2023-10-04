@@ -142,8 +142,8 @@ export default function DemoPage() {
     const map = new (Radar.ui.map as any)({
       container: 'map',
       style: 'radar-default-v1',
-      center: [34.0549, -118.2426], // Middle of united states
-      zoom: 3,
+      center: [-118.2426, 34.0549], // Middle of united states center: [34.0549, -118.2426]
+      zoom: 11,
     });
 
     setMap(map);
