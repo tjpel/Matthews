@@ -47,7 +47,7 @@ class UserInputs(BaseModel):
     landAreaAC: float = Field(..., gt=0, description="Required")
     landAreaSF: float = Field(..., gt=0, description="Required")
     starRating: float = Field(..., ge=0, le=5, description="Rating must be between 0 and 5")
-    netIncome: float = Field(..., gt=0, description="Required")
+    # netIncome: float = Field(..., gt=0, description="Required")
     yearBuilt: int = Field(..., gt=0, description="Required")
     age: int = Field(..., ge=0, description="Required")
 

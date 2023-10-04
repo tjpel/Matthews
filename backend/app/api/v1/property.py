@@ -4,6 +4,7 @@ from fastapi import APIRouter, Body, HTTPException
 from typing import Any
 
 import pandas as pd
+import random
 
 from app.services import properties
 import app.ai as ai
@@ -73,13 +74,22 @@ def predict_property_value(
 
     # Store data in database
 
-    # Call ML model
-    model = ai.gradient_boosting  # Assuming ai.gradient_boosting_best is your ML model
+    # # Call ML model
+    # model = ai.gradient_boosting  # Assuming ai.gradient_boosting_best is your ML model
 
-    # Return predicted value
-    prediction = model.predict(user_inputs_df)  # Replace with user_inputs_np if using NumPy array
+    # # Return predicted value
+    # prediction = model.predict(user_inputs_df)  # Replace with user_inputs_np if using NumPy array
 
-    return {"prediction": prediction}
+    # return {"prediction": prediction}
+
+    min_value = 1000000  # 1,000,000
+    max_value = 3000000  # 3,000,000
+    increment = 100000  # 100,000
+
+    # Generate a random number between min_value and max_value in increments of increment
+    random_prediction = random.randint(min_value // increment, max_value // increment) * increment
+
+    return { "prediction": random_prediction }
 
 
 # Route to store contact info in google analytics

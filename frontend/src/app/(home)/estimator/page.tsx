@@ -26,7 +26,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { useQuery } from '@tanstack/react-query';
 import { bridge } from '@/lib/bridge';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Separator } from "@/components/ui/separator"
 import { getDistance, isPointWithinRadius } from 'geolib';
 import * as turf from '@turf/turf'
@@ -142,8 +142,8 @@ export default function DemoPage() {
     const map = new (Radar.ui.map as any)({
       container: 'map',
       style: 'radar-default-v1',
-      center: [-118.2426, 34.0549], // Middle of united states center: [34.0549, -118.2426]
-      zoom: 11,
+      center: [-118.26037247571433, 34.05895086651929], // LA coordinates
+      zoom: 8,
     });
 
     setMap(map);
@@ -187,7 +187,7 @@ export default function DemoPage() {
     resolver: zodResolver(propertySchema),
     defaultValues: {
       grossIncome: 0,
-      netIncome: 0,
+      // netIncome: 0,
       bedrooms: 0,
       bathrooms: 0,
       size: 0,
@@ -249,24 +249,25 @@ export default function DemoPage() {
     retry: false,
   });
 
-  const predictionQuery = useQuery(['prediction', { "latitude": watchedAddressForm.address?.latitude, "longitude": watchedAddressForm.address?.longitude }, { property: watchedPropertyForm }], async () => {
-    console.log(watchedAddressForm.address.formattedAddress)
-    if (watchedAddressForm && watchedPropertyForm) {
-      console.log("querying")
-      console.log(watchedAddressForm.address)
-      console.log(watchedPropertyForm)
-      return await axios.post('/api/v1/property/predict', { address: watchedAddressForm.address, user_inputs: watchedPropertyForm })
-      // return await bridge.getPrediction({ address: { address: watchedAddressForm.address }, property: watchedPropertyForm })
-    }
-    return null;
+  // TODO: Add predictionQuery type
+  const predictionQuery = useQuery<any>(['prediction', { "latitude": watchedAddressForm.address?.latitude, "longitude": watchedAddressForm.address?.longitude }, { property: watchedPropertyForm }], async () => {
+    console.log("querying")
+    console.log(watchedAddressForm.address)
+    console.log(watchedPropertyForm)
+    return await axios.post<{ prediction: number }>('/api/v1/property/predict', {
+      address: watchedAddressForm.address,
+      user_inputs: watchedPropertyForm
+    });
+    // return await bridge.getPrediction({ address: { address: watchedAddressForm.address }, property: watchedPropertyForm })
   }, {
-    enabled: !!watchedAddressForm.address.latitude && !!watchedAddressForm.address.longitude && !!watchedPropertyForm,
+    enabled: !!addressForm.formState.isValid && !!propertyForm.formState.isValid,
     onSuccess: data => {
       console.log("query success")
       console.log(data)
     },
     retry: false,
   });
+  console.log(predictionQuery.data)
 
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
@@ -1110,7 +1111,123 @@ export default function DemoPage() {
                       Here is an AI predicted home estimate based off your property information.
                     </p>
                     <div className="space-y-4">
-
+                      {predictionQuery.data && (
+                        <RadioGroup value={predictionQuery.data}>
+                          <RadioGroup.Label className="sr-only">
+                            Your Home Estimate
+                          </RadioGroup.Label>
+                          <Label>Your Home Estimate</Label>
+                          <div className="space-y-4">
+                            <RadioGroup.Option
+                              key={predictionQuery.data.prediction}
+                              value={predictionQuery.data.prediction}
+                              className={({ checked, active }) =>
+                                classNames(
+                                  checked
+                                    ? "border-transparent"
+                                    : "border-gray-300",
+                                  active
+                                    ? "border-blue-500 ring-2 ring-blue-200"
+                                    : "",
+                                  "relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between"
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <span className="flex items-center">
+                                    <span className="flex flex-col text-sm">
+                                      <RadioGroup.Label
+                                        as="span"
+                                        className="font-medium text-gray-900"
+                                      >
+                                        {predictionQuery.data.prediction}
+                                      </RadioGroup.Label>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className="text-gray-500"
+                                      >
+                                        <span className="block">
+                                          {predictionQuery.data.prediction}
+                                        </span>
+                                      </RadioGroup.Description>
+                                    </span>
+                                  </span>
+                                  <RadioGroup.Description
+                                    as="span"
+                                    className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
+                                  >
+                                    <span className=" text-gray-500">
+                                      {predictionQuery.data.prediction >= 0 ? (
+                                        <svg
+                                          className="h-full w-[16px]"
+                                          viewBox="0 0 28 25"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                          <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#E1E1E1" />
+                                          <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
+                                          <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                        </svg>
+                                      ) : predictionQuery.data.prediction >= 500000 ? (
+                                        <svg
+                                          className="h-full w-[16px]"
+                                          viewBox="0 0 28 25"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                          <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                          <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#E1E1E1" />
+                                          <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                        </svg>
+                                      ) : predictionQuery.data.prediction >= 1500000 ? (
+                                        <svg
+                                          className="h-full w-[16px]"
+                                          viewBox="0 0 28 25"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                          <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                          <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
+                                          <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#E1E1E1" />
+                                        </svg>
+                                      ) : (
+                                        <svg
+                                          className="h-full w-[16px]"
+                                          viewBox="0 0 28 25"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <rect y="13.1309" width="4" height="11" rx="1" fill="#4E7BBA" />
+                                          <rect x="8" y="8.13086" width="4" height="16" rx="1" fill="#4E7BBA" />
+                                          <rect x="16" y="4.13086" width="4" height="20" rx="1" fill="#4E7BBA" />
+                                          <rect x="24" y="0.130859" width="4" height="24" rx="1" fill="#4E7BBA" />
+                                        </svg>
+                                      )}
+                                    </span>
+                                    <span className="font-medium text-gray-900">
+                                      {predictionQuery.data.prediction}
+                                    </span>
+                                  </RadioGroup.Description>
+                                  <span
+                                    className={classNames(
+                                      active ? "border" : "border-2",
+                                      checked
+                                        ? "border-blue-500"
+                                        : "border-transparent",
+                                      "pointer-events-none absolute -inset-px rounded-lg"
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          </div>
+                        </RadioGroup>
+                      )}
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>

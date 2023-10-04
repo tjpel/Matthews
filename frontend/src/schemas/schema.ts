@@ -49,7 +49,7 @@ export const propertySchema = z.object({
   landAreaAC: z.number().refine(value => value > 0, { message: "Required" }),
   landAreaSF: z.number().refine(value => value > 0, { message: "Required" }),
   starRating: z.number().refine(value => value >= 0 && value <= 5, { message: "Rating must be between 0 and 5" }),
-  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
+  // netIncome: z.number().refine(value => value > 0, { message: "Required" }),
   yearBuilt: z.number().refine(value => value > 0, { message: "Required" }),
   age: z.number().refine(value => value >= 0, { message: "Required" }),
 });
