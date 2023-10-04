@@ -1,6 +1,9 @@
 from redfin import Redfin
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Body, HTTPException
+from typing import Any
+
+import pandas as pd
 
 from app.services import properties
 import app.ai as ai
@@ -53,25 +56,33 @@ def get_property_data(address: str):
     }
 
 
-@routes.get("/predict")
+@routes.post("/predict")
 def predict_property_value(
-    address: str, property: properties.Property, user_inputs: properties.UserInputs
+    address: properties.Address = Body(...),
+    user_inputs: properties.UserInputs = Body(...)
 ):
     # Get user inputs from request body
     print(user_inputs)
 
+    # Convert user_inputs to a Pandas DataFrame
+    user_inputs_dict = user_inputs.dict()
+    user_inputs_df = pd.DataFrame([user_inputs_dict])
+
+    # Alternatively, convert to a NumPy array
+    # user_inputs_np = np.array(list(user_inputs_dict.values())).reshape(1, -1)
+
     # Store data in database
 
     # Call ML model
-    model = ai.gradient_boosting
+    model = ai.gradient_boosting  # Assuming ai.gradient_boosting_best is your ML model
 
     # Return predicted value
-    prediction = model.predict(user_inputs)
+    prediction = model.predict(user_inputs_df)  # Replace with user_inputs_np if using NumPy array
 
     return {"prediction": prediction}
 
 
-# Password Credentials
+# Route to store contact info in google analytics
 @routes.post("/contact")
-async def add_contact_info(property: properties.Property):
+async def add_contact_info(contact: properties.ContactInfo):
     return {"property": property}

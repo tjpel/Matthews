@@ -1,3 +1,6 @@
+import { addressSchema, propertySchema } from "@/schemas/schema";
+import { z } from "zod";
+
 const BACKEND_URL = process.env['NEXT_PUBLIC_API_URL']!;
 
 class Bridge {
@@ -6,6 +9,8 @@ class Bridge {
 
   // Properties
   getPropertyData = define<{ address: string }, Record<string, any>>('get', '/property/get-property-data', ['address']);
+
+  getPrediction = define<{ address: z.infer<typeof addressSchema>, property: z.infer<typeof propertySchema> }, Record<string, any>>('get', '/property/predict', ['address', 'property']);
 }
 
 export const bridge = new Bridge();
