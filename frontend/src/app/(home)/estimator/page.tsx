@@ -202,7 +202,7 @@ export default function DemoPage() {
     const map = new (Radar.ui.map as any)({
       container: 'map',
       style: 'radar-default-v1',
-      center: [-98.5795, 39.8283], // Middle of united states
+      center: [34.0549, -118.2426], // Middle of united states
       zoom: 3,
     });
 
@@ -247,6 +247,7 @@ export default function DemoPage() {
     resolver: zodResolver(propertySchema),
     defaultValues: {
       grossIncome: 0,
+      netIncome: 0,
       bedrooms: 0,
       bathrooms: 0,
       size: 0,
@@ -265,7 +266,6 @@ export default function DemoPage() {
       landAreaAC: 0,
       landAreaSF: 0,
       starRating: 0,
-      netIncome: 0,
       yearBuilt: 0,
       age: 0,
     },
@@ -437,7 +437,9 @@ export default function DemoPage() {
                           </FormItem>
                         )}
                       />
-                      {isBadAddress && <div>Address is too far from the search coordinates, beware bad prediction results</div>}
+                      {isBadAddress && <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
+                        Address is too far from the search coordinates, beware bad prediction results
+                        </div>}
                     </div>
                     <div className="flex gap-[15px] justify-end mt-8">
                       <div>
@@ -925,26 +927,7 @@ export default function DemoPage() {
                               )}
                           />
 
-                          {/* FormField for netIncome */}
-                          <FormField
-                              control={propertyForm.control}
-                              name="netIncome"
-                              render={({ field }) => (
-                                  <FormItem className="space-y-1 w-full">
-                                      <Label>Net Income</Label>
-                                      <FormControl>
-                                          <Input
-                                              className="h-14"
-                                              placeholder='Enter the net income of the property'
-                                              type="number"
-                                              value={field.value}
-                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                          />
-                                      </FormControl>
-                                      <FormMessage />
-                                  </FormItem>
-                              )}
-                          />
+
 
 
                           {/* FormField for yearBuilt */}
