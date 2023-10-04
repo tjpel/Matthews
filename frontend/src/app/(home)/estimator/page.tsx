@@ -504,17 +504,13 @@ export default function DemoPage() {
                                 <Label># Bathrooms</Label>
                                 <FormControl>
                                   <div className="py-1">
-                                    <Slider
-                                      aria-label="Temperature"
-                                      value={field.value}
-                                      onChange={(e, value) => field.onChange(value)}
-                                      // getAriaValueText={valuetext}
-                                      valueLabelDisplay="auto"
-                                      step={1}
-                                      marks
-                                      min={1}
-                                      max={10}
-                                    />
+                                  <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of floors'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
                                   </div>
                                 </FormControl>
                                 <FormMessage />
@@ -529,17 +525,13 @@ export default function DemoPage() {
                                 <Label># Bedrooms</Label>
                                 <FormControl>
                                   <div className="py-1">
-                                    <Slider
-                                      aria-label="Temperature"
-                                      value={field.value}
-                                      onChange={(e, value) => field.onChange(value)}
-                                      // getAriaValueText={valuetext}
-                                      valueLabelDisplay="auto"
-                                      step={1}
-                                      marks
-                                      min={1}
-                                      max={10}
-                                    />
+                                  <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of floors'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
                                   </div>
                                 </FormControl>
                                 <FormMessage />
@@ -596,16 +588,13 @@ export default function DemoPage() {
                                     <Label># Units</Label>
                                     <FormControl>
                                         <div className="py-1">
-                                            <Slider
-                                                aria-label="Number of Units"
-                                                value={field.value}
-                                                onChange={(e, value) => field.onChange(value)}
-                                                valueLabelDisplay="auto"
-                                                step={1}
-                                                marks
-                                                min={1}
-                                                max={100}
-                                            />
+                                        <Input
+                                              className="h-14"
+                                              placeholder='Enter the number of floors'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
