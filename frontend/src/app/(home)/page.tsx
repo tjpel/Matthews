@@ -39,7 +39,7 @@ export default function Home() {
             }}
             className="whitespace-nowrap font-extrabold text-[4vw] md:text-[25px] font-inter text-[#1E2B3A] z-[100]"
           >
-            TAYLOR AVAKAIN
+            TAYLOR AVAKIAN
           </motion.h1>
 
           <motion.h1
