@@ -471,7 +471,7 @@ export default function DemoPage() {
                     className="space-y-4"
                   >
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                      More Information
+                      House Information
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                       Add your property information so we can provide you with an accurate property estimation report.
@@ -1253,7 +1253,7 @@ export default function DemoPage() {
                               "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
                           }}
                         >
-                          <span> I want more! </span>
+                          <span> Contact us </span>
                           <svg
                             className="w-5 h-5"
                             viewBox="0 0 24 24"
@@ -1396,7 +1396,7 @@ export default function DemoPage() {
                               "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
                           }}
                         >
-                          <span> Submit </span>
+                          <span> Show estimation </span>
                           <svg
                             className="w-5 h-5"
                             viewBox="0 0 24 24"
