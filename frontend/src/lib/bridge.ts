@@ -10,7 +10,13 @@ class Bridge {
   // Properties
   getPropertyData = define<{ address: string }, Record<string, any>>('get', '/property/get-property-data', ['address']);
 
-  getPrediction = define<{ address: z.infer<typeof addressSchema>, property: z.infer<typeof propertySchema> }, Record<string, any>>('get', '/property/predict', ['address', 'property']);
+  getPrediction = define<{
+    // address: z.infer<typeof addressSchema>,
+    address: any,
+    user_inputs: z.infer<typeof propertySchema>
+  }, {
+    prediction: number
+  }>('post', '/property/predict');
 }
 
 export const bridge = new Bridge();

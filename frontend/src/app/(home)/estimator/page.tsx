@@ -255,11 +255,7 @@ export default function DemoPage() {
     console.log("querying")
     console.log(watchedAddressForm.address)
     console.log(watchedPropertyForm)
-    return await axios.post<{ prediction: number }>('/api/v1/property/predict', {
-      address: watchedAddressForm.address,
-      user_inputs: watchedPropertyForm
-    });
-    // return await bridge.getPrediction({ address: { address: watchedAddressForm.address }, property: watchedPropertyForm })
+    return await bridge.getPrediction({ address: watchedAddressForm.address, user_inputs: watchedPropertyForm })
   }, {
     enabled: !!addressForm.formState.isValid && !!propertyForm.formState.isValid,
     onSuccess: data => {
