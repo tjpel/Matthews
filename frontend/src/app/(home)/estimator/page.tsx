@@ -471,7 +471,7 @@ export default function DemoPage() {
                     className="space-y-4"
                   >
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                      House Information
+                      Multifamily Information
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                       Add your property information so we can provide you with an accurate property estimation report.
