@@ -72,7 +72,7 @@ export default function Home() {
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
                 Use our AI for for free to get an estimate
-                on your home value.
+                on your multifamily value.
               </p>
             </div>
             <div className="w-1/2">
