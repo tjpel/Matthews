@@ -32,6 +32,7 @@ import { getDistance, isPointWithinRadius } from 'geolib';
 import * as turf from '@turf/turf'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
+import * as gtag from "@/lib/gtag";
 
 const questions = [
   {
@@ -290,6 +291,15 @@ export default function DemoPage() {
       console.log("done")
     }
   }, [addressForm, watchedAddressForm, map]);
+
+  // Custom Google Analytics information
+  let last = -1;
+  useEffect(() => {
+    const back = last > step;
+    last = step;
+    console.log("sending 'valuation_step':", { step, back });
+    window.gtag("event", "valuation_step", { step, back });
+  }, [step]);
 
   return (
     <AnimatePresence>
