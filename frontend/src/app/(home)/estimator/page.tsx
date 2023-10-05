@@ -1396,7 +1396,7 @@ export default function DemoPage() {
                               "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
                           }}
                         >
-                          <span> Show estimation </span>
+                          <span> Submit </span>
                           <svg
                             className="w-5 h-5"
                             viewBox="0 0 24 24"
