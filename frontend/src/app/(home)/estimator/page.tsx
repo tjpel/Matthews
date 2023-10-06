@@ -526,13 +526,13 @@ export default function DemoPage() {
                                 <Label># Bedrooms</Label>
                                 <FormControl>
                                   <div className="py-1">
-                                  <Input
-                                              className="h-14"
-                                              placeholder='Enter the number of floors'
-                                              type="number"
-                                              value={field.value}
-                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                          />
+                                    <Input
+                                      className="h-14"
+                                      placeholder='Enter the number of floors'
+                                      type="number"
+                                      value={field.value}
+                                      onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                    />
                                   </div>
                                 </FormControl>
                                 <FormMessage />
