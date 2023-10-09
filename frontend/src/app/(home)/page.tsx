@@ -41,7 +41,7 @@ export default function Home() {
             }}
             className="whitespace-nowrap font-extrabold text-[4vw] md:text-[25px] font-inter text-[#1E2B3A] z-[100]"
           >
-            TAYLOR AVAKAIN
+            TAYLOR AVAKIAN
           </motion.h1>
 
           <motion.h1
@@ -74,7 +74,7 @@ export default function Home() {
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
                 Use our AI for for free to get an estimate
-                on your home value.
+                on your multifamily property's value.
               </p>
             </div>
             <div className="w-1/2">
