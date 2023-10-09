@@ -225,8 +225,10 @@ export default function DemoPage() {
   const watchedAddressForm = addressForm.watch();
   const watchedPropertyForm = propertyForm.watch();
 
-  const getAddressData = async (address: string): Promise<any> =>
+  const getAddressData = async (address: string): Promise<any> => {
+    gtag.search(address);
     await bridge.getPropertyData({ address });
+  }
 
   const {
     isLoading,
@@ -264,7 +266,6 @@ export default function DemoPage() {
     },
     retry: false,
   });
-  console.log(predictionQuery.data)
 
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
@@ -289,12 +290,8 @@ export default function DemoPage() {
   }, [addressForm, watchedAddressForm, map]);
 
   // Custom Google Analytics information
-  let last = -1;
   useEffect(() => {
-    const back = last > step;
-    last = step;
-    console.log("sending 'valuation_step':", { step, back });
-    window.gtag("event", "valuation_step", { step, back });
+    gtag.valuationStep(step);
   }, [step]);
 
   return (
