@@ -1,9 +1,11 @@
 from pydantic import BaseModel, Field, root_validator, validator
 from typing import List
 
+
 class geometrySchema(BaseModel):
     type: str
     coordinates: List[float]
+
 
 class Address(BaseModel):
     latitude: float
@@ -27,6 +29,7 @@ class Address(BaseModel):
     #         raise ValueError("You must add a valid address")
     #     return values
 
+
 class UserInputs(BaseModel):
     grossIncome: float = Field(..., gt=0, description="Required")
     bedrooms: int = Field(..., gt=0, description="Required")
@@ -46,10 +49,13 @@ class UserInputs(BaseModel):
     numberOf3BedroomsUnits: int = Field(..., ge=0, description="Required")
     landAreaAC: float = Field(..., gt=0, description="Required")
     landAreaSF: float = Field(..., gt=0, description="Required")
-    starRating: float = Field(..., ge=0, le=5, description="Rating must be between 0 and 5")
+    starRating: float = Field(
+        ..., ge=0, le=5, description="Rating must be between 0 and 5"
+    )
     # netIncome: float = Field(..., gt=0, description="Required")
     yearBuilt: int = Field(..., gt=0, description="Required")
     age: int = Field(..., ge=0, description="Required")
+
 
 class ContactInfo(BaseModel):
     name: str = Field(..., description="Required")

@@ -60,7 +60,7 @@ def get_property_data(address: str):
 @routes.post("/predict")
 def predict_property_value(
     address: properties.Address = Body(...),
-    user_inputs: properties.UserInputs = Body(...)
+    user_inputs: properties.UserInputs = Body(...),
 ):
     # Get user inputs from request body
     print(user_inputs)
@@ -87,9 +87,11 @@ def predict_property_value(
     increment = 100000  # 100,000
 
     # Generate a random number between min_value and max_value in increments of increment
-    random_prediction = random.randint(min_value // increment, max_value // increment) * increment
+    random_prediction = (
+        random.randint(min_value // increment, max_value // increment) * increment
+    )
 
-    return { "prediction": random_prediction }
+    return {"prediction": random_prediction}
 
 
 # Route to store contact info in google analytics
