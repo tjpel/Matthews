@@ -6,7 +6,7 @@ from typing import Any
 import pandas as pd
 import random
 
-from backend.app.model import property
+from app.model import property
 import app.ai as ai
 
 routes = APIRouter(prefix="/property")
