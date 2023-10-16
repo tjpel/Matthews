@@ -184,6 +184,7 @@ export default function DemoPage() {
     },
   });
 
+  /*
   const propertyForm = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
@@ -210,6 +211,23 @@ export default function DemoPage() {
       yearBuilt: 0,
       age: 0,
     },
+  });
+  */
+
+  const propertyForm = useForm<z.infer<typeof propertySchema>>({
+    resolver: zodResolver(propertySchema),
+    defaultValues: {
+      netIncome: 0,
+      buildingSF: 0,
+      typicalFloorSF: 0,
+      size: 0,
+      numberOfParkingSpaces: 0,
+      //for model, sum all below to be 'Number of Units' -- Taylor will want unit mix even though model doesn't
+      numberOfStudiosUnits: 0,
+      numberOf1BedroomsUnits: 0,
+      numberOf2BedroomsUnits: 0,
+      numberOf3BedroomsUnits: 0
+    }
   });
 
   const contactForm = useForm<z.infer<typeof contactSchema>>({
@@ -244,9 +262,9 @@ export default function DemoPage() {
       console.log(data.initial_info)
       console.log(data.mls_data)
       console.log(data.avm_details)
-      propertyForm.setValue("grossIncome", data.mls_data.grossIncome ?? 0);
-      propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
-      propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
+      //propertyForm.setValue("grossIncome", data.mls_data.grossIncome ?? 0);
+      //propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
+      //propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
       console.log(propertyForm.getValues())
     },
     retry: false,
@@ -483,14 +501,14 @@ export default function DemoPage() {
                           <div className="space-y-4 px-4">
                             <FormField
                               control={propertyForm.control}
-                              name="grossIncome"
+                              name="netIncome"
                               render={({ field }) => (
                                 <FormItem className="space-y-1 w-full">
-                                  <Label>$ Gross Income</Label>
+                                  <Label>$ Net Income</Label>
                                   <FormControl>
                                     <Input
                                       className="h-14"
-                                      placeholder='Enter your property gross income'
+                                      placeholder='Enter your property net income'
                                       type="number"
                                       value={field.value}
                                       onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -500,46 +518,24 @@ export default function DemoPage() {
                                 </FormItem>
                               )}
                             />
+                            {/* New FormField for buildingSF */}
                             <FormField
                               control={propertyForm.control}
-                              name="bathrooms"
+                              name="buildingSF"
                               render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                  <Label># Bathrooms</Label>
-                                  <FormControl>
-                                    <div className="py-1">
-                                    <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of floors'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                    </div>
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={propertyForm.control}
-                              name="bedrooms"
-                              render={({ field }) => (
-                                <FormItem className="space-y-1 w-full">
-                                  <Label># Bedrooms</Label>
-                                  <FormControl>
-                                    <div className="py-1">
-                                      <Input
-                                        className="h-14"
-                                        placeholder='Enter the number of floors'
-                                        type="number"
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                      />
-                                    </div>
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
+                                  <FormItem className="space-y-1 w-full">
+                                      <Label>Building Size (sq ft)</Label>
+                                      <FormControl>
+                                          <Input
+                                              className="h-14"
+                                              placeholder='Enter the building size in sq ft'
+                                              type="number"
+                                              value={field.value}
+                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                          />
+                                      </FormControl>
+                                      <FormMessage />
+                                  </FormItem>
                               )}
                             />
                             <FormField
@@ -561,219 +557,6 @@ export default function DemoPage() {
                                   </FormItem>
                               )}
                             />
-
-                            {/* New FormField for buildingSF */}
-                            <FormField
-                              control={propertyForm.control}
-                              name="buildingSF"
-                              render={({ field }) => (
-                                  <FormItem className="space-y-1 w-full">
-                                      <Label>Building Size (sq ft)</Label>
-                                      <FormControl>
-                                          <Input
-                                              className="h-14"
-                                              placeholder='Enter the building size in sq ft'
-                                              type="number"
-                                              value={field.value}
-                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                          />
-                                      </FormControl>
-                                      <FormMessage />
-                                  </FormItem>
-                              )}
-                            />
-
-                            {/* New FormField for numberOfUnits */}
-                            <FormField
-                              control={propertyForm.control}
-                              name="numberOfUnits"
-                              render={({ field }) => (
-                                  <FormItem className="space-y-1 w-full">
-                                      <Label># Units</Label>
-                                      <FormControl>
-                                          <div className="py-1">
-                                          <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of floors'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                          </div>
-                                      </FormControl>
-                                      <FormMessage />
-                                  </FormItem>
-                              )}
-                            />
-
-                            {/* FormField for numberOfFloors */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="numberOfFloors"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Number of Floors</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of floors'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for pricePerACLand */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="pricePerACLand"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Price Per Acre of Land</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the price per acre of land'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for pricePerSFLand */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="pricePerSFLand"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Price Per Square Foot of Land</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the price per square foot of land'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for numberOf1BedroomsUnits */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="numberOf1BedroomsUnits"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Number of 1 Bedroom Units</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of 1 bedroom units'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for numberOf2BedroomsUnits */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="numberOf2BedroomsUnits"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Number of 2 Bedroom Units</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of 2 bedroom units'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for floorAreaRatio */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="floorAreaRatio"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Floor Area Ratio</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the floor area ratio'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for numberOfParkingSpaces */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="numberOfParkingSpaces"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Number of Parking Spaces</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of parking spaces'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for numberOfStudiosUnits */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="numberOfStudiosUnits"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Number of Studio Units</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the number of studio units'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
                             {/* FormField for typicalFloorSF */}
                             <FormField
                                 control={propertyForm.control}
@@ -794,7 +577,86 @@ export default function DemoPage() {
                                     </FormItem>
                                 )}
                             />
-
+                            {/* FormField for numberOfParkingSpaces */}
+                            <FormField
+                                control={propertyForm.control}
+                                name="numberOfParkingSpaces"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1 w-full">
+                                        <Label>Number of Parking Spaces</Label>
+                                        <FormControl>
+                                            <Input
+                                                className="h-14"
+                                                placeholder='Enter the number of parking spaces'
+                                                type="number"
+                                                value={field.value}
+                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {/* FormField for numberOfStudiosUnits */}
+                            <FormField
+                                control={propertyForm.control}
+                                name="numberOfStudiosUnits"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1 w-full">
+                                        <Label>Number of Studio Units</Label>
+                                        <FormControl>
+                                            <Input
+                                                className="h-14"
+                                                placeholder='Enter the number of studio units'
+                                                type="number"
+                                                value={field.value}
+                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {/* FormField for numberOf1BedroomsUnits */}
+                            <FormField
+                                control={propertyForm.control}
+                                name="numberOf1BedroomsUnits"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1 w-full">
+                                        <Label>Number of 1 Bedroom Units</Label>
+                                        <FormControl>
+                                            <Input
+                                                className="h-14"
+                                                placeholder='Enter the number of 1 bedroom units'
+                                                type="number"
+                                                value={field.value}
+                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {/* FormField for numberOf2BedroomsUnits */}
+                            <FormField
+                                control={propertyForm.control}
+                                name="numberOf2BedroomsUnits"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1 w-full">
+                                        <Label>Number of 2 Bedroom Units</Label>
+                                        <FormControl>
+                                            <Input
+                                                className="h-14"
+                                                placeholder='Enter the number of 2 bedroom units'
+                                                type="number"
+                                                value={field.value}
+                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             {/* FormField for numberOf3BedroomsUnits */}
                             <FormField
                                 control={propertyForm.control}
@@ -806,114 +668,6 @@ export default function DemoPage() {
                                             <Input
                                                 className="h-14"
                                                 placeholder='Enter the number of 3 bedroom units'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for landAreaAC */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="landAreaAC"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Land Area in Acres</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the land area in acres'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for landAreaSF */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="landAreaSF"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Land Area in Square Feet</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the land area in square feet'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for starRating */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="starRating"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Star Rating</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the star rating'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-
-
-
-                            {/* FormField for yearBuilt */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="yearBuilt"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Year Built</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the year the property was built'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* FormField for age */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="age"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Age of Property</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the age of the property'
                                                 type="number"
                                                 value={field.value}
                                                 onChange={(e) => field.onChange(parseFloat(e.target.value))}

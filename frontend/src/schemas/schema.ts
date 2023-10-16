@@ -29,6 +29,7 @@ export const addressSchema = z.object({
   ),
 });
 
+/*
 export const propertySchema = z.object({
   grossIncome: z.number().refine(value => value > 0, { message: "Required" }),
   bedrooms: z.number().refine(value => !isNaN(value), { message: "Required" }),
@@ -53,6 +54,18 @@ export const propertySchema = z.object({
   yearBuilt: z.number().refine(value => value > 0, { message: "Required" }),
   age: z.number().refine(value => value >= 0, { message: "Required" }),
 });
+*/
+export const propertySchema = z.object({
+  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
+  buildingSF: z.number().refine(value => value > 0, { message: "Required" }),
+  typicalFloorSF: z.number().refine(value => value > 0, { message: "Required" }),
+  size: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfParkingSpaces:  z.number().refine(value => value > 0, { message: "Required" }),
+  numberOfStudiosUnits: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf1BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf2BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" }),
+  numberOf3BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" })
+})
 
 export const contactSchema = z.object({
   firstName: z.string().min(1, { message: "Required" }),
