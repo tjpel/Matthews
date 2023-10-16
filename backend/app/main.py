@@ -8,7 +8,11 @@ from app.api import api_routes
 from app.core.config import config
 from app.db.session import engine
 
-middleware = [Middleware(CORSMiddleware, allow_origins=config.cors_allowed_origins)]
+middleware = [
+    Middleware(
+        CORSMiddleware, allow_origins=config.cors_allowed_origins, allow_methods=["*"]
+    )
+]
 
 
 @asynccontextmanager

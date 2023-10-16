@@ -12,9 +12,7 @@ export default function Home() {
 
   return (
     <AnimatePresence>
-      {
-      
-        <div className="min-h-[100vh] sm:min-h-screen w-screen flex flex-col relative bg-[#F2F3F5] font-inter overflow-hidden">
+      <div className="min-h-[100vh] sm:min-h-screen w-screen flex flex-col relative bg-[#F2F3F5] font-inter overflow-hidden">
         <svg
           style={{ filter: "contrast(125%) brightness(110%)" }}
           className="fixed z-[1] w-full h-full opacity-[35%]"
@@ -87,7 +85,7 @@ export default function Home() {
               </p>
             </div>
           </motion.div>
-          
+
           <div className="flex gap-[15px] mt-8 md:mt-0">
           <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -168,7 +166,6 @@ export default function Home() {
                 </svg>
               </Link>
             </motion.div>
-            
           </div>
         </main>
 

@@ -19,8 +19,4 @@ async def ping() -> str:
 
 @routes.get("/user_info")
 async def user_info(user: UserAuth) -> UserData:
-    return UserData(
-        id=user.id,
-        email=user.email,
-        name=user.name
-    )
+    return UserData(id=user.id, email=user.email, name=user.name)

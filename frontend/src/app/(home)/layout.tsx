@@ -3,14 +3,14 @@ import 'radar-sdk-js/dist/radar.css';
 
 import { Metadata } from "next";
 import Providers from "@/contexts/providers";
-import GoogleAnalytics from '@/components/google-analytics';
-
-const GA_ID = process.env["NEXT_PUBLIC_GA_ID"]!;
+import React from 'react';
 
 export const metadata: Metadata = {
   title: "Multifamily Valuation - Taylor Avakain",
   themeColor: "#FFF",
 };
+
+const NEXT_PUBLIC_GA_ID: string = process.env["NEXT_PUBLIC_GA_ID"]!;
 
 export default async function RootLayout({
   children,
@@ -20,12 +20,27 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${NEXT_PUBLIC_GA_ID}`}/>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag() {dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${NEXT_PUBLIC_GA_ID}', {
+                  page_path: window.location.pathname
+                });
+
+                window.gtag = gtag;
+              `}}
+        />
+      </head>
       <body className="scroll-smooth antialiased [font-feature-settings:'ss01']">
         <Providers>
           {children}
         </Providers>
-
-        <GoogleAnalytics ga_id={GA_ID} />
       </body>
     </html>
   );

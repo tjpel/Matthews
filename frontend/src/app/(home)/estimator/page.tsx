@@ -32,6 +32,7 @@ import { getDistance, isPointWithinRadius } from 'geolib';
 import * as turf from '@turf/turf'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
+import * as gtag from "@/lib/gtag";
 
 const questions = [
   {
@@ -224,8 +225,10 @@ export default function DemoPage() {
   const watchedAddressForm = addressForm.watch();
   const watchedPropertyForm = propertyForm.watch();
 
-  const getAddressData = async (address: string): Promise<any> =>
+  const getAddressData = async (address: string): Promise<any> => {
+    gtag.search(address);
     await bridge.getPropertyData({ address });
+  }
 
   const {
     isLoading,
@@ -254,11 +257,7 @@ export default function DemoPage() {
     console.log("querying")
     console.log(watchedAddressForm.address)
     console.log(watchedPropertyForm)
-    return await axios.post<{ prediction: number }>('/api/v1/property/predict', {
-      address: watchedAddressForm.address,
-      user_inputs: watchedPropertyForm
-    });
-    // return await bridge.getPrediction({ address: { address: watchedAddressForm.address }, property: watchedPropertyForm })
+    return await bridge.getPrediction({ address: watchedAddressForm.address, user_inputs: watchedPropertyForm })
   }, {
     enabled: !!addressForm.formState.isValid && !!propertyForm.formState.isValid,
     onSuccess: data => {
@@ -267,7 +266,6 @@ export default function DemoPage() {
     },
     retry: false,
   });
-  console.log(predictionQuery.data)
 
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
@@ -290,6 +288,11 @@ export default function DemoPage() {
       console.log("done")
     }
   }, [addressForm, watchedAddressForm, map]);
+
+  // Custom Google Analytics information
+  useEffect(() => {
+    gtag.valuationStep(step);
+  }, [step]);
 
   return (
     <AnimatePresence>
@@ -314,7 +317,7 @@ export default function DemoPage() {
                     className="space-y-4"
                   >
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                      Find out what your home is really worth
+                      Find out what your multifamily property is really worth
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                       Enter an address, and our AI will do the rest.
@@ -1105,18 +1108,18 @@ export default function DemoPage() {
                 className="max-w-lg mx-auto px-4 lg:px-0"
               >
                     <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                      Your Home Estimate
+                      Your Multifamily Estimate
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                      Here is an AI predicted home estimate based off your property information.
+                      Here is an AI predicted multifamily estimate based off your property information.
                     </p>
                     <div className="space-y-4">
                       {predictionQuery.data && (
                         <RadioGroup value={predictionQuery.data}>
                           <RadioGroup.Label className="sr-only">
-                            Your Home Estimate
+                            Your Multifamily Estimate
                           </RadioGroup.Label>
-                          <Label>Your Home Estimate</Label>
+                          <Label>Your Multifamily Estimate</Label>
                           <div className="space-y-4">
                             <RadioGroup.Option
                               key={predictionQuery.data.prediction}
