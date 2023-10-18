@@ -219,8 +219,6 @@ export default function DemoPage() {
     defaultValues: {
       netIncome: 0,
       buildingSF: 0,
-      typicalFloorSF: 0,
-      size: 0,
       numberOfParkingSpaces: 0,
       //for model, sum all below to be 'Number of Units' -- Taylor will want unit mix even though model doesn't
       numberOfStudiosUnits: 0,
@@ -275,7 +273,11 @@ export default function DemoPage() {
     console.log("querying")
     console.log(watchedAddressForm.address)
     console.log(watchedPropertyForm)
-    return await bridge.getPrediction({ address: watchedAddressForm.address, user_inputs: watchedPropertyForm })
+    const propertyData = watchedPropertyForm
+    Object.assign(propertyData, { typicalFloorSF: propertyData.buildingSF, size: propertyData.buildingSF });
+
+    return axios.post('/api/property/predict', { address: watchedAddressForm.address, user_inputs: propertyData })
+    // return await bridge.getPrediction({ address: watchedAddressForm.address, user_inputs: propertyData })
   }, {
     enabled: !!addressForm.formState.isValid && !!propertyForm.formState.isValid,
     onSuccess: data => {
@@ -537,45 +539,6 @@ export default function DemoPage() {
                                       <FormMessage />
                                   </FormItem>
                               )}
-                            />
-                            <FormField
-                              control={propertyForm.control}
-                              name="size"
-                              render={({ field }) => (
-                                  <FormItem className="space-y-1 w-full">
-                                      <Label>Size (sq ft)</Label>
-                                      <FormControl>
-                                          <Input
-                                              className="h-14"
-                                              placeholder='Enter the size in sq ft'
-                                              type="number"
-                                              value={field.value}
-                                              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                          />
-                                      </FormControl>
-                                      <FormMessage />
-                                  </FormItem>
-                              )}
-                            />
-                            {/* FormField for typicalFloorSF */}
-                            <FormField
-                                control={propertyForm.control}
-                                name="typicalFloorSF"
-                                render={({ field }) => (
-                                    <FormItem className="space-y-1 w-full">
-                                        <Label>Typical Floor Square Footage</Label>
-                                        <FormControl>
-                                            <Input
-                                                className="h-14"
-                                                placeholder='Enter the typical floor square footage'
-                                                type="number"
-                                                value={field.value}
-                                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
                             />
                             {/* FormField for numberOfParkingSpaces */}
                             <FormField
