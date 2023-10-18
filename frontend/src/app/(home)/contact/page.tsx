@@ -84,7 +84,7 @@ export default () => {
 						<div className="flex justify-between gap-x-4">
 							<Link
 								href="/"
-								className="group w-1/2 px-4 py-2 text-[#f5f7f9] font-semibold transition-all flex items-center justify-center bg-[#407BBF] hover:bg-[#1E2B3A] rounded-lg no-underline active:scale-95 scale-100 duration-75"
+								className="group w-1/2 px-4 py-2 font-semibold transition-all flex items-center justify-center  bg-[#1E2B3A] text-white hover:bg-[#1E2B3A] rounded-lg no-underline active:scale-95 scale-100 duration-75"
 								style={{
 									boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
 								}}
@@ -93,7 +93,7 @@ export default () => {
 							</Link>
 
 							<button
-								className="w-1/2 px-4 py-2 text-[#f5f7f9] font-medium bg-[#407BBF] hover:bg-[#1E2B3A] active:bg-[#407BBF] rounded-lg duration-150"
+								className="w-1/2 px-4 py-2 font-medium bg-[#1E2B3A] text-white hover:bg-[#1E2B3A] active:bg-[#407BBF] rounded-lg duration-150"
 							>
 								Submit
 							</button>
