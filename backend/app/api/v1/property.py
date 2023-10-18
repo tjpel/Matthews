@@ -7,7 +7,7 @@ from typing import Any
 import pandas as pd
 import random
 
-from app.services import properties
+from app.model import property
 import app.ai as ai
 
 routes = APIRouter(prefix="/property")
@@ -60,8 +60,8 @@ def get_property_data(address: str):
 
 @routes.post("/predict")
 def predict_property_value(
-    address: properties.Address = Body(...),
-    user_inputs: properties.UserInputs = Body(...),
+    address: property.Address = Body(...),
+    user_inputs: property.UserInputs = Body(...),
 ):
     # Get user inputs from request body
     print(user_inputs)
@@ -89,5 +89,5 @@ def predict_property_value(
 
 # Route to store contact info in google analytics
 @routes.post("/contact")
-async def add_contact_info(contact: properties.ContactInfo):
+async def add_contact_info(contact: property.ContactInfo):
     return {"property": property}
