@@ -67,22 +67,25 @@ def predict_property_value(
     print(user_inputs)
 
     # Convert user_inputs to a Pandas DataFrame
-    user_inputs_dict = user_inputs.dict()
+    user_inputs_dict = user_inputs.model_dump()
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
     # Store data in database
 
-    # # Call ML model
-    # model = ai.gradient_boosting  # Assuming ai.gradient_boosting_best is your ML model
+    # ModelPrector = ModelPredictor(
+    #     # model_path="../../ai/v1_model/L_Gradient_Boosting_high_performing_model.pkl", model_type=ai.GradientBoostingRegressor
+    #     # model_path="./v1_model/L_Gradient_Boosting_high_performing_model.pkl", model_type=ai.GradientBoostingRegressor
+    #     # model_path="./app/ai/v1_model/L_Gradient_Boosting_high_performing_model.pkl", model_type=ai.GradientBoostingRegressor
+    #     # model_path="./ai/v1_model/L_Gradient_Boosting_high_performing_model.pkl", model_type=ai.GradientBoostingRegressor
+    #     # model_path="../../ai/vA_allParLeher_Gradient_Boosting.pkl", model_type=ai.GradientBoostingRegressor
+    #     model_path="./vA_allParLeher_Gradient_Boosting.pkl", model_type=ai.GradientBoostingRegressor
+    # )
 
-    # # Return predicted value
-    # prediction = model.predict(user_inputs_df)  # Replace with user_inputs_np if using NumPy array
+    # prediction = ModelPrector.predict(user_inputs_df)
+    model = ai.gradient_boosting_best_v2
+    prediction = model.predict(user_inputs_df)
 
-    ModelPrector = ModelPredictor(
-        model_path="app/ai/v1/L_Gradient Boosting_high_performing_model.pkl", model_type=ai.GradientBoostingRegressor
-    )
-
-    prediction = ModelPrector.predict(user_inputs_df)
+    print("Prediction: {}".format(prediction))
 
     return {"prediction": prediction}
 

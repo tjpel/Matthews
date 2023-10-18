@@ -19,3 +19,6 @@ random_forest_high_performing: RandomForestRegressor = load_model(
 gradient_boosting_best: GradientBoostingRegressor = load_model(
     "Gradient_Boosting_high_performing_model_v2.pkl"
 )
+gradient_boosting_best_v2: GradientBoostingRegressor = load_model(
+    "vB_fiveParLeher_Gradient Boosting.pkl"
+)
