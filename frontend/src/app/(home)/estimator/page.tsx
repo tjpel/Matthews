@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { RadioGroup } from '@headlessui/react';
 import Link from 'next/link';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -44,6 +44,7 @@ import * as turf from '@turf/turf';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
 import * as gtag from '@/lib/gtag';
+import {NumberBar} from '@/components/number-bar';
 
 const questions = [
   {
@@ -142,7 +143,6 @@ export default function DemoPage() {
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
-  const [prediction, setPrediction] = useState<null | object>(null);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<RadarAutocompleteAddress[]>(
     []
@@ -156,6 +156,12 @@ export default function DemoPage() {
   };
   const distanceThreshold = 150; // distance in meters away from searchCoordinates where addresses are considered still good. Any address farther than distanceThreshold is considered bad for ML and will be flagged in UI
   const [isBadAddress, setIsBadAddress] = useState<boolean>(false);
+  const [prediction, setPrediction] = useState<{
+    lowPrediction: string;
+    prediction: string;
+    numberPrediction: number; // To use in calculations + slider
+    highPrediction: string;
+  }>({ lowPrediction: '0', prediction: '0', numberPrediction: 0, highPrediction: '0' });
 
   useEffect(() => {
     Radar.initialize('prj_live_pk_b172f4472789be4d6feee1895fd8d1f4ff69e531');
@@ -204,36 +210,6 @@ export default function DemoPage() {
       address: {}
     }
   });
-
-  /*
-  const propertyForm = useForm<z.infer<typeof propertySchema>>({
-    resolver: zodResolver(propertySchema),
-    defaultValues: {
-      grossIncome: 0,
-      // netIncome: 0,
-      bedrooms: 0,
-      bathrooms: 0,
-      size: 0,
-      buildingSF: 0,
-      numberOfUnits: 0,
-      numberOfFloors: 0,
-      pricePerACLand: 0,
-      pricePerSFLand: 0,
-      numberOf1BedroomsUnits: 0,
-      numberOf2BedroomsUnits: 0,
-      floorAreaRatio: 0,
-      numberOfParkingSpaces: 0,
-      numberOfStudiosUnits: 0,
-      typicalFloorSF: 0,
-      numberOf3BedroomsUnits: 0,
-      landAreaAC: 0,
-      landAreaSF: 0,
-      starRating: 0,
-      yearBuilt: 0,
-      age: 0,
-    },
-  });
-  */
 
   const propertyForm = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
@@ -285,13 +261,6 @@ export default function DemoPage() {
         !!watchedAddressForm.address.longitude,
       onSuccess: (data) => {
         console.log('query success');
-        console.log(data.response);
-        console.log(data.initial_info);
-        console.log(data.mls_data);
-        console.log(data.avm_details);
-        //propertyForm.setValue("grossIncome", data.mls_data.grossIncome ?? 0);
-        //propertyForm.setValue("bedrooms", data.mls_data.publicRecordsInfo.basicInfo.beds ?? 0);
-        //propertyForm.setValue("bathrooms", data.mls_data.publicRecordsInfo.basicInfo.baths ?? 0);
         console.log(propertyForm.getValues());
       },
       retry: false
@@ -318,10 +287,12 @@ export default function DemoPage() {
         size: propertyData.buildingSF
       });
 
-      return axios.post('/api/property/predict', {
+      // Await the axios.post call and then access the data property
+      const response = await axios.post('/api/property/predict', {
         address: watchedAddressForm.address,
         user_inputs: propertyData
       });
+      return response.data;
       // return await bridge.getPrediction({ address: watchedAddressForm.address, user_inputs: propertyData })
     },
     {
@@ -330,6 +301,19 @@ export default function DemoPage() {
       onSuccess: (data) => {
         console.log('query success');
         console.log(data);
+        // Round to the nearest tens place
+        const roundToTens = (num: number) => Math.round(num / 10) * 10;
+
+        const lowPrediction = roundToTens(data.prediction - data.prediction * 0.1);
+        const highPrediction = roundToTens(data.prediction + data.prediction * 0.1);
+        const roundedPrediction = roundToTens(data.prediction);
+
+        setPrediction({
+          lowPrediction: lowPrediction.toLocaleString(),
+          prediction: roundedPrediction.toLocaleString(),
+          numberPrediction: roundedPrediction,
+          highPrediction: highPrediction.toLocaleString()
+        });
       },
       retry: false
     }
@@ -931,233 +915,79 @@ export default function DemoPage() {
                     property information.
                   </p>
                   <div className="space-y-4">
-                    {predictionQuery.data && (
-                      <RadioGroup value={predictionQuery.data}>
-                        <RadioGroup.Label className="sr-only">
-                          Your Multifamily Estimate
-                        </RadioGroup.Label>
-                        <Label>Your Multifamily Estimate</Label>
-                        <div className="space-y-4">
-                          <RadioGroup.Option
-                            key={predictionQuery.data.prediction}
-                            value={predictionQuery.data.prediction}
-                            className={({ checked, active }) =>
-                              classNames(
-                                checked
-                                  ? 'border-transparent'
-                                  : 'border-gray-300',
-                                active
-                                  ? 'border-blue-500 ring-2 ring-blue-200'
-                                  : '',
-                                'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
-                              )
-                            }
-                          >
-                            {({ active, checked }) => (
-                              <>
-                                <span className="flex items-center">
-                                  <span className="flex flex-col text-sm">
-                                    <RadioGroup.Label
-                                      as="span"
-                                      className="font-medium text-gray-900"
-                                    >
-                                      {predictionQuery.data.prediction}
-                                    </RadioGroup.Label>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className="text-gray-500"
-                                    >
-                                      <span className="block">
-                                        {predictionQuery.data.prediction}
-                                      </span>
-                                    </RadioGroup.Description>
-                                  </span>
+                    <RadioGroup value={prediction.prediction}>
+                      <RadioGroup.Label className="sr-only">
+                        Your Multifamily Estimate
+                      </RadioGroup.Label>
+                      <Label>Your Multifamily Estimate</Label>
+                      <div className="space-y-4">
+                        <RadioGroup.Option
+                          key={prediction.prediction}
+                          value={prediction.prediction}
+                          className={({ checked, active }) =>
+                            classNames(
+                              checked
+                                ? 'border-transparent'
+                                : 'border-gray-300',
+                              active
+                                ? 'border-blue-500 ring-2 ring-blue-200'
+                                : '',
+                              'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
+                            )
+                          }
+                        >
+                          {({ active, checked }) => (
+                            <>
+                              <span className="flex items-center">
+                                <span className="flex flex-col text-sm">
+                                  <RadioGroup.Label
+                                    as="span"
+                                    className="font-medium text-gray-900"
+                                  >
+                                    {prediction.prediction}
+                                  </RadioGroup.Label>
+                                  <RadioGroup.Description
+                                    as="span"
+                                    className="text-gray-500"
+                                  >
+                                    <span className="block">
+                                      {/* {prediction.prediction} */}
+                                    </span>
+                                  </RadioGroup.Description>
                                 </span>
-                                <RadioGroup.Description
-                                  as="span"
-                                  className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
-                                >
-                                  <span className=" text-gray-500">
-                                    {predictionQuery.data.prediction >= 0 ? (
-                                      <svg
-                                        className="h-full w-[16px]"
-                                        viewBox="0 0 28 25"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <rect
-                                          y="13.1309"
-                                          width="4"
-                                          height="11"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="8"
-                                          y="8.13086"
-                                          width="4"
-                                          height="16"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                        <rect
-                                          x="16"
-                                          y="4.13086"
-                                          width="4"
-                                          height="20"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                        <rect
-                                          x="24"
-                                          y="0.130859"
-                                          width="4"
-                                          height="24"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                      </svg>
-                                    ) : predictionQuery.data.prediction >=
-                                      500000 ? (
-                                      <svg
-                                        className="h-full w-[16px]"
-                                        viewBox="0 0 28 25"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <rect
-                                          y="13.1309"
-                                          width="4"
-                                          height="11"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="8"
-                                          y="8.13086"
-                                          width="4"
-                                          height="16"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="16"
-                                          y="4.13086"
-                                          width="4"
-                                          height="20"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                        <rect
-                                          x="24"
-                                          y="0.130859"
-                                          width="4"
-                                          height="24"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                      </svg>
-                                    ) : predictionQuery.data.prediction >=
-                                      1500000 ? (
-                                      <svg
-                                        className="h-full w-[16px]"
-                                        viewBox="0 0 28 25"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <rect
-                                          y="13.1309"
-                                          width="4"
-                                          height="11"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="8"
-                                          y="8.13086"
-                                          width="4"
-                                          height="16"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="16"
-                                          y="4.13086"
-                                          width="4"
-                                          height="20"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="24"
-                                          y="0.130859"
-                                          width="4"
-                                          height="24"
-                                          rx="1"
-                                          fill="#E1E1E1"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg
-                                        className="h-full w-[16px]"
-                                        viewBox="0 0 28 25"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <rect
-                                          y="13.1309"
-                                          width="4"
-                                          height="11"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="8"
-                                          y="8.13086"
-                                          width="4"
-                                          height="16"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="16"
-                                          y="4.13086"
-                                          width="4"
-                                          height="20"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                        <rect
-                                          x="24"
-                                          y="0.130859"
-                                          width="4"
-                                          height="24"
-                                          rx="1"
-                                          fill="#4E7BBA"
-                                        />
-                                      </svg>
-                                    )}
-                                  </span>
-                                  <span className="font-medium text-gray-900">
-                                    {predictionQuery.data.prediction}
-                                  </span>
-                                </RadioGroup.Description>
-                                <span
-                                  className={classNames(
-                                    active ? 'border' : 'border-2',
-                                    checked
-                                      ? 'border-blue-500'
-                                      : 'border-transparent',
-                                    'pointer-events-none absolute -inset-px rounded-lg'
+                              </span>
+                              <RadioGroup.Description
+                                as="span"
+                                className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
+                              >
+                                <span className=" text-gray-500">
+                                  {prediction.numberPrediction >= 0 && prediction.numberPrediction < 500000 ? (
+                                    <NumberBar level={1} totalBars={5} />
+                                  ) : prediction.numberPrediction >= 500000 && prediction.numberPrediction < 1500000 ? (
+                                    <NumberBar level={2} totalBars={5} />
+                                  ) : prediction.numberPrediction >= 1500000 ? (
+                                    <NumberBar level={3} totalBars={5} />
+                                  ) : (
+                                    <NumberBar level={4} totalBars={5} />
                                   )}
-                                  aria-hidden="true"
-                                />
-                              </>
-                            )}
-                          </RadioGroup.Option>
-                        </div>
-                      </RadioGroup>
-                    )}
+                                </span>
+                                <span className="font-medium text-gray-900"></span>
+                              </RadioGroup.Description>
+                              <span
+                                className={classNames(
+                                  active ? 'border' : 'border-2',
+                                  checked
+                                    ? 'border-blue-500'
+                                    : 'border-transparent',
+                                  'pointer-events-none absolute -inset-px rounded-lg'
+                                )}
+                                aria-hidden="true"
+                              />
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                      </div>
+                    </RadioGroup>
                   </div>
                   <div className="flex gap-[15px] justify-end mt-8">
                     <div>

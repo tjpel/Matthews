@@ -73,6 +73,8 @@ def predict_property_value(
     model = ai.all_models.get("v2_modelGradient Boosting")
     prediction = model.predict(user_inputs_df)[0]
 
+    print("Prediction: ", prediction)
+
     return {"prediction": prediction}
 
 
