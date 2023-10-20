@@ -19,7 +19,7 @@ if __name__ == "__main__":
     user_inputs_dict = data.model_dump()
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
-    model = ai.all_models.get("vA_allParLeher_Gradient Boosting")
+    model = ai.all_models.get("v2_modelGradient Boosting")
     prediction = model.predict(user_inputs_df)[0]
 
     print("Prediction: {}".format(prediction))
