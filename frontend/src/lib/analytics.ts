@@ -1,14 +1,14 @@
-import type { NextApiRequest } from 'next'
-import type { NextFetchEvent, NextRequest } from 'next/server'
+import type { NextApiRequest } from 'next';
+import type { NextFetchEvent, NextRequest } from 'next/server';
 
 export const initAnalytics = ({
   request,
   event
 }: {
-  request: NextRequest | NextApiRequest | Request
-  event?: NextFetchEvent
+  request: NextRequest | NextApiRequest | Request;
+  event?: NextFetchEvent;
 }) => {
-  const endpoint = process.env.VERCEL_URL
+  const endpoint = process.env.VERCEL_URL;
 
   return {
     track: async (eventName: string, data?: any) => {
@@ -17,14 +17,14 @@ export const initAnalytics = ({
           console.log(
             `[Vercel Web Analytics] Track "${eventName}"` +
               (data ? ` with data ${JSON.stringify(data || {})}` : '')
-          )
-          return
+          );
+          return;
         }
 
-        const headers: { [key: string]: string } = {}
+        const headers: { [key: string]: string } = {};
         Object.entries(request.headers).map(([key, value]) => {
-          headers[key] = value
-        })
+          headers[key] = value;
+        });
 
         const body = {
           o: headers.referer,
@@ -32,7 +32,7 @@ export const initAnalytics = ({
           r: '',
           en: eventName,
           ed: data
-        }
+        };
 
         const promise = fetch(
           `https://${process.env.VERCEL_URL}/_vercel/insights/event`,
@@ -46,17 +46,17 @@ export const initAnalytics = ({
             body: JSON.stringify(body),
             method: 'POST'
           }
-        )
+        );
 
         if (event) {
-          event.waitUntil(promise)
+          event.waitUntil(promise);
         }
         {
-          await promise
+          await promise;
         }
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     }
-  }
-}
+  };
+};

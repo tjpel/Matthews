@@ -1,5 +1,5 @@
-import { addressSchema, propertySchema } from "@/schemas/schema";
-import { z } from "zod";
+import { addressSchema, propertySchema } from '@/schemas/schema';
+import { z } from 'zod';
 
 const BACKEND_URL = process.env['NEXT_PUBLIC_API_URL']!;
 
@@ -8,19 +8,25 @@ class Bridge {
   ping = define_blank<string>('get', '/ping');
 
   // Properties
-  getPropertyData = define<{ address: string }, Record<string, any>>('get', '/property/get-property-data', ['address']);
+  getPropertyData = define<{ address: string }, Record<string, any>>(
+    'get',
+    '/property/get-property-data',
+    ['address']
+  );
 
-  getPrediction = define<{
-    // address: z.infer<typeof addressSchema>,
-    address: any,
-    user_inputs: z.infer<typeof propertySchema>
-  }, {
-    prediction: number
-  }>('post', '/property/predict');
+  getPrediction = define<
+    {
+      // address: z.infer<typeof addressSchema>,
+      address: any;
+      user_inputs: z.infer<typeof propertySchema>;
+    },
+    {
+      prediction: number;
+    }
+  >('post', '/property/predict');
 }
 
 export const bridge = new Bridge();
-
 
 export type Method = 'get' | 'post' | 'put' | 'delete';
 
@@ -34,14 +40,18 @@ export type BlankRoute<T> = { (): Promise<T> };
  * @param path path to append to the configured API route
  * @param queryParams List of keys to be placed in the URL query instead of the body
  */
-function define<R, T>(method: Method, path: string, queryParams: string[] = []): Route<R, T> {
+function define<R, T>(
+  method: Method,
+  path: string,
+  queryParams: string[] = []
+): Route<R, T> {
   const url = path.startsWith('/')
     ? BACKEND_URL + path
     : BACKEND_URL + '/' + path;
 
   return async (data: R): Promise<T> => {
-    const params: Record<string, any> = {}
-    if (typeof data == "object") {
+    const params: Record<string, any> = {};
+    if (typeof data == 'object') {
       for (const param of queryParams) {
         // @ts-ignore
         params[param] = data[param];
@@ -49,16 +59,19 @@ function define<R, T>(method: Method, path: string, queryParams: string[] = []):
         delete data[param];
       }
     }
-    const query = Object.keys(params).length > 0 ? formatQuery(params) : "";
+    const query = Object.keys(params).length > 0 ? formatQuery(params) : '';
 
     // @ts-ignore
-    const dataHasKeys = typeof data == "object" && data !== null && Object.keys(data).length > 0
-    let requestInit: RequestInit = dataHasKeys ? {
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    } : {};
+    const dataHasKeys =
+      typeof data == 'object' && data !== null && Object.keys(data).length > 0;
+    let requestInit: RequestInit = dataHasKeys
+      ? {
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      : {};
 
     const response = await fetch(url + query, {
       method,
@@ -83,4 +96,7 @@ function define_blank<T>(method: Method, path: string): BlankRoute<T> {
 }
 
 const formatQuery = (query: Record<string, any>): string =>
-  "?" + Object.keys(query).map(key => `${key}=${query[key]}`).join("&")
+  '?' +
+  Object.keys(query)
+    .map((key) => `${key}=${query[key]}`)
+    .join('&');

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import * as React from 'react'
+import * as React from 'react';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 // import {
 //   Sheet,
 //   SheetContent,
@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button'
 //   SheetTitle,
 //   SheetTrigger
 // } from '@/components/ui/sheet'
-import { IconSidebar } from '@/components/ui/icons'
+import { IconSidebar } from '@/components/ui/icons';
 
 export interface SidebarProps {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 export function Sidebar({ children }: SidebarProps) {
@@ -33,5 +33,5 @@ export function Sidebar({ children }: SidebarProps) {
     //     {children}
     //   </SheetContent>
     // </Sheet>
-  )
+  );
 }

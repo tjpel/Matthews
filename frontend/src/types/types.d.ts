@@ -1,5 +1,16 @@
-
-type RadarGeocodeLayer = 'place' | 'address' | 'intersection' | 'street' | 'neighborhood' | 'postalCode' | 'locality' | 'county' | 'state' | 'country' | 'coarse' | 'fine';
+type RadarGeocodeLayer =
+  | 'place'
+  | 'address'
+  | 'intersection'
+  | 'street'
+  | 'neighborhood'
+  | 'postalCode'
+  | 'locality'
+  | 'county'
+  | 'state'
+  | 'country'
+  | 'coarse'
+  | 'fine';
 interface RadarAddress {
   addressLabel?: string;
   borough?: string;

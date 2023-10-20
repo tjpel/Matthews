@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const geometrySchema = z.object({
   type: z.string(),
@@ -6,27 +6,28 @@ const geometrySchema = z.object({
 });
 
 export const addressSchema = z.object({
-  address: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-    geometry: geometrySchema,
-    country: z.string(),
-    countryCode: z.string(),
-    countryFlag: z.string(),
-    county: z.string(),
-    distance: z.number(),
-    city: z.string(),
-    stateCode: z.string(),
-    state: z.string(),
-    layer: z.string(),
-    formattedAddress: z.string(),
-  })
-  .refine(
-    data => !!data.latitude && !!data.longitude, // Add your own validation logic here
-    {
-      message: "You must add a valid address", // Custom error message
-    }
-  ),
+  address: z
+    .object({
+      latitude: z.number(),
+      longitude: z.number(),
+      geometry: geometrySchema,
+      country: z.string(),
+      countryCode: z.string(),
+      countryFlag: z.string(),
+      county: z.string(),
+      distance: z.number(),
+      city: z.string(),
+      stateCode: z.string(),
+      state: z.string(),
+      layer: z.string(),
+      formattedAddress: z.string()
+    })
+    .refine(
+      (data) => !!data.latitude && !!data.longitude, // Add your own validation logic here
+      {
+        message: 'You must add a valid address' // Custom error message
+      }
+    )
 });
 
 /*
@@ -56,18 +57,28 @@ export const propertySchema = z.object({
 });
 */
 export const propertySchema = z.object({
-  netIncome: z.number().refine(value => value > 0, { message: "Required" }),
-  buildingSF: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOfParkingSpaces:  z.number().refine(value => value > 0, { message: "Required" }),
-  numberOfStudiosUnits: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOf1BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOf2BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" }),
-  numberOf3BedroomsUnits: z.number().refine(value => value > 0, { message: "Required" })
-})
+  netIncome: z.number().refine((value) => value > 0, { message: 'Required' }),
+  buildingSF: z.number().refine((value) => value > 0, { message: 'Required' }),
+  numberOfParkingSpaces: z
+    .number()
+    .refine((value) => value > 0, { message: 'Required' }),
+  numberOfStudiosUnits: z
+    .number()
+    .refine((value) => value > 0, { message: 'Required' }),
+  numberOf1BedroomsUnits: z
+    .number()
+    .refine((value) => value > 0, { message: 'Required' }),
+  numberOf2BedroomsUnits: z
+    .number()
+    .refine((value) => value > 0, { message: 'Required' }),
+  numberOf3BedroomsUnits: z
+    .number()
+    .refine((value) => value > 0, { message: 'Required' })
+});
 
 export const contactSchema = z.object({
-  firstName: z.string().min(1, { message: "Required" }),
-  lastName: z.string().min(1, { message: "Required" }),
-  email: z.string().email({ message: "Required" }),
-  phone: z.string().min(1, { message: "Required" }),
+  firstName: z.string().min(1, { message: 'Required' }),
+  lastName: z.string().min(1, { message: 'Required' }),
+  email: z.string().email({ message: 'Required' }),
+  phone: z.string().min(1, { message: 'Required' })
 });

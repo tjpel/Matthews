@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 export function SidebarFooter({
   children,
@@ -12,5 +12,5 @@ export function SidebarFooter({
     >
       {children}
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import '../globals.css'
+import '../globals.css';
 import 'radar-sdk-js/dist/radar.css';
 
 import { Analytics } from '@vercel/analytics/react';

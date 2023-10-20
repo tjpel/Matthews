@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 declare global {
   interface Window {
@@ -7,11 +7,11 @@ declare global {
 }
 
 export const valuationStep = (step: number) =>
-  window.gtag("event", "valuation_step", { step })
+  window.gtag('event', 'valuation_step', { step });
 
 export const search = (address: string) => {
-  console.log("gtag search: ", address);
+  console.log('gtag search: ', address);
   window.gtag('event', 'search', {
     search_term: address
   });
-}
+};
