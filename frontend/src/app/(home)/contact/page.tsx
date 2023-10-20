@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default () => {
+export default function ContactPage() {
   return (
     <main className="py-14">
       <div className="max-w-screen-xl mx-auto px-4 text-[#1a2b3b] md:px-8">
@@ -87,4 +87,4 @@ export default () => {
       </div>
     </main>
   );
-};
+}
