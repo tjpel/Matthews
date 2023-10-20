@@ -15,7 +15,14 @@ export const NumberBar = ({ level, totalBars }: NumberBarProps) => {
     const fillColor = i < level ? '#4E7BBA' : '#E1E1E1';
 
     bars.push(
-        <rect x={xPosition} y={yPosition}  width="4" height={height} rx="1" fill={fillColor} />
+      <rect
+        x={xPosition}
+        y={yPosition}
+        width="4"
+        height={height}
+        rx="1"
+        fill={fillColor}
+      />
     );
 
     height = height + 4;
@@ -24,7 +31,13 @@ export const NumberBar = ({ level, totalBars }: NumberBarProps) => {
   }
 
   return (
-    <svg style={{ width: `${totalBars * 4}px` }} className="h-full" viewBox="0 0 28 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      style={{ width: `${totalBars * 4}px` }}
+      className="h-full"
+      viewBox="0 0 28 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       {bars}
     </svg>
   );

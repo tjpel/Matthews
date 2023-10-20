@@ -44,7 +44,7 @@ import * as turf from '@turf/turf';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
 import * as gtag from '@/lib/gtag';
-import {NumberBar} from '@/components/number-bar';
+import { NumberBar } from '@/components/number-bar';
 
 const questions = [
   {
@@ -161,7 +161,12 @@ export default function DemoPage() {
     prediction: string;
     numberPrediction: number; // To use in calculations + slider
     highPrediction: string;
-  }>({ lowPrediction: '0', prediction: '0', numberPrediction: 0, highPrediction: '0' });
+  }>({
+    lowPrediction: '0',
+    prediction: '0',
+    numberPrediction: 0,
+    highPrediction: '0'
+  });
 
   useEffect(() => {
     Radar.initialize('prj_live_pk_b172f4472789be4d6feee1895fd8d1f4ff69e531');
@@ -304,8 +309,12 @@ export default function DemoPage() {
         // Round to the nearest tens place
         const roundToTens = (num: number) => Math.round(num / 10) * 10;
 
-        const lowPrediction = roundToTens(data.prediction - data.prediction * 0.1);
-        const highPrediction = roundToTens(data.prediction + data.prediction * 0.1);
+        const lowPrediction = roundToTens(
+          data.prediction - data.prediction * 0.1
+        );
+        const highPrediction = roundToTens(
+          data.prediction + data.prediction * 0.1
+        );
         const roundedPrediction = roundToTens(data.prediction);
 
         setPrediction({
@@ -961,9 +970,11 @@ export default function DemoPage() {
                                 className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
                               >
                                 <span className=" text-gray-500">
-                                  {prediction.numberPrediction >= 0 && prediction.numberPrediction < 500000 ? (
+                                  {prediction.numberPrediction >= 0 &&
+                                  prediction.numberPrediction < 500000 ? (
                                     <NumberBar level={1} totalBars={5} />
-                                  ) : prediction.numberPrediction >= 500000 && prediction.numberPrediction < 1500000 ? (
+                                  ) : prediction.numberPrediction >= 500000 &&
+                                    prediction.numberPrediction < 1500000 ? (
                                     <NumberBar level={2} totalBars={5} />
                                   ) : prediction.numberPrediction >= 1500000 ? (
                                     <NumberBar level={3} totalBars={5} />
