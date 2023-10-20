@@ -1,24 +1,21 @@
 from pathlib import Path
 import pickle
-
-from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+import os
+from typing import Dict, Any
+from sklearn.base import BaseEstimator
 
 current_dir = Path(__file__).parent.resolve()
 
+def load_all_models(directory: Path) -> Dict[str, BaseEstimator]:
+    models = {}
+    for filename in os.listdir(directory):
+        if filename.endswith(".pkl"):
+            model_name = filename.split(".")[0]
+            path = directory.joinpath(filename)
+            with open(path, "rb") as file:
+                model = pickle.load(file)
+            models[model_name] = model
+    return models
 
-def load_model(filename: str) -> any:
-    path = current_dir.joinpath(filename)
-    with open(path, "rb") as file:
-        return pickle.load(file)
-
-
-gradient_boosting: GradientBoostingRegressor = load_model("gradient_boosting_model.pkl")
-random_forest_high_performing: RandomForestRegressor = load_model(
-    "Random_Forest_high_performing_model_v2.pkl"
-)
-gradient_boosting_best: GradientBoostingRegressor = load_model(
-    "Gradient_Boosting_high_performing_model_v2.pkl"
-)
-gradient_boosting_best_v2: GradientBoostingRegressor = load_model(
-    "vB_fiveParLeher_Gradient Boosting.pkl"
-)
+# Load all models in the current directory
+all_models = load_all_models(current_dir)
