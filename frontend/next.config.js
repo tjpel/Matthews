@@ -1,20 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
+    appDir: true
   },
   rewrites: async () => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000';  // Fallback to local if the env variable is not set
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    if (!backendUrl) {
+      throw new Error(
+        'The environment variable NEXT_PUBLIC_BACKEND_URL is required but was not provided.'
+      );
+    }
+
     return [
       {
         source: '/api/:path*',
-        destination: `${backendUrl}/:path*`,
-      },
+        destination: `${backendUrl}/:path*`
+      }
     ];
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh'],
-  },
+    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
+  }
 };
 
 module.exports = nextConfig;
