@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, Title, Text } from '@tremor/react';
 import { queryBuilder } from '@/lib/planetscale';
 import Search from './search';
@@ -5,7 +7,7 @@ import UsersTable from './table';
 
 export const dynamic = 'force-dynamic';
 
-export default async function IndexPage({
+export default function IndexPage({
   searchParams
 }: {
   searchParams: { q: string };
@@ -17,10 +19,10 @@ export default async function IndexPage({
   //   .where('name', 'like', `%${search}%`)
   //   .execute();
 
-  const response = await fetch('http://127.0.0.1:8000/api/v1/property/predict');
+  // const response = await fetch('api/property/predict');
 
-  const items = await response.json();
-  console.log(items);
+  // const items = await response.json();
+  // console.log(items);
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
