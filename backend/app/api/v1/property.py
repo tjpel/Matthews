@@ -12,12 +12,6 @@ import app.ai as ai
 
 routes = APIRouter(prefix="/property")
 
-ModelPrector = ModelPredictor(
-    model_path="../../ai/vB_fiveParLeher_Gradient_Boosting.pkl", model_type=ai.GradientBoostingRegressor
-)
-
-prediction = ModelPrector.predict(user_inputs_df)
-
 @routes.get("/get-property-data")
 def get_property_data(address: str):
     # Initialize Redfin API client
@@ -62,7 +56,6 @@ def get_property_data(address: str):
         "avm_details": avm_payload,
     }
 
-
 @routes.post("/predict")
 def predict_property_value(
     address: property.Address = Body(...),
@@ -72,22 +65,13 @@ def predict_property_value(
     print(user_inputs)
 
     # Convert user_inputs to a Pandas DataFrame
-    user_inputs_dict = user_inputs.dict()
+    user_inputs_dict = user_inputs.model_dump()
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
     # Store data in database
 
-    # # Call ML model
-    # model = ai.gradient_boosting  # Assuming ai.gradient_boosting_best is your ML model
-
-    # # Return predicted value
-    # prediction = model.predict(user_inputs_df)  # Replace with user_inputs_np if using NumPy array
-
-    ModelPrector = ModelPredictor(
-        model_path="../../ai/v2_model/v2_modelGradient Boosting", model_type=ai.GradientBoostingRegressor
-    )
-
-    prediction = ModelPrector.predict(user_inputs_df)
+    model = ai.all_models.get("v2_modelGradient Boosting")
+    prediction = model.predict(user_inputs_df)[0]
 
     return {"prediction": prediction}
 
