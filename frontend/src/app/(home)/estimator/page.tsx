@@ -948,7 +948,7 @@ export default function DemoPage() {
                                     as="span"
                                     className="font-medium text-gray-900"
                                   >
-                                    {prediction.prediction}
+                                    ${prediction.prediction}
                                   </RadioGroup.Label>
                                   <RadioGroup.Description
                                     as="span"
