@@ -220,13 +220,8 @@ export default function DemoPage() {
     resolver: zodResolver(propertySchema),
     defaultValues: {
       netIncome: 100000,
-      buildingSF: 500,
-      numberOfParkingSpaces: 0,
+      buildingSF: 500
       //for model, sum all below to be 'Number of Units' -- Taylor will want unit mix even though model doesn't
-      numberOfStudiosUnits: 0,
-      numberOf1BedroomsUnits: 0,
-      numberOf2BedroomsUnits: 0,
-      numberOf3BedroomsUnits: 0
     }
   });
 
