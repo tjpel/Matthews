@@ -70,7 +70,7 @@ def predict_property_value(
 
     # Store data in database
 
-    model = ai.all_models.get("v2_modelGradient Boosting")
+    model = ai.all_models.get("v2_modelRandom_Forest_Pipeline")
     prediction = model.predict(user_inputs_df)[0]
 
     print("Prediction: ", prediction)
