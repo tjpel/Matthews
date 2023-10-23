@@ -66,6 +66,24 @@ def predict_property_value(
 
     # Convert user_inputs to a Pandas DataFrame
     user_inputs_dict = user_inputs.model_dump()
+
+    mapping_dict = {
+        'netIncome': 'Net Income',
+        'buildingSF': 'Size',
+        'typicalFloorSF': 'Typical Floor (SF)',
+        'size': 'Size',
+        'numberOfParkingSpaces': 'Number Of Parking Spaces',
+        'numberOfStudiosUnits': 'Number Of Studios Units',
+        'numberOf1BedroomsUnits': 'Number Of 1 Bedrooms Units',
+        'numberOf2BedroomsUnits': 'Number Of 2 Bedrooms Units',
+        'numberOf3BedroomsUnits': 'Number Of 3 Bedrooms Units'
+    }
+
+    # Use the pop method to rename keys inline
+    for k_old, k_new in mapping_dict.items():
+        user_inputs_dict[k_new] = user_inputs_dict.pop(k_old)
+
+
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
     # Store data in database
