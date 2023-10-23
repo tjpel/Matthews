@@ -1,0 +1,25 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "vendor-chunks/@turf+boolean-clockwise@6.5.0";
+exports.ids = ["vendor-chunks/@turf+boolean-clockwise@6.5.0"];
+exports.modules = {
+
+/***/ "(ssr)/./node_modules/.pnpm/@turf+boolean-clockwise@6.5.0/node_modules/@turf/boolean-clockwise/dist/es/index.js":
+/*!****************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/@turf+boolean-clockwise@6.5.0/node_modules/@turf/boolean-clockwise/dist/es/index.js ***!
+  \****************************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ booleanClockwise)\n/* harmony export */ });\n/* harmony import */ var _turf_invariant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @turf/invariant */ \"(ssr)/./node_modules/.pnpm/@turf+invariant@6.5.0/node_modules/@turf/invariant/dist/es/index.js\");\n\n/**\n * Takes a ring and return true or false whether or not the ring is clockwise or counter-clockwise.\n *\n * @name booleanClockwise\n * @param {Feature<LineString>|LineString|Array<Array<number>>} line to be evaluated\n * @returns {boolean} true/false\n * @example\n * var clockwiseRing = turf.lineString([[0,0],[1,1],[1,0],[0,0]]);\n * var counterClockwiseRing = turf.lineString([[0,0],[1,0],[1,1],[0,0]]);\n *\n * turf.booleanClockwise(clockwiseRing)\n * //=true\n * turf.booleanClockwise(counterClockwiseRing)\n * //=false\n */\nfunction booleanClockwise(line) {\n    var ring = (0,_turf_invariant__WEBPACK_IMPORTED_MODULE_0__.getCoords)(line);\n    var sum = 0;\n    var i = 1;\n    var prev;\n    var cur;\n    while (i < ring.length) {\n        prev = cur || ring[0];\n        cur = ring[i];\n        sum += (cur[0] - prev[0]) * (cur[1] + prev[1]);\n        i++;\n    }\n    return sum > 0;\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvLnBucG0vQHR1cmYrYm9vbGVhbi1jbG9ja3dpc2VANi41LjAvbm9kZV9tb2R1bGVzL0B0dXJmL2Jvb2xlYW4tY2xvY2t3aXNlL2Rpc3QvZXMvaW5kZXguanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBNEM7QUFDNUM7QUFDQTtBQUNBO0FBQ0E7QUFDQSxXQUFXLHFEQUFxRDtBQUNoRSxhQUFhLFNBQVM7QUFDdEI7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ2U7QUFDZixlQUFlLDBEQUFTO0FBQ3hCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL21mdmFsdWUtZnJvbnRlbmQvLi9ub2RlX21vZHVsZXMvLnBucG0vQHR1cmYrYm9vbGVhbi1jbG9ja3dpc2VANi41LjAvbm9kZV9tb2R1bGVzL0B0dXJmL2Jvb2xlYW4tY2xvY2t3aXNlL2Rpc3QvZXMvaW5kZXguanM/ZDI5NSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBnZXRDb29yZHMgfSBmcm9tIFwiQHR1cmYvaW52YXJpYW50XCI7XG4vKipcbiAqIFRha2VzIGEgcmluZyBhbmQgcmV0dXJuIHRydWUgb3IgZmFsc2Ugd2hldGhlciBvciBub3QgdGhlIHJpbmcgaXMgY2xvY2t3aXNlIG9yIGNvdW50ZXItY2xvY2t3aXNlLlxuICpcbiAqIEBuYW1lIGJvb2xlYW5DbG9ja3dpc2VcbiAqIEBwYXJhbSB7RmVhdHVyZTxMaW5lU3RyaW5nPnxMaW5lU3RyaW5nfEFycmF5PEFycmF5PG51bWJlcj4+fSBsaW5lIHRvIGJlIGV2YWx1YXRlZFxuICogQHJldHVybnMge2Jvb2xlYW59IHRydWUvZmFsc2VcbiAqIEBleGFtcGxlXG4gKiB2YXIgY2xvY2t3aXNlUmluZyA9IHR1cmYubGluZVN0cmluZyhbWzAsMF0sWzEsMV0sWzEsMF0sWzAsMF1dKTtcbiAqIHZhciBjb3VudGVyQ2xvY2t3aXNlUmluZyA9IHR1cmYubGluZVN0cmluZyhbWzAsMF0sWzEsMF0sWzEsMV0sWzAsMF1dKTtcbiAqXG4gKiB0dXJmLmJvb2xlYW5DbG9ja3dpc2UoY2xvY2t3aXNlUmluZylcbiAqIC8vPXRydWVcbiAqIHR1cmYuYm9vbGVhbkNsb2Nrd2lzZShjb3VudGVyQ2xvY2t3aXNlUmluZylcbiAqIC8vPWZhbHNlXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIGJvb2xlYW5DbG9ja3dpc2UobGluZSkge1xuICAgIHZhciByaW5nID0gZ2V0Q29vcmRzKGxpbmUpO1xuICAgIHZhciBzdW0gPSAwO1xuICAgIHZhciBpID0gMTtcbiAgICB2YXIgcHJldjtcbiAgICB2YXIgY3VyO1xuICAgIHdoaWxlIChpIDwgcmluZy5sZW5ndGgpIHtcbiAgICAgICAgcHJldiA9IGN1ciB8fCByaW5nWzBdO1xuICAgICAgICBjdXIgPSByaW5nW2ldO1xuICAgICAgICBzdW0gKz0gKGN1clswXSAtIHByZXZbMF0pICogKGN1clsxXSArIHByZXZbMV0pO1xuICAgICAgICBpKys7XG4gICAgfVxuICAgIHJldHVybiBzdW0gPiAwO1xufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/.pnpm/@turf+boolean-clockwise@6.5.0/node_modules/@turf/boolean-clockwise/dist/es/index.js\n");
+
+/***/ })
+
+};
+;
