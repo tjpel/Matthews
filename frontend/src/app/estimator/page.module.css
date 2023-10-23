@@ -13,12 +13,21 @@
     }
 }
 
-.formWrapper {
+.formScroll {
     grid-area: form;
+    display: grid;
+
+    width: 100%;
+    min-height: 100vh;
+    padding: 1em 0;
+    overflow: auto;
+}
+
+.formWrapper {
     max-width: 32em;
     margin: 0 2em;
-    align-self: center;
     justify-self: center;
+    align-self: center;
 }
 
 .suggestions {

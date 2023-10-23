@@ -91,25 +91,27 @@ export default function Page() {
 
   return <FormStateContext.Provider value={{ form, setForm }}>
     <div className={styles.estimator}>
-      {transition((step, state) => (
-        <div
-          className={styles.formWrapper}
-          style={{
-            transition: `all ${ANIM_SECS}s ${state === 'leave' ? 'ease-in' : 'ease-out'}`,
-            opacity: state === 'enter' ? 1 : 0,
-            transform: {
-              enter: 'translateY(0)',
-              from: 'translateY(-2em)',
-              leave: 'translateY(2em)'
-            }[state]
-          }}
-        >
-          {step === 0 && <GetAddress home={home} next={next} />}
-          {step === 1 && <PropertyInfo back={back} next={next}/>}
+      <div className={styles.formScroll}>
+        {transition((step, state) => (
+          <div
+            className={styles.formWrapper}
+            style={{
+              transition: `all ${ANIM_SECS}s ${state === 'leave' ? 'ease-in' : 'ease-out'}`,
+              opacity: state === 'enter' ? 1 : 0,
+              transform: `translateY(${{
+                "enter": 0,
+                "from": "-2em",
+                "leave": "2em"
+              }[state]})`
+            }}
+          >
+            {step === 0 && <GetAddress home={home} next={next} />}
+            {step === 1 && <PropertyInfo back={back} next={next}/>}
 
-          {step === 2 && <>unimplemented :P</>}
-        </div>
-      ))}
+            {step === 2 && <>unimplemented :P</>}
+          </div>
+        ))}
+      </div>
 
       <div style={{position: "relative"}}>
         <div id="map" style={{width: '100%', height: '100%'}}/>
