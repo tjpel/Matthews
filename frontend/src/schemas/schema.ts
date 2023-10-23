@@ -61,19 +61,19 @@ export const propertySchema = z.object({
   buildingSF: z.number().refine((value) => value > 0, { message: 'Required' }),
   numberOfParkingSpaces: z
     .number()
-    .refine((value) => value > 0, { message: 'Required' }),
+    .refine((value) => value >= 0, { message: 'Required' }),
   numberOfStudiosUnits: z
     .number()
-    .refine((value) => value > 0, { message: 'Required' }),
+    .refine((value) => value >= 0, { message: 'Required' }),
   numberOf1BedroomsUnits: z
     .number()
-    .refine((value) => value > 0, { message: 'Required' }),
+    .refine((value) => value >= 0, { message: 'Required' }),
   numberOf2BedroomsUnits: z
     .number()
-    .refine((value) => value > 0, { message: 'Required' }),
+    .refine((value) => value >= 0, { message: 'Required' }),
   numberOf3BedroomsUnits: z
     .number()
-    .refine((value) => value > 0, { message: 'Required' })
+    .refine((value) => value >= 0, { message: 'Required' })
 });
 
 export const contactSchema = z.object({

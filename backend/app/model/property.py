@@ -61,12 +61,12 @@ class UserInputs(BaseModel):
     buildingSF: float = Field(..., gt=0, description="Required")
     typicalFloorSF: float = Field(..., gt=0, description="Required")
     size: float = Field(..., gt=0, description="Required")
-    numberOfParkingSpaces: int = Field(..., gt=0, description="Required")
-    numberOfStudiosUnits: int = Field(..., gt=0, description="Required")
-    numberOf1BedroomsUnits: int = Field(..., gt=0, description="Required")
-    numberOf2BedroomsUnits: int = Field(..., gt=0, description="Required")
-    numberOf3BedroomsUnits: int = Field(..., gt=0, description="Required")
-   
+    numberOfParkingSpaces: int = Field(..., ge=0, description="Required")
+    numberOfStudiosUnits: int = Field(..., ge=0, description="Required")
+    numberOf1BedroomsUnits: int = Field(..., ge=0, description="Required")
+    numberOf2BedroomsUnits: int = Field(..., ge=0, description="Required")
+    numberOf3BedroomsUnits: int = Field(..., ge=0, description="Required")
+
 
 class ContactInfo(BaseModel):
     name: str = Field(..., description="Required")
