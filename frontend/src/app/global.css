@@ -23,7 +23,8 @@ body {
 }
 
 h1 {
-    font-size: 2.3rem;
+    /* travis says 3.2rem looks odd */
+    font-size: 36px;
     line-height: 1.1em;
     margin: 0.8rem 0;
 }
@@ -87,11 +88,16 @@ button, input[type="submit"] {
     background-color: var(--text-light);
     cursor: pointer;
 
-    padding: 0 1em;
-    height: 3em;
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 2.5em;
     box-shadow: var(--button-shadow);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
 
     &[disabled] {
         opacity: 0.75;

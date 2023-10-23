@@ -1,18 +1,19 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useEffect, useState, KeyboardEvent, MouseEvent } from 'react';
+import { createContext, KeyboardEvent, MouseEvent, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSwitchTransition } from 'transition-hook';
 import { Updater, useImmer } from 'use-immer';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AutocompleteResponse } from '@/radar-util';
 
+import * as radar from '@/radar-util';
+import { AutocompleteResponse } from '@/radar-util';
 import * as schema from '@/schema';
 import { PropertyData } from '@/schema';
-import * as radar from "@/radar-util";
-import {SuggestionInput} from '@/components/suggestion-input';
+import { SuggestionInput } from '@/components/suggestion-input';
+import Arrow from "@/svg/arrow.svg";
 
 import styles from './page.module.css';
 import 'radar-sdk-js/dist/radar.css';
@@ -66,7 +67,7 @@ export default function Page() {
 
   useEffect(() => {
     radar.init();
-    radar.createMap("map");
+    radar.createMap('map');
 
     return () => radar.removeMap();
   }, []);
@@ -99,22 +100,22 @@ export default function Page() {
               transition: `all ${ANIM_SECS}s ${state === 'leave' ? 'ease-in' : 'ease-out'}`,
               opacity: state === 'enter' ? 1 : 0,
               transform: `translateY(${{
-                "enter": 0,
-                "from": "-2em",
-                "leave": "2em"
+                'enter': 0,
+                'from': '-2em',
+                'leave': '2em'
               }[state]})`
             }}
           >
             {step === 0 && <GetAddress home={home} next={next} />}
-            {step === 1 && <PropertyInfo back={back} next={next}/>}
+            {step === 1 && <PropertyInfo back={back} next={next} />}
 
             {step === 2 && <>unimplemented :P</>}
           </div>
         ))}
       </div>
 
-      <div style={{position: "relative"}}>
-        <div id="map" style={{width: '100%', height: '100%'}}/>
+      <div style={{ position: 'relative' }}>
+        <div id='map' style={{ width: '100%', height: '100%' }} />
       </div>
     </div>
   </FormStateContext.Provider>;
@@ -141,7 +142,7 @@ function GetAddress(props: {
     }
   });
 
-  const [currentValue, setCurrentValue] = useState("");
+  const [currentValue, setCurrentValue] = useState('');
   const [autocomplete, setAutocomplete] = useState<AutocompleteResponse>([]);
   const [handle, setHandle] = useState<number>();
 
@@ -151,7 +152,7 @@ function GetAddress(props: {
 
     // @ts-ignore
     setHandle(setTimeout(() => {
-      const address = getValues("address");
+      const address = getValues('address');
       setCurrentValue(address);
       console.log(autocomplete);
       if (address.length > 0) {
@@ -175,8 +176,8 @@ function GetAddress(props: {
       setAutocomplete([]);
   };
   const onSelect = (address: string) => {
-    console.log("setting to ", address);
-    setValue("address", address);
+    console.log('setting to ', address);
+    setValue('address', address);
     setAutocomplete([]);
   };
   const onSubmit = (data: z.infer<typeof formSchema>) => {
@@ -209,7 +210,7 @@ function GetAddress(props: {
     </span>
 
     <div className={styles.controls}>
-      <button className='primary'>Continue</button>
+      <button className='primary'>Continue<Arrow/></button>
       <button onClick={props.home}>Back to home</button>
     </div>
   </form>;
@@ -219,8 +220,8 @@ function PropertyInfo(props: {
   back: ButtonAction,
   next: ButtonAction
 }) {
-  const {form, setForm} = useContext(FormStateContext);
-  const {register, handleSubmit, formState: {errors}} = useForm({
+  const { form, setForm } = useContext(FormStateContext);
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema.property),
     defaultValues: form.data.property
   });
@@ -231,43 +232,43 @@ function PropertyInfo(props: {
 
     });
     props.next();
-  }
+  };
 
   return <form onSubmit={handleSubmit(onSubmit)}>
     <h1>Multifamily Information</h1>
     <sub>Add your property information so we can provide you with an accurate property estimation report.</sub>
 
     <label>$ Net Income</label>
-    <input type='number' {...register("netIncome", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.netIncome?.message}</span>
+    <input type='number' {...register('netIncome', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.netIncome?.message}</span>
 
     <label>Building Size (square feet)</label>
-    <input type='number' {...register("buildingSF", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.buildingSF?.message}</span>
+    <input type='number' {...register('buildingSF', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.buildingSF?.message}</span>
 
     <label>Number of Parking Spaces</label>
-    <input type='number' {...register("parkingSpaces", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.parkingSpaces?.message}</span>
+    <input type='number' {...register('parkingSpaces', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.parkingSpaces?.message}</span>
 
     <label>Number of Studio Units</label>
-    <input type='number' {...register("studioUnits", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.studioUnits?.message}</span>
+    <input type='number' {...register('studioUnits', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.studioUnits?.message}</span>
 
     <label>Number of 1 Bedroom Units</label>
-    <input type='number' {...register("oneBedroomUnits", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.oneBedroomUnits?.message}</span>
+    <input type='number' {...register('oneBedroomUnits', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.oneBedroomUnits?.message}</span>
 
     <label>Number of 2 Bedroom Units</label>
-    <input type='number' {...register("twoBedroomUnits", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.twoBedroomUnits?.message}</span>
+    <input type='number' {...register('twoBedroomUnits', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.twoBedroomUnits?.message}</span>
 
     <label>Number of 3 Bedroom Units</label>
-    <input type='number' {...register("threeBedroomUnits", {valueAsNumber: true})}/>
-    <span className="form-error">{errors.threeBedroomUnits?.message}</span>
+    <input type='number' {...register('threeBedroomUnits', { valueAsNumber: true })} />
+    <span className='form-error'>{errors.threeBedroomUnits?.message}</span>
 
     <div className={styles.controls}>
-      <button className="primary">Your property estimate</button>
+      <button className='primary'>Your property estimate<Arrow/></button>
       <button onClick={props.back}>Previous step</button>
     </div>
-  </form>
+  </form>;
 }
