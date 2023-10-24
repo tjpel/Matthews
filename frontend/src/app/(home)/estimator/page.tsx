@@ -961,7 +961,7 @@ export default function DemoPage() {
                   </p>
                   <div className="space-y-4">
                     {predictionQuery.isLoading && (
-                      <Loader color="blue" type="dots" />
+                      <Loader color="blue" type="dots" size="xl" />
                     )}
 
                     {!predictionQuery.isLoading && (
