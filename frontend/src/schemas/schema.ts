@@ -80,5 +80,6 @@ export const contactSchema = z.object({
   firstName: z.string().min(1, { message: 'Required' }),
   lastName: z.string().min(1, { message: 'Required' }),
   email: z.string().email({ message: 'Required' }),
-  phone: z.string().min(1, { message: 'Required' })
+  phone: z.string().min(1, { message: 'Required' }),
+  message: z.string()
 });

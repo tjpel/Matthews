@@ -46,6 +46,7 @@ import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
 import * as gtag from '@/lib/gtag';
 import { NumberBar } from '@/components/number-bar';
 import { Loader } from '@mantine/core';
+import { ContactForm } from '@/components/contact-form';
 
 const questions = [
   {
@@ -221,16 +222,6 @@ export default function DemoPage() {
     resolver: zodResolver(propertySchema),
     defaultValues: {
       //for model, sum all below to be 'Number of Units' -- Taylor will want unit mix even though model doesn't
-    }
-  });
-
-  const contactForm = useForm<z.infer<typeof contactSchema>>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: ''
     }
   });
 
@@ -1002,6 +993,16 @@ export default function DemoPage() {
                         </div>
                       </RadioGroup>
                     )}
+
+                    <h2 className="mt-4 text-4xl font-bold text-[#1E2B3A]">
+                      Contact Info
+                    </h2>
+                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                      Add your contact info to get an in-depth property
+                      estimation report from one of our agents.
+                    </p>
+
+                    <ContactForm />
                   </div>
                   <div className="flex gap-[15px] justify-end mt-8">
                     <div>
@@ -1018,16 +1019,15 @@ export default function DemoPage() {
                     <div>
                       <button
                         onClick={() => {
-                          setStep(4);
+                          setStep(3);
                         }}
-                        // type="submit"
                         className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                         style={{
                           boxShadow:
                             '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
                         }}
                       >
-                        <span> Contact us </span>
+                        <span> Submit Contact Info </span>
                         <svg
                           className="w-5 h-5"
                           viewBox="0 0 24 24"
@@ -1054,161 +1054,7 @@ export default function DemoPage() {
                   </div>
                 </motion.div>
               ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -40 }}
-                  key="step-2"
-                  transition={{
-                    duration: 0.95,
-                    ease: [0.165, 0.84, 0.44, 1]
-                  }}
-                  className="max-w-lg mx-auto px-4 lg:px-0"
-                >
-                  <Form {...contactForm}>
-                    <form
-                      onSubmit={contactForm.handleSubmit((e) => setStep(4))}
-                      className="space-y-4"
-                    >
-                      <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                        Contact Info
-                      </h2>
-                      <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                        Add your contact info to get an in-depth property
-                        estimation report from one of our agents.
-                      </p>
-                      <div className="space-y-4">
-                        <FormField
-                          control={contactForm.control}
-                          name="firstName"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>
-                                First Name
-                                <span className="text-red-500">*</span>
-                              </Label>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your first name"
-                                  className="h-12"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={contactForm.control}
-                          name="lastName"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>
-                                Last Name<span className="text-red-500">*</span>
-                              </Label>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your last name"
-                                  className="h-12"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={contactForm.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>
-                                Email<span className="text-red-500">*</span>
-                              </Label>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your email"
-                                  className="h-12"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={contactForm.control}
-                          name="phone"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>
-                                Phone<span className="text-red-500">*</span>
-                              </Label>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your phone number"
-                                  className="h-12"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="flex gap-[15px] justify-end mt-8">
-                        <div>
-                          <button
-                            onClick={() => setStep(3)}
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0 1px 1px #0c192714, 0 1px 3px #0c192724'
-                            }}
-                          >
-                            Back to predictions
-                          </button>
-                        </div>
-                        <div>
-                          <button
-                            // onClick={() => {
-                            //   setStep(3);
-                            // }}
-                            type="submit"
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
-                            }}
-                          >
-                            <span> Submit </span>
-                            <svg
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M13.75 6.75L19.25 12L13.75 17.25"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M19 12H4.75"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </Form>
-                </motion.div>
+                <></>
               )}
             </div>
           </ScrollArea>
