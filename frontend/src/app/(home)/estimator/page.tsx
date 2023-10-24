@@ -220,8 +220,6 @@ export default function DemoPage() {
   const propertyForm = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
-      netIncome: 100000,
-      buildingSF: 500
       //for model, sum all below to be 'Number of Units' -- Taylor will want unit mix even though model doesn't
     }
   });
