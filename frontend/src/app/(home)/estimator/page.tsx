@@ -45,6 +45,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { addressSchema, contactSchema, propertySchema } from '@/schemas/schema';
 import * as gtag from '@/lib/gtag';
 import { NumberBar } from '@/components/number-bar';
+import { Loader } from '@mantine/core';
 
 const questions = [
   {
@@ -322,6 +323,8 @@ export default function DemoPage() {
       retry: false
     }
   );
+
+  console.log(predictionQuery.isLoading);
 
   useEffect(() => {
     const addressFormValues = addressForm.getValues();
@@ -919,81 +922,88 @@ export default function DemoPage() {
                     property information.
                   </p>
                   <div className="space-y-4">
-                    <RadioGroup value={prediction.prediction}>
-                      <RadioGroup.Label className="sr-only">
-                        Your Multifamily Estimate
-                      </RadioGroup.Label>
-                      <Label>Your Multifamily Estimate</Label>
-                      <div className="space-y-4">
-                        <RadioGroup.Option
-                          key={prediction.prediction}
-                          value={prediction.prediction}
-                          className={({ checked, active }) =>
-                            classNames(
-                              checked
-                                ? 'border-transparent'
-                                : 'border-gray-300',
-                              active
-                                ? 'border-blue-500 ring-2 ring-blue-200'
-                                : '',
-                              'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
-                            )
-                          }
-                        >
-                          {({ active, checked }) => (
-                            <>
-                              <span className="flex items-center">
-                                <span className="flex flex-col text-sm">
-                                  <RadioGroup.Label
-                                    as="span"
-                                    className="font-medium text-gray-900"
-                                  >
-                                    ${prediction.prediction}
-                                  </RadioGroup.Label>
-                                  <RadioGroup.Description
-                                    as="span"
-                                    className="text-gray-500"
-                                  >
-                                    <span className="block">
-                                      {/* {prediction.prediction} */}
-                                    </span>
-                                  </RadioGroup.Description>
+                    {predictionQuery.isLoading && (
+                      <Loader color="blue" type="dots" />
+                    )}
+
+                    {!predictionQuery.isLoading && (
+                      <RadioGroup value={prediction.prediction}>
+                        <RadioGroup.Label className="sr-only">
+                          Your Multifamily Estimate
+                        </RadioGroup.Label>
+                        <Label>Your Multifamily Estimate</Label>
+                        <div className="space-y-4">
+                          <RadioGroup.Option
+                            key={prediction.prediction}
+                            value={prediction.prediction}
+                            className={({ checked, active }) =>
+                              classNames(
+                                checked
+                                  ? 'border-transparent'
+                                  : 'border-gray-300',
+                                active
+                                  ? 'border-blue-500 ring-2 ring-blue-200'
+                                  : '',
+                                'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
+                              )
+                            }
+                          >
+                            {({ active, checked }) => (
+                              <>
+                                <span className="flex items-center">
+                                  <span className="flex flex-col text-sm">
+                                    <RadioGroup.Label
+                                      as="span"
+                                      className="font-medium text-gray-900"
+                                    >
+                                      ${prediction.prediction}
+                                    </RadioGroup.Label>
+                                    <RadioGroup.Description
+                                      as="span"
+                                      className="text-gray-500"
+                                    >
+                                      <span className="block">
+                                        {/* {prediction.prediction} */}
+                                      </span>
+                                    </RadioGroup.Description>
+                                  </span>
                                 </span>
-                              </span>
-                              <RadioGroup.Description
-                                as="span"
-                                className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
-                              >
-                                <span className=" text-gray-500">
-                                  {prediction.numberPrediction >= 0 &&
-                                  prediction.numberPrediction < 500000 ? (
-                                    <NumberBar level={1} totalBars={5} />
-                                  ) : prediction.numberPrediction >= 500000 &&
-                                    prediction.numberPrediction < 1500000 ? (
-                                    <NumberBar level={2} totalBars={5} />
-                                  ) : prediction.numberPrediction >= 1500000 ? (
-                                    <NumberBar level={3} totalBars={5} />
-                                  ) : (
-                                    <NumberBar level={4} totalBars={5} />
+                                <RadioGroup.Description
+                                  as="span"
+                                  className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
+                                >
+                                  <span className=" text-gray-500">
+                                    {prediction.numberPrediction >= 0 &&
+                                    prediction.numberPrediction < 500000 ? (
+                                      <NumberBar level={1} totalBars={5} />
+                                    ) : prediction.numberPrediction >= 500000 &&
+                                      prediction.numberPrediction < 1500000 ? (
+                                      <NumberBar level={2} totalBars={5} />
+                                    ) : prediction.numberPrediction >=
+                                      1500000 ? (
+                                      <NumberBar level={3} totalBars={5} />
+                                    ) : (
+                                      <NumberBar level={4} totalBars={5} />
+                                    )}
+                                  </span>
+                                  <span className="font-medium text-gray-900"></span>
+                                </RadioGroup.Description>
+                                <span
+                                  className={classNames(
+                                    active ? 'border' : 'border-2',
+                                    checked
+                                      ? 'border-blue-500'
+                                      : 'border-transparent',
+                                    'pointer-events-none absolute -inset-px rounded-lg'
                                   )}
-                                </span>
-                                <span className="font-medium text-gray-900"></span>
-                              </RadioGroup.Description>
-                              <span
-                                className={classNames(
-                                  active ? 'border' : 'border-2',
-                                  checked
-                                    ? 'border-blue-500'
-                                    : 'border-transparent',
-                                  'pointer-events-none absolute -inset-px rounded-lg'
-                                )}
-                                aria-hidden="true"
-                              />
-                            </>
-                          )}
-                        </RadioGroup.Option>
-                      </div>
-                    </RadioGroup>
+                                  aria-hidden="true"
+                                />
+                              </>
+                            )}
+                          </RadioGroup.Option>
+                        </div>
+                      </RadioGroup>
+                    )}
                   </div>
                   <div className="flex gap-[15px] justify-end mt-8">
                     <div>
