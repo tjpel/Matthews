@@ -995,7 +995,7 @@ export default function DemoPage() {
                     )}
 
                     <h2 className="mt-4 text-4xl font-bold text-[#1E2B3A]">
-                      Contact Info
+                      Contact Us
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                       Add your contact info to get an in-depth property
