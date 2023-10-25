@@ -636,11 +636,39 @@ export default function DemoPage() {
                                   <Input
                                     className="h-14"
                                     placeholder="Enter the number of parking spaces"
-                                    type="number"
-                                    value={field.value}
-                                    onChange={(e) =>
-                                      field.onChange(parseFloat(e.target.value))
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -658,11 +686,39 @@ export default function DemoPage() {
                                   <Input
                                     className="h-14"
                                     placeholder="Enter the number of studio units"
-                                    type="number"
-                                    value={field.value}
-                                    onChange={(e) =>
-                                      field.onChange(parseFloat(e.target.value))
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -680,11 +736,39 @@ export default function DemoPage() {
                                   <Input
                                     className="h-14"
                                     placeholder="Enter the number of 1 bedroom units"
-                                    type="number"
-                                    value={field.value}
-                                    onChange={(e) =>
-                                      field.onChange(parseFloat(e.target.value))
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -702,11 +786,39 @@ export default function DemoPage() {
                                   <Input
                                     className="h-14"
                                     placeholder="Enter the number of 2 bedroom units"
-                                    type="number"
-                                    value={field.value}
-                                    onChange={(e) =>
-                                      field.onChange(parseFloat(e.target.value))
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -724,11 +836,39 @@ export default function DemoPage() {
                                   <Input
                                     className="h-14"
                                     placeholder="Enter the number of 3 bedroom units"
-                                    type="number"
-                                    value={field.value}
-                                    onChange={(e) =>
-                                      field.onChange(parseFloat(e.target.value))
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
                                   />
                                 </FormControl>
                                 <FormMessage />
