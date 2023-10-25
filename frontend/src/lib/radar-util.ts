@@ -43,11 +43,6 @@ export async function geocode(query: string): Promise<RadarAddress | undefined> 
   return isWithinRange(location) ? address : undefined;
 }
 
-export async function name(location: Location) {
-  const res = await Radar.reverseGeocode(location);
-  console.log(res.addresses);
-}
-
 export async function autocomplete(query: string): Promise<AutocompleteResponse> {
   const res = await Radar.autocomplete({
     query,

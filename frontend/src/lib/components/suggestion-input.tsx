@@ -33,12 +33,12 @@ export function SuggestionInput(props: {
       let elem: Element | null = ev.target as Element | null;
       while (elem) {
         if (elem === div.current) {
-          props.onBlur?.();
           break;
         } else {
           elem = elem.parentElement;
         }
       }
+      props.onBlur?.();
     };
 
     if (props.onBlur) {

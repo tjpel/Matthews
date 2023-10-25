@@ -29,7 +29,7 @@ interface FormState {
   step: number;
   data: {
     address: string;
-    property: PropertyData
+    property: Partial<PropertyData>
   };
 }
 
@@ -38,13 +38,13 @@ const FORM_STATE: FormState = {
   data: {
     address: '',
     property: {
-      netIncome: 0,
-      buildingSF: 0,
-      parkingSpaces: 0,
-      studioUnits: 0,
-      oneBedroomUnits: 0,
-      twoBedroomUnits: 0,
-      threeBedroomUnits: 0
+      netIncome: undefined,
+      buildingSF: undefined,
+      parkingSpaces: undefined,
+      studioUnits: undefined,
+      oneBedroomUnits: undefined,
+      twoBedroomUnits: undefined,
+      threeBedroomUnits: undefined
     }
   }
 };
@@ -109,7 +109,7 @@ export default function Page() {
             {step === 0 && <GetAddress home={home} next={next} />}
             {step === 1 && <PropertyInfo back={back} next={next} />}
 
-            {step === 2 && <>unimplemented :P</>}
+            {step === 2 && <ResultsWithContact back={back} />}
           </div>
         ))}
       </div>
@@ -148,25 +148,30 @@ function GetAddress(props: {
 
   // for live address suggestions
   const onChange = useCallback(() => {
+    const address = getValues('address');
+    setCurrentValue(getValues('address'));
+    if (address.length > 0) {
+      radar.autocomplete(address).then(setAutocomplete);
+    } else {
+      setAutocomplete([]);
+    }
+  }, [setCurrentValue, setAutocomplete]);
+
+  // set main map position
+  useEffect(() => {
     if (handle) clearTimeout(handle);
 
     // @ts-ignore
     setHandle(setTimeout(() => {
-      const address = getValues('address');
-      setCurrentValue(address);
-      console.log(autocomplete);
-      if (address.length > 0) {
-        radar.geocode(address).then(address => {
+      if (currentValue.length > 0) {
+        radar.geocode(currentValue).then(address => {
           if (address) {
             radar.setMapMarker(address);
           }
         });
-        radar.autocomplete(address).then(setAutocomplete);
-      } else {
-        setAutocomplete([]);
       }
     }, REQUEST_DELAY_MS));
-  }, [handle, autocomplete, setCurrentValue, setHandle]);
+  }, [currentValue, setHandle]);
 
   const onBlur = () => {
     setAutocomplete([]);
@@ -176,12 +181,11 @@ function GetAddress(props: {
       setAutocomplete([]);
   };
   const onSelect = (address: string) => {
-    console.log('setting to ', address);
     setValue('address', address);
+    setCurrentValue(address);
     setAutocomplete([]);
   };
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    // should be set by onChange, but setting again just to be safe
     setForm(form => {
       form.data.address = data.address;
     });
@@ -221,49 +225,61 @@ function PropertyInfo(props: {
   next: ButtonAction
 }) {
   const { form, setForm } = useContext(FormStateContext);
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm<PropertyData>({
     resolver: zodResolver(schema.property),
-    defaultValues: form.data.property
+    defaultValues: form.data.property as PropertyData
   });
 
-  const onSubmit = (data: PropertyData) => {
-    console.log(data);
-    setForm(_form => {
-
+  const onChange = () => {
+    setForm(form => {
+      form.data.property = getValues();
     });
+  }
+
+  const onSubmit = () => {
+    onChange();
     props.next();
   };
+
+  const inputProps = (name: keyof PropertyData) => {
+    return {
+      ...register(name, {
+        valueAsNumber: true,
+        onChange
+      })
+    }
+  }
 
   return <form onSubmit={handleSubmit(onSubmit)}>
     <h1>Multifamily Information</h1>
     <sub>Add your property information so we can provide you with an accurate property estimation report.</sub>
 
     <label>$ Net Income</label>
-    <input type='number' {...register('netIncome', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('netIncome')} />
     <span className='form-error'>{errors.netIncome?.message}</span>
 
     <label>Building Size (square feet)</label>
-    <input type='number' {...register('buildingSF', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('buildingSF')} />
     <span className='form-error'>{errors.buildingSF?.message}</span>
 
     <label>Number of Parking Spaces</label>
-    <input type='number' {...register('parkingSpaces', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('parkingSpaces')} />
     <span className='form-error'>{errors.parkingSpaces?.message}</span>
 
     <label>Number of Studio Units</label>
-    <input type='number' {...register('studioUnits', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('studioUnits')} />
     <span className='form-error'>{errors.studioUnits?.message}</span>
 
     <label>Number of 1 Bedroom Units</label>
-    <input type='number' {...register('oneBedroomUnits', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('oneBedroomUnits')} />
     <span className='form-error'>{errors.oneBedroomUnits?.message}</span>
 
     <label>Number of 2 Bedroom Units</label>
-    <input type='number' {...register('twoBedroomUnits', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('twoBedroomUnits')} />
     <span className='form-error'>{errors.twoBedroomUnits?.message}</span>
 
     <label>Number of 3 Bedroom Units</label>
-    <input type='number' {...register('threeBedroomUnits', { valueAsNumber: true })} />
+    <input type='number' {...inputProps('threeBedroomUnits')} />
     <span className='form-error'>{errors.threeBedroomUnits?.message}</span>
 
     <div className={styles.controls}>
@@ -271,4 +287,17 @@ function PropertyInfo(props: {
       <button onClick={props.back}>Previous step</button>
     </div>
   </form>;
+}
+
+function ResultsWithContact(props: {
+  back: ButtonAction
+}) {
+  return <div>
+
+    <form>
+      <div className={styles.controls}>
+        <button onClick={props.back}>Previous step</button>
+      </div>
+    </form>
+  </div>;
 }
