@@ -1,27 +1,17 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true
-  },
-  rewrites: async () => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+/**
+ * @type {import('next').NextConfig}
+ */
+const config = {
+  reactStrictMode: true,
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack']
+    });
 
-    if (!backendUrl) {
-      throw new Error(
-        'The environment variable NEXT_PUBLIC_BACKEND_URL is required but was not provided.'
-      );
-    }
-
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${backendUrl}/:path*`
-      }
-    ];
-  },
-  images: {
-    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
+    return config;
   }
 };
 
-module.exports = nextConfig;
+module.exports = config;

@@ -1,0 +1,112 @@
+@import url(sanitize.css);
+
+:root {
+    --text: hsl(212, 32%, 17%);
+    --text-light: hsl(212, 30%, 95%);
+    --background: white;
+    --input: hsl(212, 32%, 90%);
+
+    --primary: hsl(212, 90%, 50%);
+    --secondary: hsl(210, 25%, 97%);
+    --error: hsl(340, 90%, 50%);
+
+    --input-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --button-shadow: 0px 1px 1px rgba(12, 25, 39, 0.08), 0px 1px 3px rgba(12, 25, 39, 0.14);
+
+    font-family: system-ui;
+
+    color: var(--text);
+}
+
+body {
+    background-color: var(--background);
+}
+
+h1 {
+    /* travis says 3.2rem looks odd */
+    font-size: 36px;
+    line-height: 1.1em;
+    margin: 0.8rem 0;
+}
+
+sub {
+    font-size: 0.9rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+label {
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-top: 1em;
+}
+input + label {
+    margin-top: 0;
+}
+
+input {
+    font-size: 0.9rem;
+    color: inherit;
+
+    margin-top: 0.2em;
+    padding: 1.2em 1em;
+    border: 1px solid var(--input);
+    border-radius: 0.4em;
+    box-shadow: var(--input-shadow);
+
+    &:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+
+        &.error {
+            outline-color: var(--error);
+        }
+    }
+}
+
+span.form-error {
+    font-size: 0.9rem;
+    padding: 0.5em 0 0 0.5em;
+    color: var(--error);
+
+    &::after {
+        content: " ";
+        font-size: 0;
+        white-space: pre;
+    }
+}
+
+button, input[type="submit"] {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text);
+    background-color: var(--text-light);
+    cursor: pointer;
+
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 2.5em;
+    box-shadow: var(--button-shadow);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+
+    &[disabled] {
+        opacity: 0.75;
+        cursor: default;
+    }
+
+    &.primary {
+        color: var(--text-light);
+        background-color: var(--text);
+        box-shadow: none;
+    }
+}

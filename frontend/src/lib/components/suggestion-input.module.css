@@ -1,0 +1,44 @@
+.wrapper {
+    position: relative;
+
+    > input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+    }
+}
+
+.suggestions {
+    z-index: 1;
+    position: absolute;
+    margin: 0 0.5em;
+    width: calc(100% - 1em);
+
+    background-color: var(--background);
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    box-shadow: var(--button-shadow);
+    overflow: hidden;
+
+    transform: translateY(-0.5em);
+
+    &.hidden {
+        display: none;
+    }
+
+    > button {
+        all: unset;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        width: 100%;
+
+        transition: 0.2s ease background-color;
+        &:hover {
+            background-color: var(--text-light);
+        }
+
+        &:first-child {
+            padding-top: 1em;
+        }
+    }
+}

@@ -1,0 +1,57 @@
+.estimator {
+    height: 100vh;
+    display: grid;
+    grid-template-areas: "form map";
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 1000px) {
+        grid-template-areas:
+            "form"
+            "map";
+        grid-template-columns: unset;
+        grid-template-rows: 2fr 1fr;
+    }
+
+    svg {
+        width: 1.25rem;
+    }
+}
+
+.formScroll {
+    grid-area: form;
+    display: grid;
+
+    width: 100%;
+    min-height: 100vh;
+    padding: 1em 0;
+    overflow: auto;
+}
+
+.formWrapper {
+    max-width: 32em;
+    margin: 0 2em;
+    justify-self: center;
+    align-self: center;
+}
+
+.suggestions {
+    position: absolute;
+    &.hidden {
+        display: none;
+    }
+}
+
+.controls {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    gap: 1em;
+}
+
+.map {
+    grid-area: map;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
