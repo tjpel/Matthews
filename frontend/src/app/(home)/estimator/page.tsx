@@ -343,433 +343,540 @@ export default function DemoPage() {
     }
   }, [addressForm, watchedAddressForm, map]);
 
-  // Custom Google Analytics information
+  const [scrollAreaActive, setScrollAreaActive] = useState<boolean>(true);
+  // Custom Google Analytics information, ScrollArea refreshes position on step 3
   useEffect(() => {
     gtag.valuationStep(step);
+    if (step === 3) {
+      setScrollAreaActive(false);
+
+      setTimeout(() => {
+        setScrollAreaActive(true);
+      }, 50);
+    }
   }, [step]);
 
   return (
     <AnimatePresence>
       <div className="flex flex-col md:flex-row w-full md:overflow-hidden">
         <div className="w-full min-h-[60vh] md:w-1/2 md:h-screen flex flex-col px-4 pt-2 pb-8 md:px-0 md:py-2 bg-[#FCFCFC] justify-center">
-          <ScrollArea className="w-full rounded">
-            <div className="h-full w-full items-center justify-center flex flex-col py-16">
-              {step === 1 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -40 }}
-                  key="step-1"
-                  transition={{
-                    duration: 0.95,
-                    ease: [0.165, 0.84, 0.44, 1]
-                  }}
-                  className="max-w-lg mx-auto px-4 lg:px-0"
-                >
-                  <Form {...addressForm}>
-                    <form
-                      onSubmit={addressForm.handleSubmit((e) => setStep(2))}
-                      className="space-y-4"
-                    >
-                      <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                        Find out what your multifamily property is really worth
-                      </h2>
-                      <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                        Enter an address, and our AI will do the rest.
-                      </p>
-                      <div>
-                        <FormField
-                          control={addressForm.control}
-                          name="address"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <FormControl>
-                                <div className="relative">
+          {scrollAreaActive && (
+            <ScrollArea className="w-full rounded">
+              <div className="h-full w-full items-center justify-center flex flex-col py-16">
+                {step === 1 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    key="step-1"
+                    transition={{
+                      duration: 0.95,
+                      ease: [0.165, 0.84, 0.44, 1]
+                    }}
+                    className="max-w-lg mx-auto px-4 lg:px-0"
+                  >
+                    <Form {...addressForm}>
+                      <form
+                        onSubmit={addressForm.handleSubmit((e) => setStep(2))}
+                        className="space-y-4"
+                      >
+                        <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                          Find out what your multifamily property is really
+                          worth
+                        </h2>
+                        <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                          Enter an address, and our AI will do the rest.
+                        </p>
+                        <div>
+                          <FormField
+                            control={addressForm.control}
+                            name="address"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <FormControl>
+                                  <div className="relative">
+                                    <Input
+                                      className="h-14"
+                                      placeholder="Enter your address"
+                                      value={field.value.formattedAddress}
+                                      onChange={(e) => {
+                                        field.onChange({
+                                          ...field.value,
+                                          formattedAddress: e.target.value
+                                        });
+                                        // if (field.value.formattedAddress) {
+                                        //   handleAutocomplete(field.value.formattedAddress);
+                                        //   setAddressSuggestionsOpen(true);
+                                        // } else {
+                                        //   setSuggestions([]);
+                                        // }
+                                      }}
+                                      onKeyUp={(e) => {
+                                        if (field.value.formattedAddress) {
+                                          handleAutocomplete(
+                                            field.value.formattedAddress
+                                          );
+                                          setAddressSuggestionsOpen(true);
+                                        } else {
+                                          setSuggestions([]);
+                                        }
+                                      }}
+                                    />
+                                    {addressSuggestionsOpen && (
+                                      <div
+                                        style={{
+                                          position: 'absolute',
+                                          zIndex: 1,
+                                          backgroundColor: '#FFFFFF'
+                                        }}
+                                        className="z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                                      >
+                                        <Command className="w-full p-0">
+                                          <CommandEmpty>
+                                            No address found.
+                                          </CommandEmpty>
+                                          <CommandGroup>
+                                            {suggestions.map((suggestion) => (
+                                              <CommandItem
+                                                className="h-10 rounded-md"
+                                                key={
+                                                  suggestion.formattedAddress
+                                                }
+                                                onSelect={() => {
+                                                  field.onChange(suggestion);
+                                                  setAddressSuggestionsOpen(
+                                                    false
+                                                  );
+
+                                                  console.log(
+                                                    searchCoordinates
+                                                  );
+                                                  console.log(suggestion);
+
+                                                  const turfSearchCoordinates =
+                                                    turf.point([
+                                                      searchCoordinates.latitude,
+                                                      searchCoordinates.longitude
+                                                    ]);
+                                                  const turfTargetCoordinates =
+                                                    turf.point([
+                                                      suggestion.latitude,
+                                                      suggestion.longitude
+                                                    ]);
+
+                                                  const distance =
+                                                    turf.distance(
+                                                      turfSearchCoordinates,
+                                                      turfTargetCoordinates
+                                                    );
+
+                                                  console.log(distance);
+
+                                                  if (
+                                                    distance <=
+                                                    distanceThreshold
+                                                  ) {
+                                                    console.log('good address');
+                                                    setIsBadAddress(false);
+                                                  } else {
+                                                    console.log('bad address');
+                                                    setIsBadAddress(true);
+                                                  }
+                                                }}
+                                              >
+                                                {suggestion.formattedAddress}
+                                              </CommandItem>
+                                            ))}
+                                          </CommandGroup>
+                                        </Command>
+                                      </div>
+                                    )}
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {isBadAddress && (
+                            <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
+                              Address is too far from the search coordinates,
+                              beware bad prediction results
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-[15px] justify-end mt-8">
+                          <div>
+                            <Link
+                              href="/"
+                              className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                              style={{
+                                boxShadow:
+                                  '0 1px 1px #0c192714, 0 1px 3px #0c192724'
+                              }}
+                            >
+                              Back to home
+                            </Link>
+                          </div>
+                          <div>
+                            <button
+                              // onClick={() => {
+                              //   setStep(2);
+                              // }}
+                              type="submit"
+                              className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                              style={{
+                                boxShadow:
+                                  '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
+                              }}
+                            >
+                              <span> Continue </span>
+                              <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M13.75 6.75L19.25 12L13.75 17.25"
+                                  stroke="#FFF"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M19 12H4.75"
+                                  stroke="#FFF"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </Form>
+                  </motion.div>
+                ) : step === 2 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    key="step-2"
+                    transition={{
+                      duration: 0.95,
+                      ease: [0.165, 0.84, 0.44, 1]
+                    }}
+                    className="max-w-lg mx-auto px-4 lg:px-0"
+                  >
+                    <Form {...propertyForm}>
+                      <form
+                        onSubmit={propertyForm.handleSubmit((e) => setStep(3))}
+                        className="space-y-4"
+                      >
+                        <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                          Multifamily Information
+                        </h2>
+                        <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                          Add your property information so we can provide you
+                          with an accurate property estimation report.
+                        </p>
+                        <div className="space-y-4 px-4">
+                          <FormField
+                            control={propertyForm.control}
+                            name="netIncome"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>$ Net Income</Label>
+                                <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter your address"
-                                    value={field.value.formattedAddress}
+                                    placeholder="Enter your property net income"
+                                    type="number"
+                                    value={field.value}
+                                    onChange={(e) =>
+                                      field.onChange(parseFloat(e.target.value))
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* New FormField for buildingSF */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="buildingSF"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Building Size (sq ft)</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the building size in sq ft"
+                                    type="number"
+                                    value={field.value}
+                                    onChange={(e) =>
+                                      field.onChange(parseFloat(e.target.value))
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* FormField for numberOfParkingSpaces */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOfParkingSpaces"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Number of Parking Spaces</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the number of parking spaces"
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
+                                    }
                                     onChange={(e) => {
-                                      field.onChange({
-                                        ...field.value,
-                                        formattedAddress: e.target.value
-                                      });
-                                      // if (field.value.formattedAddress) {
-                                      //   handleAutocomplete(field.value.formattedAddress);
-                                      //   setAddressSuggestionsOpen(true);
-                                      // } else {
-                                      //   setSuggestions([]);
-                                      // }
-                                    }}
-                                    onKeyUp={(e) => {
-                                      if (field.value.formattedAddress) {
-                                        handleAutocomplete(
-                                          field.value.formattedAddress
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
                                         );
-                                        setAddressSuggestionsOpen(true);
-                                      } else {
-                                        setSuggestions([]);
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
                                       }
+                                      // If the input contains anything other than numbers and commas, ignore the change
                                     }}
                                   />
-                                  {addressSuggestionsOpen && (
-                                    <div
-                                      style={{
-                                        position: 'absolute',
-                                        zIndex: 1,
-                                        backgroundColor: '#FFFFFF'
-                                      }}
-                                      className="z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
-                                    >
-                                      <Command className="w-full p-0">
-                                        <CommandEmpty>
-                                          No address found.
-                                        </CommandEmpty>
-                                        <CommandGroup>
-                                          {suggestions.map((suggestion) => (
-                                            <CommandItem
-                                              className="h-10 rounded-md"
-                                              key={suggestion.formattedAddress}
-                                              onSelect={() => {
-                                                field.onChange(suggestion);
-                                                setAddressSuggestionsOpen(
-                                                  false
-                                                );
-
-                                                console.log(searchCoordinates);
-                                                console.log(suggestion);
-
-                                                const turfSearchCoordinates =
-                                                  turf.point([
-                                                    searchCoordinates.latitude,
-                                                    searchCoordinates.longitude
-                                                  ]);
-                                                const turfTargetCoordinates =
-                                                  turf.point([
-                                                    suggestion.latitude,
-                                                    suggestion.longitude
-                                                  ]);
-
-                                                const distance = turf.distance(
-                                                  turfSearchCoordinates,
-                                                  turfTargetCoordinates
-                                                );
-
-                                                console.log(distance);
-
-                                                if (
-                                                  distance <= distanceThreshold
-                                                ) {
-                                                  console.log('good address');
-                                                  setIsBadAddress(false);
-                                                } else {
-                                                  console.log('bad address');
-                                                  setIsBadAddress(true);
-                                                }
-                                              }}
-                                            >
-                                              {suggestion.formattedAddress}
-                                            </CommandItem>
-                                          ))}
-                                        </CommandGroup>
-                                      </Command>
-                                    </div>
-                                  )}
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {isBadAddress && (
-                          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
-                            Address is too far from the search coordinates,
-                            beware bad prediction results
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex gap-[15px] justify-end mt-8">
-                        <div>
-                          <Link
-                            href="/"
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0 1px 1px #0c192714, 0 1px 3px #0c192724'
-                            }}
-                          >
-                            Back to home
-                          </Link>
-                        </div>
-                        <div>
-                          <button
-                            // onClick={() => {
-                            //   setStep(2);
-                            // }}
-                            type="submit"
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
-                            }}
-                          >
-                            <span> Continue </span>
-                            <svg
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M13.75 6.75L19.25 12L13.75 17.25"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M19 12H4.75"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </Form>
-                </motion.div>
-              ) : step === 2 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -40 }}
-                  key="step-2"
-                  transition={{
-                    duration: 0.95,
-                    ease: [0.165, 0.84, 0.44, 1]
-                  }}
-                  className="max-w-lg mx-auto px-4 lg:px-0"
-                >
-                  <Form {...propertyForm}>
-                    <form
-                      onSubmit={propertyForm.handleSubmit((e) => setStep(3))}
-                      className="space-y-4"
-                    >
-                      <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                        Multifamily Information
-                      </h2>
-                      <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                        Add your property information so we can provide you with
-                        an accurate property estimation report.
-                      </p>
-                      <div className="space-y-4 px-4">
-                        <FormField
-                          control={propertyForm.control}
-                          name="netIncome"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>$ Net Income</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter your property net income"
-                                  type="text" // Change this to text to allow formatted numbers
-                                  value={
-                                    field.value !== undefined &&
-                                    field.value !== null
-                                      ? field.value
-                                          .toString()
-                                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                      : ''
-                                  }
-                                  onChange={(e) => {
-                                    // Only proceed if the input is empty or contains digits possibly separated by commas
-                                    if (
-                                      e.target.value === '' ||
-                                      /^[0-9,]+$/.test(e.target.value)
-                                    ) {
-                                      // Remove commas and parse the value as a float
-                                      const actualValue = parseFloat(
-                                        e.target.value.replace(/,/g, '')
-                                      );
-
-                                      if (!isNaN(actualValue)) {
-                                        // If it's a valid number, update the state
-                                        field.onChange(actualValue);
-                                      } else {
-                                        // If it's not a valid number (e.g., empty string), set to undefined or some default value
-                                        field.onChange(undefined);
-                                      }
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* FormField for numberOfStudiosUnits */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOfStudiosUnits"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Number of Studio Units</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the number of studio units"
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
-                                    // If the input contains anything other than numbers and commas, ignore the change
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={propertyForm.control}
-                          name="buildingSF"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Building Size (sq ft)</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the building size in sq ft"
-                                  type="text" // Change this to text to allow formatted numbers
-                                  value={
-                                    field.value !== undefined &&
-                                    field.value !== null
-                                      ? field.value
-                                          .toString()
-                                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                      : ''
-                                  }
-                                  onChange={(e) => {
-                                    // Only proceed if the input is empty or contains digits possibly separated by commas
-                                    if (
-                                      e.target.value === '' ||
-                                      /^[0-9,]+$/.test(e.target.value)
-                                    ) {
-                                      // Remove commas and parse the value as a float
-                                      const actualValue = parseFloat(
-                                        e.target.value.replace(/,/g, '')
-                                      );
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
 
-                                      if (!isNaN(actualValue)) {
-                                        // If it's a valid number, update the state
-                                        field.onChange(actualValue);
-                                      } else {
-                                        // If it's not a valid number (e.g., empty string), set to undefined or some default value
-                                        field.onChange(undefined);
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
                                       }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* FormField for numberOf1BedroomsUnits */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOf1BedroomsUnits"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Number of 1 Bedroom Units</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the number of 1 bedroom units"
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
                                     }
-                                    // If the input contains anything other than numbers and commas, ignore the change
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* FormField for numberOfParkingSpaces */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOfParkingSpaces"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Number of Parking Spaces</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the number of parking spaces"
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseFloat(e.target.value))
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* FormField for numberOfStudiosUnits */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOfStudiosUnits"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Number of Studio Units</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the number of studio units"
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseFloat(e.target.value))
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* FormField for numberOf1BedroomsUnits */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOf1BedroomsUnits"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Number of 1 Bedroom Units</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the number of 1 bedroom units"
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseFloat(e.target.value))
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* FormField for numberOf2BedroomsUnits */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOf2BedroomsUnits"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Number of 2 Bedroom Units</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the number of 2 bedroom units"
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseFloat(e.target.value))
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* FormField for numberOf3BedroomsUnits */}
-                        <FormField
-                          control={propertyForm.control}
-                          name="numberOf3BedroomsUnits"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1 w-full">
-                              <Label>Number of 3 Bedroom Units</Label>
-                              <FormControl>
-                                <Input
-                                  className="h-14"
-                                  placeholder="Enter the number of 3 bedroom units"
-                                  type="number"
-                                  value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseFloat(e.target.value))
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
 
-                        {/* <RadioGroup value={selected} onChange={setSelected}>
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* FormField for numberOf2BedroomsUnits */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOf2BedroomsUnits"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Number of 2 Bedroom Units</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the number of 2 bedroom units"
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
+                                    }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {/* FormField for numberOf3BedroomsUnits */}
+                          <FormField
+                            control={propertyForm.control}
+                            name="numberOf3BedroomsUnits"
+                            render={({ field }) => (
+                              <FormItem className="space-y-1 w-full">
+                                <Label>Number of 3 Bedroom Units</Label>
+                                <FormControl>
+                                  <Input
+                                    className="h-14"
+                                    placeholder="Enter the number of 3 bedroom units"
+                                    type="text" // Change this to text to allow formatted numbers
+                                    value={
+                                      field.value !== undefined &&
+                                      field.value !== null
+                                        ? field.value
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ','
+                                            )
+                                        : ''
+                                    }
+                                    onChange={(e) => {
+                                      // Only proceed if the input is empty or contains digits possibly separated by commas
+                                      if (
+                                        e.target.value === '' ||
+                                        /^[0-9,]+$/.test(e.target.value)
+                                      ) {
+                                        // Remove commas and parse the value as a float
+                                        const actualValue = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
+
+                                        if (!isNaN(actualValue)) {
+                                          // If it's a valid number, update the state
+                                          field.onChange(actualValue);
+                                        } else {
+                                          // If it's not a valid number (e.g., empty string), set to undefined or some default value
+                                          field.onChange(undefined);
+                                        }
+                                      }
+                                      // If the input contains anything other than numbers and commas, ignore the change
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* <RadioGroup value={selected} onChange={setSelected}>
                               <RadioGroup.Label className="sr-only">
                                 # Bedrooms
                               </RadioGroup.Label>
@@ -886,227 +993,232 @@ export default function DemoPage() {
                                 ))}
                               </div>
                             </RadioGroup> */}
-                      </div>
-                      <div className="flex gap-[15px] justify-end mt-8">
-                        <div>
-                          <button
-                            onClick={() => setStep(1)}
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0 1px 1px #0c192714, 0 1px 3px #0c192724'
-                            }}
-                          >
-                            Previous step
-                          </button>
                         </div>
-                        <div>
-                          <button
-                            // onClick={() => {
-                            //   setStep(3);
-                            // }}
-                            type="submit"
-                            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                            style={{
-                              boxShadow:
-                                '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
-                            }}
-                          >
-                            <span> Your home estimation </span>
-                            <svg
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
+                        <div className="flex gap-[15px] justify-end mt-8">
+                          <div>
+                            <button
+                              onClick={() => setStep(1)}
+                              className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                              style={{
+                                boxShadow:
+                                  '0 1px 1px #0c192714, 0 1px 3px #0c192724'
+                              }}
                             >
-                              <path
-                                d="M13.75 6.75L19.25 12L13.75 17.25"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M19 12H4.75"
-                                stroke="#FFF"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </Form>
-                </motion.div>
-              ) : step === 3 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -40 }}
-                  key="step-2"
-                  transition={{
-                    duration: 0.95,
-                    ease: [0.165, 0.84, 0.44, 1]
-                  }}
-                  className="max-w-lg mx-auto px-4 lg:px-0"
-                >
-                  <h2 className="text-4xl font-bold text-[#1E2B3A]">
-                    Your Multifamily Estimate
-                  </h2>
-                  <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                    Here is an AI predicted multifamily estimate based off your
-                    property information.
-                  </p>
-                  <div className="space-y-4">
-                    {predictionQuery.isLoading && (
-                      <Loader color="blue" type="dots" size="xl" />
-                    )}
-
-                    {!predictionQuery.isLoading && (
-                      <RadioGroup value={prediction.prediction}>
-                        <RadioGroup.Label className="sr-only">
-                          Your Multifamily Estimate
-                        </RadioGroup.Label>
-                        <Label>Your Multifamily Estimate</Label>
-                        <div className="space-y-4">
-                          <RadioGroup.Option
-                            key={prediction.prediction}
-                            value={prediction.prediction}
-                            className={({ checked, active }) =>
-                              classNames(
-                                checked
-                                  ? 'border-transparent'
-                                  : 'border-gray-300',
-                                active
-                                  ? 'border-blue-500 ring-2 ring-blue-200'
-                                  : '',
-                                'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
-                              )
-                            }
-                          >
-                            {({ active, checked }) => (
-                              <>
-                                <span className="flex items-center">
-                                  <span className="flex flex-col text-sm">
-                                    <RadioGroup.Label
-                                      as="span"
-                                      className="font-medium text-gray-900"
-                                    >
-                                      ${prediction.prediction}
-                                    </RadioGroup.Label>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className="text-gray-500"
-                                    >
-                                      <span className="block">
-                                        {/* {prediction.prediction} */}
-                                      </span>
-                                    </RadioGroup.Description>
-                                  </span>
-                                </span>
-                                <RadioGroup.Description
-                                  as="span"
-                                  className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
-                                >
-                                  <span className=" text-gray-500">
-                                    {prediction.numberPrediction >= 0 &&
-                                    prediction.numberPrediction < 500000 ? (
-                                      <NumberBar level={1} totalBars={5} />
-                                    ) : prediction.numberPrediction >= 500000 &&
-                                      prediction.numberPrediction < 1500000 ? (
-                                      <NumberBar level={2} totalBars={5} />
-                                    ) : prediction.numberPrediction >=
-                                      1500000 ? (
-                                      <NumberBar level={3} totalBars={5} />
-                                    ) : (
-                                      <NumberBar level={4} totalBars={5} />
-                                    )}
-                                  </span>
-                                  <span className="font-medium text-gray-900"></span>
-                                </RadioGroup.Description>
-                                <span
-                                  className={classNames(
-                                    active ? 'border' : 'border-2',
-                                    checked
-                                      ? 'border-blue-500'
-                                      : 'border-transparent',
-                                    'pointer-events-none absolute -inset-px rounded-lg'
-                                  )}
-                                  aria-hidden="true"
+                              Previous step
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              // onClick={() => {
+                              //   setStep(3);
+                              // }}
+                              type="submit"
+                              className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                              style={{
+                                boxShadow:
+                                  '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
+                              }}
+                            >
+                              <span> Your home estimation </span>
+                              <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M13.75 6.75L19.25 12L13.75 17.25"
+                                  stroke="#FFF"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                 />
-                              </>
-                            )}
-                          </RadioGroup.Option>
+                                <path
+                                  d="M19 12H4.75"
+                                  stroke="#FFF"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
-                      </RadioGroup>
-                    )}
-
-                    <h2 className="mt-4 text-4xl font-bold text-[#1E2B3A]">
-                      Contact Info
+                      </form>
+                    </Form>
+                  </motion.div>
+                ) : step === 3 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    key="step-3"
+                    transition={{
+                      duration: 0.95,
+                      ease: [0.165, 0.84, 0.44, 1]
+                    }}
+                    className="max-w-lg mx-auto px-4 lg:px-0"
+                  >
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                      Your Multifamily Estimate
                     </h2>
                     <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-                      Add your contact info to get an in-depth property
-                      estimation report from one of our agents.
+                      Here is an AI predicted multifamily estimate based off
+                      your property information.
                     </p>
+                    <div className="space-y-4">
+                      {predictionQuery.isLoading && (
+                        <Loader color="blue" type="dots" />
+                      )}
 
-                    <ContactForm />
-                  </div>
-                  <div className="flex gap-[15px] justify-end mt-8">
-                    <div>
-                      <button
-                        onClick={() => setStep(2)}
-                        className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-                        style={{
-                          boxShadow: '0 1px 1px #0c192714, 0 1px 3px #0c192724'
-                        }}
-                      >
-                        Previous step
-                      </button>
+                      {!predictionQuery.isLoading && (
+                        <RadioGroup value={prediction.prediction}>
+                          <RadioGroup.Label className="sr-only">
+                            Your Multifamily Estimate
+                          </RadioGroup.Label>
+                          <Label>Your Multifamily Estimate</Label>
+                          <div className="space-y-4">
+                            <RadioGroup.Option
+                              key={prediction.prediction}
+                              value={prediction.prediction}
+                              className={({ checked, active }) =>
+                                classNames(
+                                  checked
+                                    ? 'border-transparent'
+                                    : 'border-gray-300',
+                                  active
+                                    ? 'border-blue-500 ring-2 ring-blue-200'
+                                    : '',
+                                  'relative cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none flex justify-between'
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <span className="flex items-center">
+                                    <span className="flex flex-col text-sm">
+                                      <RadioGroup.Label
+                                        as="span"
+                                        className="font-medium text-gray-900"
+                                      >
+                                        ${prediction.prediction}
+                                      </RadioGroup.Label>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className="text-gray-500"
+                                      >
+                                        <span className="block">
+                                          {/* {prediction.prediction} */}
+                                        </span>
+                                      </RadioGroup.Description>
+                                    </span>
+                                  </span>
+                                  <RadioGroup.Description
+                                    as="span"
+                                    className="flex text-sm ml-4 mt-0 flex-col text-right items-center justify-center"
+                                  >
+                                    <span className=" text-gray-500">
+                                      {prediction.numberPrediction >= 0 &&
+                                      prediction.numberPrediction < 500000 ? (
+                                        <NumberBar level={1} totalBars={5} />
+                                      ) : prediction.numberPrediction >=
+                                          500000 &&
+                                        prediction.numberPrediction <
+                                          1500000 ? (
+                                        <NumberBar level={2} totalBars={5} />
+                                      ) : prediction.numberPrediction >=
+                                        1500000 ? (
+                                        <NumberBar level={3} totalBars={5} />
+                                      ) : (
+                                        <NumberBar level={4} totalBars={5} />
+                                      )}
+                                    </span>
+                                    <span className="font-medium text-gray-900"></span>
+                                  </RadioGroup.Description>
+                                  <span
+                                    className={classNames(
+                                      active ? 'border' : 'border-2',
+                                      checked
+                                        ? 'border-blue-500'
+                                        : 'border-transparent',
+                                      'pointer-events-none absolute -inset-px rounded-lg'
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          </div>
+                        </RadioGroup>
+                      )}
                     </div>
-                    <div>
-                      <button
-                        onClick={() => {
-                          setStep(3);
-                        }}
-                        className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                        style={{
-                          boxShadow:
-                            '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
-                        }}
-                      >
-                        <span> Submit Contact Info </span>
-                        <svg
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                    <div className="mt-10 space-y-4">
+                      <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                        Contact Us
+                      </h2>
+                      <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                        Add your contact info to get an in-depth property
+                        estimation report from one of our agents.
+                      </p>
+
+                      <ContactForm />
+                    </div>
+                    <div className="flex gap-[15px] justify-end mt-8">
+                      <div>
+                        <button
+                          onClick={() => setStep(2)}
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow:
+                              '0 1px 1px #0c192714, 0 1px 3px #0c192724'
+                          }}
                         >
-                          <path
-                            d="M13.75 6.75L19.25 12L13.75 17.25"
-                            stroke="#FFF"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M19 12H4.75"
-                            stroke="#FFF"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
+                          Previous step
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => {
+                            setStep(3);
+                          }}
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow:
+                              '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
+                          }}
+                        >
+                          <span> Submit Contact Info </span>
+                          <svg
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M13.75 6.75L19.25 12L13.75 17.25"
+                              stroke="#FFF"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M19 12H4.75"
+                              stroke="#FFF"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ) : (
-                <></>
-              )}
-            </div>
-          </ScrollArea>
+                  </motion.div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </ScrollArea>
+          )}
         </div>
         <div className="w-full h-[40vh] md:w-1/2 md:h-screen bg-[#F1F2F4] relative overflow-hidden">
           <svg
