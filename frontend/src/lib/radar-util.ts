@@ -1,6 +1,6 @@
 import Radar from 'radar-sdk-js';
 import { Location, RadarAutocompleteAddress, RadarAddress } from 'radar-sdk-js/src/types';
-import { Map, Marker } from 'maplibre-gl';
+import { Map, Marker, NavigationControl } from 'maplibre-gl';
 import * as turf from '@turf/turf';
 
 import { RADAR_KEY } from './env';
@@ -64,6 +64,12 @@ export function createMap(container: string | HTMLElement) {
     zoom: 8,
     interactive: false
   });
+
+  // manually remove map ui zoom controls
+  for (const control of map._controls) {
+    if (control instanceof NavigationControl)
+      map.removeControl(control);
+  }
 }
 
 export function removeMap() {

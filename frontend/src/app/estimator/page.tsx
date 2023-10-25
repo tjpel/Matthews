@@ -12,21 +12,27 @@ import * as radar from '@/radar-util';
 import { AutocompleteResponse } from '@/radar-util';
 import * as schema from '@/schema';
 import { PropertyData } from '@/schema';
+import { Input } from '@/components/input';
 import { SuggestionInput } from '@/components/suggestion-input';
-import Arrow from "@/svg/arrow.svg";
+import Arrow from '@/svg/arrow.svg';
+import * as format from '@/format';
+import * as bridge from '@/bridge';
 
 import styles from './page.module.css';
 import 'radar-sdk-js/dist/radar.css';
+import { ButtonAction } from './types';
+import { ContactForm } from './contact';
+import { PriceRange } from '@/components/price-range';
 
 // Prevents spam to Radar API
 const REQUEST_DELAY_MS = 500;
 
 const ANIM_SECS = 0.2;
-
-type ButtonAction = (ev?: MouseEvent) => void;
+const ANIM_MS = ANIM_SECS * 1000;
 
 interface FormState {
   step: number;
+  prediction: number | undefined;
   data: {
     address: string;
     property: Partial<PropertyData>
@@ -35,6 +41,7 @@ interface FormState {
 
 const FORM_STATE: FormState = {
   step: 0,
+  prediction: undefined,
   data: {
     address: '',
     property: {
@@ -63,7 +70,8 @@ export default function Page() {
   const [form, setForm] = useImmer(FORM_STATE);
 
   const step = useMemo(() => form.step, [form]);
-  const transition = useSwitchTransition(step, ANIM_SECS * 1000, 'out-in');
+  const [animStep, setAnimStep] = useState(step);
+  const transition = useSwitchTransition(step, ANIM_MS, 'out-in');
 
   useEffect(() => {
     radar.init();
@@ -71,6 +79,14 @@ export default function Page() {
 
     return () => radar.removeMap();
   }, []);
+
+  useEffect(() => {
+    // extra delay if setting to first step so that there's no chance of flickering
+    if (step === 0)
+      setTimeout(() => setAnimStep(step), ANIM_MS * 1.5);
+    else
+      setTimeout(() => setAnimStep(step), ANIM_MS);
+  }, [step]);
 
   const home = useCallback((ev?: MouseEvent) => {
     ev?.preventDefault();
@@ -92,7 +108,9 @@ export default function Page() {
 
   return <FormStateContext.Provider value={{ form, setForm }}>
     <div className={styles.estimator}>
-      <div className={styles.formScroll}>
+      <div className={styles.formScroll} style={{
+        '--overflow': animStep === 0 ? 'visible' : 'scroll'
+      }}>
         {transition((step, state) => (
           <div
             className={styles.formWrapper}
@@ -114,7 +132,7 @@ export default function Page() {
         ))}
       </div>
 
-      <div style={{ position: 'relative' }}>
+      <div className={styles.mapWrapper}>
         <div id='map' style={{ width: '100%', height: '100%' }} />
       </div>
     </div>
@@ -214,7 +232,7 @@ function GetAddress(props: {
     </span>
 
     <div className={styles.controls}>
-      <button className='primary'>Continue<Arrow/></button>
+      <button className='primary'>Continue<Arrow /></button>
       <button onClick={props.home}>Back to home</button>
     </div>
   </form>;
@@ -234,56 +252,44 @@ function PropertyInfo(props: {
     setForm(form => {
       form.data.property = getValues();
     });
-  }
+  };
 
   const onSubmit = () => {
     onChange();
     props.next();
   };
 
-  const inputProps = (name: keyof PropertyData) => {
-    return {
-      ...register(name, {
-        valueAsNumber: true,
+  const inputProps = (name: keyof PropertyData) =>
+    ({
+      register: register(name, {
+        setValueAs: (value: string | number) =>
+          typeof value === 'string' ? Number(value.replaceAll(',', '')) : value,
         onChange
-      })
-    }
-  }
+      }),
+      error: errors[name],
+      format: format.number()
+    });
 
   return <form onSubmit={handleSubmit(onSubmit)}>
     <h1>Multifamily Information</h1>
     <sub>Add your property information so we can provide you with an accurate property estimation report.</sub>
 
-    <label>$ Net Income</label>
-    <input type='number' {...inputProps('netIncome')} />
-    <span className='form-error'>{errors.netIncome?.message}</span>
+    <Input {...inputProps('netIncome')}>$ Net Income</Input>
 
-    <label>Building Size (square feet)</label>
-    <input type='number' {...inputProps('buildingSF')} />
-    <span className='form-error'>{errors.buildingSF?.message}</span>
+    <Input {...inputProps('buildingSF')}>Building Size (square feet)</Input>
 
-    <label>Number of Parking Spaces</label>
-    <input type='number' {...inputProps('parkingSpaces')} />
-    <span className='form-error'>{errors.parkingSpaces?.message}</span>
+    <Input {...inputProps('parkingSpaces')}>Number of Parking Spaces</Input>
 
-    <label>Number of Studio Units</label>
-    <input type='number' {...inputProps('studioUnits')} />
-    <span className='form-error'>{errors.studioUnits?.message}</span>
+    <Input {...inputProps('studioUnits')}>Number of Studio Units</Input>
 
-    <label>Number of 1 Bedroom Units</label>
-    <input type='number' {...inputProps('oneBedroomUnits')} />
-    <span className='form-error'>{errors.oneBedroomUnits?.message}</span>
+    <Input {...inputProps('oneBedroomUnits')}>Number of 1 Bedroom Units</Input>
 
-    <label>Number of 2 Bedroom Units</label>
-    <input type='number' {...inputProps('twoBedroomUnits')} />
-    <span className='form-error'>{errors.twoBedroomUnits?.message}</span>
+    <Input {...inputProps('twoBedroomUnits')}>Number of 2 Bedroom Units</Input>
 
-    <label>Number of 3 Bedroom Units</label>
-    <input type='number' {...inputProps('threeBedroomUnits')} />
-    <span className='form-error'>{errors.threeBedroomUnits?.message}</span>
+    <Input {...inputProps('threeBedroomUnits')}>Number of 3 Bedroom Units</Input>
 
     <div className={styles.controls}>
-      <button className='primary'>Your property estimate<Arrow/></button>
+      <button className='primary'>Your property estimate<Arrow /></button>
       <button onClick={props.back}>Previous step</button>
     </div>
   </form>;
@@ -292,12 +298,29 @@ function PropertyInfo(props: {
 function ResultsWithContact(props: {
   back: ButtonAction
 }) {
-  return <div>
+  const { form, setForm } = useContext(FormStateContext);
 
-    <form>
-      <div className={styles.controls}>
-        <button onClick={props.back}>Previous step</button>
+  useEffect(() => {
+    bridge.predict(form.data.property as PropertyData).then(res => {
+      setForm(form => {
+        form.prediction = res.prediction;
+      });
+    });
+  }, []);
+
+  return <div>
+    { form.prediction === undefined ?
+      <div>
+        Loading
       </div>
-    </form>
+    :
+      <div>
+        <h1>Estimate:</h1>
+        <PriceRange price={Math.ceil(form.prediction)} />
+      </div>}
+
+    <hr/>
+
+    <ContactForm back={props.back} />
   </div>;
 }

@@ -1,33 +1,4 @@
-from pydantic import BaseModel, Field, root_validator, validator
-from typing import List
-
-
-class geometrySchema(BaseModel):
-    type: str
-    coordinates: List[float]
-
-
-class Address(BaseModel):
-    latitude: float
-    longitude: float
-    geometry: geometrySchema
-    country: str
-    countryCode: str
-    countryFlag: str
-    county: str
-    distance: float
-    city: str
-    stateCode: str
-    state: str
-    layer: str
-    formattedAddress: str
-
-    # @root_validator
-    # def check_latitude_longitude(cls, values):
-    #     latitude, longitude = values.get('latitude'), values.get('longitude')
-    #     if latitude is None or longitude is None:
-    #         raise ValueError("You must add a valid address")
-    #     return values
+from pydantic import BaseModel, Field
 
 
 # class UserInputs(BaseModel):
@@ -59,13 +30,11 @@ class Address(BaseModel):
 class UserInputs(BaseModel):
     netIncome: float = Field(..., gt=0, description="Required")
     buildingSF: float = Field(..., gt=0, description="Required")
-    typicalFloorSF: float = Field(..., gt=0, description="Required")
-    size: float = Field(..., gt=0, description="Required")
-    numberOfParkingSpaces: int = Field(..., ge=0, description="Required")
-    numberOfStudiosUnits: int = Field(..., ge=0, description="Required")
-    numberOf1BedroomsUnits: int = Field(..., ge=0, description="Required")
-    numberOf2BedroomsUnits: int = Field(..., ge=0, description="Required")
-    numberOf3BedroomsUnits: int = Field(..., ge=0, description="Required")
+    parkingSpaces: int = Field(..., ge=0, description="Required")
+    studioUnits: int = Field(..., ge=0, description="Required")
+    oneBedroomUnits: int = Field(..., ge=0, description="Required")
+    twoBedroomUnits: int = Field(..., ge=0, description="Required")
+    threeBedroomUnits: int = Field(..., ge=0, description="Required")
 
 
 class ContactInfo(BaseModel):

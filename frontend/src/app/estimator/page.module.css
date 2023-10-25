@@ -1,15 +1,11 @@
 .estimator {
     height: 100vh;
     display: grid;
-    grid-template-areas: "form map";
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;;
 
     @media (max-width: 1000px) {
-        grid-template-areas:
-            "form"
-            "map";
-        grid-template-columns: unset;
-        grid-template-rows: 2fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2fr 1fr
     }
 
     svg {
@@ -18,13 +14,18 @@
 }
 
 .formScroll {
-    grid-area: form;
-    display: grid;
+    --overflow: scroll;
 
+    display: grid;
     width: 100%;
-    min-height: 100vh;
+    height: 100%;
+
     padding: 1em 0;
-    overflow: auto;
+    overflow: var(--overflow);
+
+    @media (max-width: 1000px) {
+        box-shadow: var(--button-shadow);
+    }
 }
 
 .formWrapper {
@@ -36,6 +37,7 @@
 
 .suggestions {
     position: absolute;
+
     &.hidden {
         display: none;
     }
@@ -46,6 +48,13 @@
     flex-direction: row-reverse;
     align-items: flex-start;
     gap: 1em;
+}
+
+.mapWrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: -1;
 }
 
 .map {

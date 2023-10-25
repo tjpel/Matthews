@@ -1,5 +1,5 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { KeyboardEvent, useEffect, useState, useRef } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { classes } from '@/util';
 
@@ -42,9 +42,9 @@ export function SuggestionInput(props: {
     };
 
     if (props.onBlur) {
-      window.addEventListener("click", click);
+      window.addEventListener('click', click);
       return () => {
-        window.removeEventListener("click", click);
+        window.removeEventListener('click', click);
       };
     }
   }, [div, props.onBlur]);

@@ -1,7 +1,25 @@
-import {BACKEND_URL} from './env';
+import { BACKEND_URL } from './env';
 
-export const ping = define<undefined, string>("get", "/ping");
+export const ping = define<undefined, string>('get', '/ping');
 
+export const predict = define<{
+  netIncome: number,
+  buildingSF: number,
+  parkingSpaces: number,
+  studioUnits: number,
+  oneBedroomUnits: number,
+  twoBedroomUnits: number,
+  threeBedroomUnits: number,
+}, {
+  prediction: number
+}>('post', '/property/predict');
+
+export const contact = define<{
+  name: string,
+  email: string,
+  phone: string,
+  message: string
+}, never>('post', '/property/contact');
 
 type Method = 'get' | 'post';
 type Route<T, R> = T extends undefined
@@ -9,7 +27,7 @@ type Route<T, R> = T extends undefined
   : (payload: T) => Promise<R>;
 
 
-function define<T, R>(method: Method, path: string):  Route<T, R> {
+function define<T, R>(method: Method, path: string): Route<T, R> {
   const url = BACKEND_URL + (path.startsWith('/') ? path : '/' + path);
 
   const route = async (payload: T) => {

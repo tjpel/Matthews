@@ -1,4 +1,6 @@
-@import url(sanitize.css);
+@import "sanitize.css";
+@import "sanitize.css/forms.css";
+@import "sanitize.css/typography.css";
 
 :root {
     --text: hsl(212, 32%, 17%);
@@ -12,10 +14,28 @@
 
     --input-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --button-shadow: 0px 1px 1px rgba(12, 25, 39, 0.08), 0px 1px 3px rgba(12, 25, 39, 0.14);
+    --popup-shadow: 0px 2px 4px hsl(210, 10%, 10%, 20%);
 
-    font-family: system-ui;
+    /* copied from "sanitize.css/typography.css" */
+    --font-mono: ui-monospace,
+        /* macOS 10.10+ */ "Menlo",
+        /* Windows 6+ */ "Consolas",
+        /* Android 4+ */ "Roboto Mono",
+        /* Ubuntu 10.10+ */ "Ubuntu Monospace",
+        /* KDE Plasma 5+ */ "Noto Mono",
+        /* KDE Plasma 4+ */ "Oxygen Mono",
+        /* Linux/OpenOffice fallback */ "Liberation Mono",
+        /* fallback */ monospace,
+        /* macOS emoji */ "Apple Color Emoji",
+        /* Windows emoji */ "Segoe UI Emoji",
+        /* Windows emoji */ "Segoe UI Symbol",
+        /* Linux emoji */ "Noto Color Emoji";
 
     color: var(--text);
+}
+
+html {
+    overflow: hidden;
 }
 
 body {
@@ -49,8 +69,9 @@ input + label {
     margin-top: 0;
 }
 
-input {
-    font-size: 0.9rem;
+input, textarea {
+    font-family: inherit;
+    font-size: 1rem;
     color: inherit;
 
     margin-top: 0.2em;
@@ -109,4 +130,13 @@ button, input[type="submit"] {
         background-color: var(--text);
         box-shadow: none;
     }
+}
+
+input[type="tel"] {
+    font-family: var(--font-mono);
+}
+
+hr {
+    color: var(--text-light);
+    margin: 1em 2em;
 }
