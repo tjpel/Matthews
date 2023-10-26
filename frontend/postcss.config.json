@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "postcss-preset-env",
+      {
+        "stage": 2,
+        "importFrom": "./src/app/globals.css"
+      }
+    ],
+    "autoprefixer"
+  ]
+}
