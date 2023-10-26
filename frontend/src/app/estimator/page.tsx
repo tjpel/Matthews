@@ -14,7 +14,7 @@ import * as schema from '@/schema';
 import { PropertyData } from '@/schema';
 import { Input } from '@/components/input';
 import { SuggestionInput } from '@/components/suggestion-input';
-import Arrow from '@/svg/arrow.svg';
+import { Arrow } from '@/svg/arrow';
 import * as format from '@/format';
 import * as bridge from '@/bridge';
 

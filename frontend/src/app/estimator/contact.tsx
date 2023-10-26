@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ButtonAction } from './types';
 import { Input } from '@/components/input';
-import Arrow from '@/svg/arrow.svg';
+import { Arrow } from '@/svg/arrow';
 import { contact, ContactData } from '@/schema';
 import * as format from '@/format';
 

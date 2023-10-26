@@ -1,0 +1,56 @@
+.front {
+    height: 90vh;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    margin: calc(min(5em, 5vw));
+    display: flex;
+    flex-direction: column;
+
+    .taylor {
+        text-transform: uppercase;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    h1 {
+        font-weight: 800;
+        font-size: 8rem;
+        line-height: 0.9em;
+        margin: 0 0 0 -0.07em;
+    }
+
+    .primary {
+        color: var(--primary-dim);
+    }
+
+    .recs {
+        display: flex;
+        gap: 2em;
+        font-size: 0.9rem;
+
+        > div {
+            max-width: 25em;
+            margin: 2rem 0;
+        }
+        h3 {
+            margin: 0;
+        }
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.gradientCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40vw;
+}

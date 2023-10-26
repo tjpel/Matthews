@@ -9,6 +9,7 @@
     --input: hsl(212, 32%, 90%);
 
     --primary: hsl(212, 90%, 50%);
+    --primary-dim: hsl(212, 50%, 50%);
     --secondary: hsl(210, 25%, 97%);
     --error: hsl(340, 90%, 50%);
 
@@ -102,11 +103,12 @@ span.form-error {
     }
 }
 
-button, input[type="submit"] {
+button, a.button, input[type="submit"] {
     font-weight: 600;
     font-size: 0.8rem;
     color: var(--text);
     background-color: var(--text-light);
+    text-decoration: none;
     cursor: pointer;
 
     padding: 0.5rem 1rem;
