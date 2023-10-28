@@ -579,7 +579,8 @@ export default function DemoPage() {
                         </h2>
                         <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                           Add your property information so we can provide you
-                          with an accurate property estimation report.
+                          with an accurate property estimation report. If
+                          parameter is not applicable, enter 0.
                         </p>
                         <div className="space-y-4 px-4">
                           <FormField
