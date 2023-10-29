@@ -592,7 +592,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter your property net income"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="number"
                                     value={field.value}
                                     onChange={(e) =>
@@ -614,7 +614,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the building size in sq ft"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="number"
                                     value={field.value}
                                     onChange={(e) =>
@@ -636,7 +636,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of parking spaces"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -686,7 +686,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of studio units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -736,7 +736,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 1 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -786,7 +786,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 2 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -836,7 +836,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 3 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
