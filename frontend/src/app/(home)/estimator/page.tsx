@@ -47,8 +47,6 @@ import * as gtag from '@/lib/gtag';
 import { NumberBar } from '@/components/number-bar';
 import { Loader } from '@mantine/core';
 import { ContactForm } from '@/components/contact-form';
-import { useRouter } from 'next/router';
-
 
 const questions = [
   {
@@ -1000,14 +998,14 @@ export default function DemoPage() {
                         <div className="flex gap-[15px] justify-end mt-8">
                           <div>
                             <button
-                              
+                              onClick={() => setStep(1)}
                               className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
                               style={{
                                 boxShadow:
                                   '0 1px 1px #0c192714, 0 1px 3px #0c192724'
                               }}
                             >
-                              Back Home
+                              Previous step
                             </button>
                           </div>
                           <div>
@@ -1077,7 +1075,7 @@ export default function DemoPage() {
                       {!predictionQuery.isLoading && (
                         <RadioGroup value={prediction.prediction}>
                           <RadioGroup.Label className="sr-only">
-                            Success!
+                            Your Multifamily Estimate
                           </RadioGroup.Label>
                           <Label>Your Multifamily Estimate</Label>
                           <div className="space-y-4">
@@ -1218,46 +1216,46 @@ export default function DemoPage() {
                   </motion.div>
                 ) : step === 4 ? (
                   <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -40 }}
-    key="step-4"
-    transition={{
-      duration: 0.95,
-      ease: [0.165, 0.84, 0.44, 1]
-    }}
-    className="max-w-lg mx-auto px-4 lg:px-0"
-  >
-    <h2 className="text-4xl font-bold text-[#1E2B3A]">
-      Thank You for using MF Value!
-    </h2>
-    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
-      An agent will be in contact with you very soon to discuss your property. 
-    </p>
-    <div className="flex gap-[15px] justify-end mt-8">
-        <button
-          onClick={() => setStep(1)}
-          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
-          style={{
-            boxShadow:
-              '0 1px 1px #0c192714, 0 1px 3px #0c192724'
-          }}
-        >
-          Restimate
-        </button>
-        <a href="/" className="group">
-        <button
-            className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline active:scale-95 scale-100 duration-75"
-            style={{
-                boxShadow:
-                    '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
-            }}
-        >
-           Back to Home
-        </button>
-    </a>
-    </div>
-  </motion.div>
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    key="step-4"
+                    transition={{
+                      duration: 0.95,
+                      ease: [0.165, 0.84, 0.44, 1]
+                    }}
+                    className="max-w-lg mx-auto px-4 lg:px-0"
+                  >
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                      Thank You for using MF Value!
+                    </h2>
+                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                      An agent will be in contact with you very soon to discuss
+                      your property.
+                    </p>
+                    <div className="flex gap-[15px] justify-end mt-8">
+                      <button
+                        onClick={() => setStep(1)}
+                        className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                        style={{
+                          boxShadow: '0 1px 1px #0c192714, 0 1px 3px #0c192724'
+                        }}
+                      >
+                        Estimate another property
+                      </button>
+                      <a href="/" className="group">
+                        <button
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow:
+                              '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
+                          }}
+                        >
+                          Back to Home
+                        </button>
+                      </a>
+                    </div>
+                  </motion.div>
                 ) : (
                   <></>
                 )}
