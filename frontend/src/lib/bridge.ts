@@ -14,6 +14,15 @@ export const predict = define<{
   prediction: number
 }>('post', '/property/predict');
 
+export const record = define<{
+  name: string,
+  email: string,
+  phone: string,
+  message: string,
+  address: string,
+  result: number
+}, undefined>('post', '/data_collection/record');
+
 export const contact = define<{
   name: string,
   email: string,

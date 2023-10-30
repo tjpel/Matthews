@@ -59,12 +59,5 @@ export function PriceRange(props: {
         High: <strong>{money(high)}</strong>
       </div>
     </div>
-
-    <div className={styles.left}>
-      {money(0)}
-    </div>
-    <div className={styles.right}>
-      {money(max)}
-    </div>
   </div>;
 }

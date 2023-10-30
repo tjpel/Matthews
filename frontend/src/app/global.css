@@ -17,6 +17,11 @@
     --button-shadow: 0px 1px 1px rgba(12, 25, 39, 0.08), 0px 1px 3px rgba(12, 25, 39, 0.14);
     --popup-shadow: 0px 2px 4px hsl(210, 10%, 10%, 20%);
 
+    --gradient-color-1: #bde1ff;
+    --gradient-color-2: #6ca0f4;
+    --gradient-color-3: #e2d8ee;
+    --gradient-color-4: #94c8ff;
+
     /* copied from "sanitize.css/typography.css" */
     --font-mono: ui-monospace,
         /* macOS 10.10+ */ "Menlo",
@@ -35,9 +40,9 @@
     color: var(--text);
 }
 
-html {
+/*html {
     overflow: hidden;
-}
+}*/
 
 body {
     background-color: var(--background);

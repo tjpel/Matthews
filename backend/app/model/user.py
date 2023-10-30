@@ -3,6 +3,8 @@ import datetime
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
+from pydantic import BaseModel
+
 from app.db.base import Base
 
 
@@ -18,3 +20,13 @@ class User(Base):
 
     password_hash: Mapped[str | None]
     google_id: Mapped[str | None] = mapped_column(unique=True)
+
+
+class RecordedData(BaseModel):
+    name: str
+    email: str
+    phone: str
+    message: str
+
+    address: str
+    result: float

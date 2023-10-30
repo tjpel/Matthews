@@ -21,6 +21,9 @@ class Config(BaseSettings):
     google_client_id: str
     google_client_secret: str
 
+    google_service_account_key_file: str
+    google_sheets_id: str
+
     postgres_host: str
     postgres_user: str
     postgres_password: str

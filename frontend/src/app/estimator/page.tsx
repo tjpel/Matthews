@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as radar from '@/radar-util';
 import { AutocompleteResponse } from '@/radar-util';
 import * as schema from '@/schema';
-import { PropertyData } from '@/schema';
+import { ContactData, PropertyData } from '@/schema';
 import { Input } from '@/components/input';
 import { SuggestionInput } from '@/components/suggestion-input';
 import { Arrow } from '@/svg/arrow';
@@ -306,11 +306,26 @@ function ResultsWithContact(props: {
         form.prediction = res.prediction;
       });
     });
-  }, []);
+  }, [form.data.property]);
+
+  const onSubmit = async (data: ContactData) => {
+    await bridge.record({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      message: data.message,
+      address: form.data.address,
+      result: form.prediction!
+    });
+
+    setForm(form => {
+      form.step += 1;
+    });
+  };
 
   return <div>
     { form.prediction === undefined ?
-      <div>
+      <div className={styles.loading}>
         Loading
       </div>
     :
@@ -321,6 +336,6 @@ function ResultsWithContact(props: {
 
     <hr/>
 
-    <ContactForm back={props.back} />
+    <ContactForm back={props.back} onSubmit={onSubmit} />
   </div>;
 }

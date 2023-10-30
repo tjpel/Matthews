@@ -1,25 +1,35 @@
 .front {
-    height: 90vh;
+    height: 95vh;
     position: relative;
 
     display: flex;
     align-items: center;
 }
 
+.bar {
+    width: 100%;
+    height: 5vh;
+    background-image: linear-gradient(to bottom, var(--text) 50% 100%);
+}
+
 .title {
-    margin: calc(min(5em, 5vw));
+    margin: calc(min(5em, 4vw));
     display: flex;
     flex-direction: column;
+
+    position: relative;
+    z-index: 3;
 
     .taylor {
         text-transform: uppercase;
         font-weight: 800;
+        font-size: calc(min(4vw, 1.5rem));
         margin: 0;
     }
 
     h1 {
         font-weight: 800;
-        font-size: 8rem;
+        font-size: calc(min(16vw, 8rem));
         line-height: 0.9em;
         margin: 0 0 0 -0.07em;
     }
@@ -48,9 +58,30 @@
     gap: 1rem;
 }
 
-.gradientCanvas {
+.gradientCanvas, .gradientCover {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 40vw;
+    right: 0;
+    width: 50vw;
+    height: 100vh;
+
+    background-color: var(--gradient-color-1);
+    box-shadow: var(--button-shadow);
+    clip-path: polygon(100px 0, 100% 0, calc(100% + 225px) 100%, 480px 100%);
+
+    opacity: 1;
+    transition: opacity 1s ease;
+    &.hidden {
+        opacity: 0;
+    }
+}
+.gradientCanvas {
+    z-index: 2;
+}
+.gradientCover {
+    z-index: 1;
+}
+
+.content {
+    min-height: 90vh;
 }

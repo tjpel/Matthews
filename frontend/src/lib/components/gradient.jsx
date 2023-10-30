@@ -39,17 +39,17 @@ class MiniGl {
       (_miniGl.debug =
         debug && debug_output
           ? function (e) {
-              const t = new Date();
-              t - _miniGl.lastDebugMsg > 1e3 && console.log('---'),
-                console.log(
-                  t.toLocaleTimeString() +
-                    Array(Math.max(0, 32 - e.length)).join(' ') +
-                    e +
-                    ': ',
-                  ...Array.from(arguments).slice(1)
-                ),
-                (_miniGl.lastDebugMsg = t);
-            }
+            const t = new Date();
+            t - _miniGl.lastDebugMsg > 1e3 && console.log('---'),
+              console.log(
+                t.toLocaleTimeString() +
+                Array(Math.max(0, 32 - e.length)).join(' ') +
+                e +
+                ': ',
+                ...Array.from(arguments).slice(1)
+              ),
+              (_miniGl.lastDebugMsg = t);
+          }
           : () => {}),
       Object.defineProperties(_miniGl, {
         Material: {
@@ -61,13 +61,13 @@ class MiniGl {
                 const shader = context.createShader(type);
                 return (
                   context.shaderSource(shader, source),
-                  context.compileShader(shader),
+                    context.compileShader(shader),
                   context.getShaderParameter(shader, context.COMPILE_STATUS) ||
-                    console.error(context.getShaderInfoLog(shader)),
-                  _miniGl.debug('Material.compileShaderSource', {
-                    source: source
-                  }),
-                  shader
+                  console.error(context.getShaderInfoLog(shader)),
+                    _miniGl.debug('Material.compileShaderSource', {
+                      source: source
+                    }),
+                    shader
                 );
               }
               function getUniformVariableDeclarations(uniforms, type) {
@@ -107,10 +107,10 @@ class MiniGl {
                 context.attachShader(material.program, material.vertexShader),
                 context.attachShader(material.program, material.fragmentShader),
                 context.linkProgram(material.program),
-                context.getProgramParameter(
-                  material.program,
-                  context.LINK_STATUS
-                ) || console.error(context.getProgramInfoLog(material.program)),
+              context.getProgramParameter(
+                material.program,
+                context.LINK_STATUS
+              ) || console.error(context.getProgramInfoLog(material.program)),
                 context.useProgram(material.program),
                 material.attachUniforms(void 0, _miniGl.commonUniforms),
                 material.attachUniforms(void 0, material.uniforms);
@@ -121,24 +121,24 @@ class MiniGl {
               const material = this;
               void 0 === name
                 ? Object.entries(uniforms).forEach(([name, uniform]) => {
-                    material.attachUniforms(name, uniform);
-                  })
+                  material.attachUniforms(name, uniform);
+                })
                 : 'array' == uniforms.type
-                ? uniforms.value.forEach((uniform, i) =>
+                  ? uniforms.value.forEach((uniform, i) =>
                     material.attachUniforms(`${name}[${i}]`, uniform)
                   )
-                : 'struct' == uniforms.type
-                ? Object.entries(uniforms.value).forEach(([uniform, i]) =>
-                    material.attachUniforms(`${name}.${uniform}`, i)
-                  )
-                : (_miniGl.debug('Material.attachUniforms', {
-                    name: name,
-                    uniform: uniforms
-                  }),
-                  material.uniformInstances.push({
-                    uniform: uniforms,
-                    location: context.getUniformLocation(material.program, name)
-                  }));
+                  : 'struct' == uniforms.type
+                    ? Object.entries(uniforms.value).forEach(([uniform, i]) =>
+                      material.attachUniforms(`${name}.${uniform}`, i)
+                    )
+                    : (_miniGl.debug('Material.attachUniforms', {
+                      name: name,
+                      uniform: uniforms
+                    }),
+                      material.uniformInstances.push({
+                        uniform: uniforms,
+                        location: context.getUniformLocation(material.program, name)
+                      }));
             }
           }
         },
@@ -160,13 +160,13 @@ class MiniGl {
             }
             update(value) {
               void 0 !== this.value &&
-                context[`uniform${this.typeFn}`](
-                  value,
-                  0 === this.typeFn.indexOf('Matrix')
-                    ? this.transpose
-                    : this.value,
-                  0 === this.typeFn.indexOf('Matrix') ? this.value : null
-                );
+              context[`uniform${this.typeFn}`](
+                value,
+                0 === this.typeFn.indexOf('Matrix')
+                  ? this.transpose
+                  : this.value,
+                0 === this.typeFn.indexOf('Matrix') ? this.value : null
+              );
             }
             //e - name
             //t - type
@@ -200,14 +200,14 @@ class MiniGl {
                       name_no_prefix.slice(1)),
                     `uniform struct ${name_no_prefix}
                                   {\n` +
-                      Object.entries(uniform.value)
-                        .map(([name, uniform]) =>
-                          uniform
-                            .getDeclaration(name, type)
-                            .replace(/^uniform/, '')
-                        )
-                        .join('') +
-                      `\n} ${name}${length > 0 ? `[${length}]` : ''};`
+                    Object.entries(uniform.value)
+                      .map(([name, uniform]) =>
+                        uniform
+                          .getDeclaration(name, type)
+                          .replace(/^uniform/, '')
+                      )
+                      .join('') +
+                    `\n} ${name}${length > 0 ? `[${length}]` : ''};`
                   );
                 }
                 return `uniform ${uniform.type} ${name}${
@@ -260,11 +260,11 @@ class MiniGl {
                   const i = e * (n.xSegCount + 1) + t;
                   if (
                     ((n.attributes.uv.values[2 * i] = t / n.xSegCount),
-                    (n.attributes.uv.values[2 * i + 1] = 1 - e / n.ySegCount),
-                    (n.attributes.uvNorm.values[2 * i] =
-                      (t / n.xSegCount) * 2 - 1),
-                    (n.attributes.uvNorm.values[2 * i + 1] =
-                      1 - (e / n.ySegCount) * 2),
+                      (n.attributes.uv.values[2 * i + 1] = 1 - e / n.ySegCount),
+                      (n.attributes.uvNorm.values[2 * i] =
+                        (t / n.xSegCount) * 2 - 1),
+                      (n.attributes.uvNorm.values[2 * i + 1] =
+                        1 - (e / n.ySegCount) * 2),
                     t < n.xSegCount && e < n.ySegCount)
                   ) {
                     const s = e * n.xSegCount + t;
@@ -293,12 +293,12 @@ class MiniGl {
               (geometry.width = width),
                 (geometry.height = height),
                 (geometry.orientation = orientation),
-                (geometry.attributes.position.values &&
-                  geometry.attributes.position.values.length ===
-                    3 * geometry.vertexCount) ||
-                  (geometry.attributes.position.values = new Float32Array(
-                    3 * geometry.vertexCount
-                  ));
+              (geometry.attributes.position.values &&
+                geometry.attributes.position.values.length ===
+                3 * geometry.vertexCount) ||
+              (geometry.attributes.position.values = new Float32Array(
+                3 * geometry.vertexCount
+              ));
               const o = width / -2,
                 r = height / -2,
                 segment_width = width / geometry.xSegCount,
@@ -309,11 +309,11 @@ class MiniGl {
                   const r = o + xIndex * segment_width,
                     l = yIndex * (geometry.xSegCount + 1) + xIndex;
                   (geometry.attributes.position.values[
-                    3 * l + 'xyz'.indexOf(orientation[0])
-                  ] = r),
+                  3 * l + 'xyz'.indexOf(orientation[0])
+                    ] = r),
                     (geometry.attributes.position.values[
-                      3 * l + 'xyz'.indexOf(orientation[1])
-                    ] = -t);
+                    3 * l + 'xyz'.indexOf(orientation[1])
+                      ] = -t);
                 }
               }
               geometry.attributes.position.update(),
@@ -377,7 +377,7 @@ class MiniGl {
             }
             update() {
               void 0 !== this.values &&
-                (context.bindBuffer(this.target, this.buffer),
+              (context.bindBuffer(this.target, this.buffer),
                 context.bufferData(
                   this.target,
                   this.values,
@@ -388,7 +388,7 @@ class MiniGl {
               const n = context.getAttribLocation(t, e);
               return (
                 this.target === context.ARRAY_BUFFER &&
-                  (context.enableVertexAttribArray(n),
+                (context.enableVertexAttribArray(n),
                   context.vertexAttribPointer(
                     n,
                     this.size,
@@ -397,21 +397,21 @@ class MiniGl {
                     0,
                     0
                   )),
-                n
+                  n
               );
             }
             use(e) {
               context.bindBuffer(this.target, this.buffer),
-                this.target === context.ARRAY_BUFFER &&
-                  (context.enableVertexAttribArray(e),
-                  context.vertexAttribPointer(
-                    e,
-                    this.size,
-                    this.type,
-                    this.normalized,
-                    0,
-                    0
-                  ));
+              this.target === context.ARRAY_BUFFER &&
+              (context.enableVertexAttribArray(e),
+                context.vertexAttribPointer(
+                  e,
+                  this.size,
+                  this.type,
+                  this.normalized,
+                  0,
+                  0
+                ));
             }
           }
         }
@@ -486,13 +486,13 @@ function e(object, propertyName, val) {
   return (
     propertyName in object
       ? Object.defineProperty(object, propertyName, {
-          value: val,
-          enumerable: !0,
-          configurable: !0,
-          writable: !0
-        })
+        value: val,
+        enumerable: !0,
+        configurable: !0,
+        writable: !0
+      })
       : (object[propertyName] = val),
-    object
+      object
   );
 }
 
@@ -506,10 +506,10 @@ class Gradient {
       e(this, 'isLoadedClass', !1),
       e(this, 'isScrolling', !1),
       /*e(this, "isStatic", o.disableAmbientAnimations()),*/ e(
-        this,
-        'scrollingTimeout',
-        void 0
-      ),
+      this,
+      'scrollingTimeout',
+      void 0
+    ),
       e(this, 'scrollingRefreshDelay', 200),
       e(this, 'isIntersecting', !1),
       e(this, 'shaderFiles', void 0),
@@ -545,8 +545,8 @@ class Gradient {
             this.handleScrollEnd,
             this.scrollingRefreshDelay
           )),
-          this.isGradientLegendVisible && this.hideGradientLegend(),
-          this.conf.playing && ((this.isScrolling = !0), this.pause());
+        this.isGradientLegendVisible && this.hideGradientLegend(),
+        this.conf.playing && ((this.isScrolling = !0), this.pause());
       }),
       e(this, 'handleScrollEnd', () => {
         (this.isScrolling = !1), this.isIntersecting && this.play();
@@ -564,9 +564,9 @@ class Gradient {
       }),
       e(this, 'handleMouseDown', (e) => {
         this.isGradientLegendVisible &&
-          ((this.isMetaKey = e.metaKey),
+        ((this.isMetaKey = e.metaKey),
           (this.isMouseDown = !0),
-          !1 === this.conf.playing && requestAnimationFrame(this.animate));
+        !1 === this.conf.playing && requestAnimationFrame(this.animate));
       }),
       e(this, 'handleMouseUp', () => {
         this.isMouseDown = !1;
@@ -575,8 +575,8 @@ class Gradient {
         if (!this.shouldSkipFrame(e) || this.isMouseDown) {
           if (
             ((this.t += Math.min(e - this.last, 1e3 / 15)),
-            (this.last = e),
-            this.isMouseDown)
+              (this.last = e),
+              this.isMouseDown)
           ) {
             let e = 160;
             this.isMetaKey && (e = -160), (this.t += e);
@@ -587,11 +587,11 @@ class Gradient {
         if (0 !== this.last && this.isStatic)
           return this.minigl.render(), void this.disconnect();
         /*this.isIntersecting && */ (this.conf.playing || this.isMouseDown) &&
-          requestAnimationFrame(this.animate);
+        requestAnimationFrame(this.animate);
       }),
       e(this, 'addIsLoadedClass', () => {
         /*this.isIntersecting && */ !this.isLoadedClass &&
-          ((this.isLoadedClass = !0),
+        ((this.isLoadedClass = !0),
           this.el.classList.add('isLoaded'),
           setTimeout(() => {
             this.el.parentElement.classList.add('isLoaded');
@@ -611,7 +611,6 @@ class Gradient {
   }
   initGradient(selector) {
     this.canvas = document.querySelector(selector);
-    console.log(this.canvas);
     if (!this.canvas) {
       console.error(`Cannot find an element with selector "${selector}"`);
       return;
@@ -657,7 +656,7 @@ class Gradient {
         : ((this.minigl = new MiniGl(this.el, null, null, !0)),
           requestAnimationFrame(() => {
             this.el &&
-              ((this.computedCanvasStyle = getComputedStyle(this.el)),
+            ((this.computedCanvasStyle = getComputedStyle(this.el)),
               this.waitForCssVars());
           }));
     /*
@@ -672,7 +671,7 @@ class Gradient {
   }
   disconnect() {
     this.scrollObserver &&
-      (window.removeEventListener('scroll', this.handleScroll),
+    (window.removeEventListener('scroll', this.handleScroll),
       window.removeEventListener('mousedown', this.handleMouseDown),
       window.removeEventListener('mouseup', this.handleMouseUp),
       window.removeEventListener('keydown', this.handleKeyDown),
@@ -743,7 +742,7 @@ class Gradient {
         excludeFrom: 'fragment'
       }),
       u_waveLayers: new this.minigl.Uniform({
-        value: [],
+        value: [], // why?
         excludeFrom: 'fragment',
         type: 'array'
       })
@@ -788,11 +787,11 @@ class Gradient {
         this.shaderFiles.blend,
         this.shaderFiles.vertex
       ].join('\n\n')),
-      new this.minigl.Material(
-        this.vertexShader,
-        this.shaderFiles.fragment,
-        this.uniforms
-      )
+        new this.minigl.Material(
+          this.vertexShader,
+          this.shaderFiles.fragment,
+          this.uniforms
+        )
     );
   }
   initMesh() {
@@ -816,7 +815,7 @@ class Gradient {
   }
   showGradientLegend() {
     this.width > this.minWidth &&
-      ((this.isGradientLegendVisible = !0),
+    ((this.isGradientLegendVisible = !0),
       document.body.classList.add('isGradientLegendVisible'));
   }
   hideGradientLegend() {
@@ -838,9 +837,9 @@ class Gradient {
     if (
       this.computedCanvasStyle &&
       -1 !==
-        this.computedCanvasStyle
-          .getPropertyValue('--gradient-color-1')
-          .indexOf('#')
+      this.computedCanvasStyle
+        .getPropertyValue('--gradient-color-1')
+        .indexOf('#')
     )
       this.init(), this.addIsLoadedClass();
     else {
@@ -849,7 +848,7 @@ class Gradient {
       ) {
         return (
           (this.sectionColors = [16711680, 16711680, 16711935, 65280, 255]),
-          void this.init()
+            void this.init()
         );
       }
       requestAnimationFrame(() => this.waitForCssVars());

@@ -16,6 +16,7 @@ REDIRECT = f"{config.server_url}{config.api_v1_route}/auth/google"
 SCOPES = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/spreadsheets"
 ]
 
 routes = APIRouter(prefix="/auth")
@@ -66,7 +67,7 @@ async def google_url() -> str:
 
 
 @routes.get("/google")
-async def google_token(session: AsyncSessionDep, code: str) -> str:
+async def google_token(session: AsyncSessionDep, code: str):
     tokens = await google.client.get_access_token(code, REDIRECT)
     info = await google.get_user_info(tokens["access_token"])
 

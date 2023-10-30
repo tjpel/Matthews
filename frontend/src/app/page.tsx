@@ -1,15 +1,9 @@
-// import {useEffect} from 'react';
-
-import {Arrow} from '@/svg/arrow';
+import { Arrow } from '@/svg/arrow';
 import { GradientCanvas } from './gradient';
 
 import styles from './page.module.css';
 
 export default function Page() {
-  // useEffect(() => {
-  //   gradient.initGradient("gradient-canvas");
-  // }, []);
-
   return <>
     <div className={styles.front}>
       <div className={styles.title}>
@@ -38,11 +32,13 @@ export default function Page() {
 
           <a className='button'>Contact Us</a>
 
-          <a className='button primary' href='./estimator'>Try it out <Arrow/></a>
-
-          <GradientCanvas />
+          <a className='button primary' href='./estimator'>Try it out <Arrow /></a>
         </div>
       </div>
+
+      <GradientCanvas />
     </div>
+
+    <div className={styles.bar} />
   </>;
 }
