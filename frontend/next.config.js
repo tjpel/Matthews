@@ -5,7 +5,7 @@ const nextConfig = {
   },
   rewrites: async () => {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
+    console.log('Backend URL:', backendUrl);
     if (!backendUrl) {
       throw new Error(
         'The environment variable NEXT_PUBLIC_BACKEND_URL is required but was not provided.'

@@ -580,7 +580,8 @@ export default function DemoPage() {
                         </h2>
                         <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                           Add your property information so we can provide you
-                          with an accurate property estimation report.
+                          with an accurate property estimation report. If
+                          parameter is not applicable, enter 0.
                         </p>
                         <div className="space-y-4 px-4">
                           <FormField
@@ -592,7 +593,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter your property net income"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="number"
                                     value={field.value}
                                     onChange={(e) =>
@@ -614,7 +615,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the building size in sq ft"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="number"
                                     value={field.value}
                                     onChange={(e) =>
@@ -636,7 +637,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of parking spaces"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -686,7 +687,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of studio units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -736,7 +737,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 1 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -786,7 +787,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 2 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -836,7 +837,7 @@ export default function DemoPage() {
                                 <FormControl>
                                   <Input
                                     className="h-14"
-                                    placeholder="Enter the number of 3 bedroom units"
+                                    placeholder="If none, enter 0. If unknown, enter an estimate."
                                     type="text" // Change this to text to allow formatted numbers
                                     value={
                                       field.value !== undefined &&
@@ -1191,7 +1192,7 @@ export default function DemoPage() {
                       <div>
                         <button
                           onClick={() => {
-                            setStep(3);
+                            setStep(4);
                           }}
                           className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                           style={{
@@ -1223,6 +1224,48 @@ export default function DemoPage() {
                           </svg>
                         </button>
                       </div>
+                    </div>
+                  </motion.div>
+                ) : step === 4 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    key="step-4"
+                    transition={{
+                      duration: 0.95,
+                      ease: [0.165, 0.84, 0.44, 1]
+                    }}
+                    className="max-w-lg mx-auto px-4 lg:px-0"
+                  >
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                      Thank You for using MF Value!
+                    </h2>
+                    <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                      An agent will be in contact with you very soon to discuss
+                      your property.
+                    </p>
+                    <div className="flex gap-[15px] justify-end mt-8">
+                      <button
+                        onClick={() => setStep(1)}
+                        className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
+                        style={{
+                          boxShadow: '0 1px 1px #0c192714, 0 1px 3px #0c192724'
+                        }}
+                      >
+                        Estimate another property
+                      </button>
+                      <Link href="/" className="group">
+                        <button
+                          className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline active:scale-95 scale-100 duration-75"
+                          style={{
+                            boxShadow:
+                              '0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)'
+                          }}
+                        >
+                          Back to Home
+                        </button>
+                      </Link>
                     </div>
                   </motion.div>
                 ) : (
