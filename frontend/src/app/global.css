@@ -87,11 +87,14 @@ input, textarea {
     box-shadow: var(--input-shadow);
 
     &:focus-visible {
-        outline: 2px solid var(--primary);
-        outline-offset: 2px;
+        --outline-color: var(--primary);
+        /*outline: 2px solid var(--primary);
+        outline-offset: 2px;*/
+        outline: none;
+        box-shadow: var(--input-shadow), 0 0 0 2px var(--background), 0 0 0 4px var(--outline-color);
 
         &.error {
-            outline-color: var(--error);
+            --outline-color: var(--error);
         }
     }
 }
