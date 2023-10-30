@@ -4,6 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 export default function ContactPage() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
   return (
     <main className="py-14">
       <div className="max-w-screen-xl mx-auto px-4 text-[#1a2b3b] md:px-8">
@@ -12,9 +19,15 @@ export default function ContactPage() {
             Get in touch
           </p>
           <p>We’d love to hear from you! Please fill out the form below.</p>
+          {submitted && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+              <strong className="font-bold">Thank you!</strong>
+              <span className="block sm:inline"> Your information has been submitted successfully.</span>
+            </div>
+          )}
         </div>
         <div className="mt-12 max-w-lg mx-auto">
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex flex-col items-center gap-y-5 gap-x-6 [&>*]:w-full sm:flex-row">
               <div>
                 <label className="font-medium">First name</label>
