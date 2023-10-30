@@ -12,7 +12,7 @@ class Config(BaseSettings):
 
     cors_allowed_origins: list[str]
 
-    google_service_account_key_file: str
+    google_service_account_secret: str
     google_sheets_id: str
 
 
