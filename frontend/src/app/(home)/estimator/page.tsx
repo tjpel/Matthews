@@ -1243,7 +1243,7 @@ export default function DemoPage() {
                       >
                         Estimate another property
                       </button>
-                      <a href="/" className="group">
+                      <Link href="/" className="group">
                         <button
                           className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline active:scale-95 scale-100 duration-75"
                           style={{
@@ -1253,7 +1253,7 @@ export default function DemoPage() {
                         >
                           Back to Home
                         </button>
-                      </a>
+                      </Link>
                     </div>
                   </motion.div>
                 ) : (
