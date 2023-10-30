@@ -12,7 +12,6 @@ export function PriceRange(props: { price: number }) {
   const max = Math.floor(((high - 1000) * 1.3) / 1000) * 1000;
 
   const lowOffset = low / max;
-  const midOffset = props.price / max;
   const highOffset = high / max;
 
   return (
@@ -28,8 +27,6 @@ export function PriceRange(props: { price: number }) {
 
         {/* mobile element */}
         <div className={styles.label}>
-          Mean: <strong>{money(props.price)}</strong>
-          <br />
           Range:{" "}
           <strong>
             {money(low)}–{money(high)}

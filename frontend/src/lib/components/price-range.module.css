@@ -1,8 +1,8 @@
 .wrapper {
-    margin: 6em 0 3em;
+    margin: 4em 0 3em;
 
     @media (min-width: 1501px) {
-        margin-top: 7em;
+        margin-top: 5em;
     }
 }
 
