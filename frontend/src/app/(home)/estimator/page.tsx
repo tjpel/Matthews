@@ -1068,10 +1068,6 @@ export default function DemoPage() {
                       your property information.
                     </p>
                     <div className="space-y-4">
-                      {predictionQuery.isLoading && (
-                        <Loader color="blue" type="dots" />
-                      )}
-
                       {!predictionQuery.isLoading && (
                         <RadioGroup value={prediction.prediction}>
                           <RadioGroup.Label className="sr-only">
