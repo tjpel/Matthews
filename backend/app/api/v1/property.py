@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 import pandas as pd
 
-from app.model.property import UserInputs, ContactInfo
+from app.model.property import UserInputs
 import app.ai as ai
 
 routes = APIRouter(prefix="/property")
@@ -42,9 +42,3 @@ def predict_property_value(
     prediction = model.predict(user_inputs_df)[0]
 
     return {"prediction": prediction}
-
-
-# Route to store contact info in [undecided]
-@routes.post("/contact")
-async def add_contact_info(contact: ContactInfo):
-    ...
