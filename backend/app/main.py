@@ -5,11 +5,8 @@ from starlette.middleware.cors import CORSMiddleware
 from app.api import api_routes
 from app.core.config import config
 
-middleware = [
-    Middleware(
-        CORSMiddleware, allow_origins=config.cors_allowed_origins, allow_methods=["*"]
-    )
-]
+cors = Middleware(CORSMiddleware, allow_origins=config.cors_allowed_origins, allow_methods=["*"])
+middleware = [cors]
 
 app = FastAPI(middleware=middleware)
 

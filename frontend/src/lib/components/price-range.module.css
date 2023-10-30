@@ -58,6 +58,7 @@
     left: var(--pos);
 
     padding: 0.75em;
+    background-color: var(--background);
     border-radius: 2em;
     box-shadow: var(--popup-shadow);
 

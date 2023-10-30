@@ -23,6 +23,7 @@ import 'radar-sdk-js/dist/radar.css';
 import { ButtonAction } from './types';
 import { ContactForm } from './contact';
 import { PriceRange } from '@/components/price-range';
+import * as React from 'react';
 
 // Prevents spam to Radar API
 const REQUEST_DELAY_MS = 500;
@@ -107,6 +108,7 @@ export default function Page() {
   }, [setForm]);
 
   return <FormStateContext.Provider value={{ form, setForm }}>
+    {/*<NoiseBackground opacity={0.35} />*/}
     <div className={styles.estimator}>
       <div className={styles.formScroll} style={{
         '--overflow': animStep === 0 ? 'visible' : 'scroll'
