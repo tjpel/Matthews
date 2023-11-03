@@ -40,10 +40,6 @@
     color: var(--text);
 }
 
-/*html {
-    overflow: hidden;
-}*/
-
 body {
     background-color: var(--background);
 }
@@ -80,8 +76,9 @@ input, textarea {
     font-size: 1rem;
     color: inherit;
 
-    margin-top: 0.2em;
-    padding: 1.2em 1em;
+    margin-top: 0.9em;
+    padding: 0.9em 1em;
+    background-color: var(--background);
     border: 1px solid var(--input);
     border-radius: 0.4em;
     box-shadow: var(--input-shadow);

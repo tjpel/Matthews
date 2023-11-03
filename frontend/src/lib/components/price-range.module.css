@@ -1,8 +1,8 @@
 .wrapper {
-    margin: 6em 0 3em;
+    margin: 4em 0 3em;
 
     @media (min-width: 1501px) {
-        margin-top: 7em;
+        margin-top: 5em;
     }
 }
 
@@ -58,6 +58,7 @@
     left: var(--pos);
 
     padding: 0.75em;
+    background-color: var(--background);
     border-radius: 2em;
     box-shadow: var(--popup-shadow);
 
