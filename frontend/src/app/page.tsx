@@ -4,6 +4,7 @@ import { GradientCanvas } from "./gradient";
 import styles from "./page.module.css";
 import { NoiseBackground } from "@/components/noise-background";
 import * as React from "react";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -32,9 +33,13 @@ export default function Page() {
           </div>
 
           <div className={styles.actions}>
-            <a className="button">All About Us</a>
+            <Link className="button" href="https://tayloravakian.carrd.co/">
+              All About Us
+            </Link>
 
-            <a className="button">Contact Us</a>
+            <Link className="button" href="https://tayloravakian.carrd.co/">
+              Contact Us
+            </Link>
 
             <a className="button primary" href="./estimator">
               Try it out <Arrow />
