@@ -47,6 +47,7 @@ import * as gtag from '@/lib/gtag';
 import { NumberBar } from '@/components/number-bar';
 import { Loader } from '@mantine/core';
 import { ContactForm } from '@/components/contact-form';
+import { NumberRange } from '@/components/number-range';
 
 const questions = [
   {
@@ -1068,6 +1069,17 @@ export default function DemoPage() {
                       your property information.
                     </p>
                     <div className="space-y-4">
+                      {!predictionQuery.isLoading && (
+                        <NumberRange
+                          min={0}
+                          max={5000000}
+                          value={[
+                            Number(prediction.lowPrediction),
+                            Number(prediction.highPrediction)
+                          ]}
+                        />
+                      )}
+
                       {!predictionQuery.isLoading && (
                         <RadioGroup value={prediction.prediction}>
                           <RadioGroup.Label className="sr-only">
