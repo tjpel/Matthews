@@ -33,9 +33,9 @@ export default function Page() {
           </div>
 
           <div className={styles.actions}>
-            <Link className="button" href="https://tayloravakian.carrd.co/">
+            {/* <Link className="button" href="https://tayloravakian.carrd.co/">
               All About Us
-            </Link>
+            </Link> */}
 
             <Link className="button" href="https://tayloravakian.carrd.co/">
               Contact Us
