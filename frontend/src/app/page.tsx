@@ -1,16 +1,17 @@
 import { Arrow } from "@/svg/arrow";
 import { GradientCanvas } from "./gradient";
 
-import styles from './page.module.css';
-import { NoiseBackground } from '@/components/noise-background';
-import * as React from 'react';
+import styles from "./page.module.css";
+import { NoiseBackground } from "@/components/noise-background";
+import * as React from "react";
 
 export default function Page() {
-  return <>
-    <NoiseBackground opacity={0.35} />
-    <div className={styles.front}>
-      <div className={styles.title}>
-        <h2 className={styles.taylor}>Taylor Avakian</h2>
+  return (
+    <>
+      <NoiseBackground opacity={0.35} />
+      <div className={styles.front}>
+        <div className={styles.title}>
+          <h2 className={styles.taylor}>Taylor Avakian</h2>
 
           <h1>
             Find Your <br />
