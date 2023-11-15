@@ -22,7 +22,14 @@ spreadsheet_id = config.google_sheets_id
 
 def record(values: RecordedData):
     data = {
-        "values": [list(values.model_dump().values())]
+        "values": [[
+            values.name,
+            values.email,
+            values.phone,
+            values.address,
+            values.result,
+            values.message
+        ]]
     }
 
     service.spreadsheets().values().append(

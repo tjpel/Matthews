@@ -36,7 +36,7 @@ interface FormState {
   prediction: number | undefined;
   data: {
     address: string;
-    property: Partial<PropertyData>
+    property: PropertyData
   };
 }
 
@@ -46,13 +46,13 @@ const FORM_STATE: FormState = {
   data: {
     address: '',
     property: {
-      netIncome: undefined,
-      buildingSF: undefined,
-      parkingSpaces: undefined,
-      studioUnits: undefined,
-      oneBedroomUnits: undefined,
-      twoBedroomUnits: undefined,
-      threeBedroomUnits: undefined
+      netIncome: 0,
+      buildingSF: 0,
+      parkingSpaces: 0,
+      studioUnits: 0,
+      oneBedroomUnits: 0,
+      twoBedroomUnits: 0,
+      threeBedroomUnits: 0
     }
   }
 };
@@ -275,6 +275,7 @@ function PropertyInfo(props: {
   return <form onSubmit={handleSubmit(onSubmit)}>
     <h1>Multifamily Information</h1>
     <sub>Add your property information so we can provide you with an accurate property estimation report.</sub>
+    <sub>If parameter is not applicable, enter 0</sub>
 
     <Input {...inputProps('netIncome')}>$ Net Income</Input>
 
