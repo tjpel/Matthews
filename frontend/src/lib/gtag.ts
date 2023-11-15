@@ -5,4 +5,11 @@ declare global {
 }
 
 export const step = (i: number) =>
-  window.gtag("valuation_step", )
+  window.gtag("event", "valuation_step", {
+    "step": i
+  })
+
+export const search = (address: string) =>
+  window.gtag("event", "search", {
+    "search_term": address
+  })

@@ -17,6 +17,7 @@ import { SuggestionInput } from '@/components/suggestion-input';
 import { Arrow } from '@/svg/arrow';
 import * as format from '@/format';
 import * as bridge from '@/bridge';
+import * as gtag from '@/gtag';
 
 import styles from './page.module.css';
 import 'radar-sdk-js/dist/radar.css';
@@ -87,6 +88,9 @@ export default function Page() {
       setTimeout(() => setAnimStep(step), ANIM_MS * 1.5);
     else
       setTimeout(() => setAnimStep(step), ANIM_MS);
+
+    if (step !== 0)
+      gtag.step(step);
   }, [step]);
 
   const home = useCallback((ev?: MouseEvent) => {
@@ -130,6 +134,7 @@ export default function Page() {
             {step === 1 && <PropertyInfo back={back} next={next} />}
 
             {step === 2 && <ResultsWithContact back={back} />}
+            {step === 3 && <Thanks home={home} />}
           </div>
         ))}
       </div>
@@ -184,9 +189,10 @@ function GetAddress(props: {
     // @ts-ignore
     setHandle(setTimeout(() => {
       if (currentValue.length > 0) {
-        radar.geocode(currentValue).then(address => {
-          if (address) {
-            radar.setMapMarker(address);
+        radar.geocode(currentValue).then(location => {
+          if (location) {
+            gtag.search(getValues('address'));
+            radar.setMapMarker(location);
           }
         });
       }
@@ -262,20 +268,20 @@ function PropertyInfo(props: {
   };
 
   const inputProps = (name: keyof PropertyData) =>
-    ({
-      register: register(name, {
-        setValueAs: (value: string | number) =>
-          typeof value === 'string' ? Number(value.replaceAll(',', '')) : value,
-        onChange
-      }),
-      error: errors[name],
-      format: format.number()
-    });
+  ({
+    register: register(name, {
+      setValueAs: (value: string | number) =>
+        typeof value === 'string' ? Number(value.replaceAll(',', '')) : value,
+      onChange
+    }),
+    error: errors[name],
+    format: format.number()
+  });
 
   return <form onSubmit={handleSubmit(onSubmit)}>
     <h1>Multifamily Information</h1>
     <sub>Add your property information so we can provide you with an accurate property estimation report.</sub>
-    <sub>If parameter is not applicable, enter 0</sub>
+    <sub>If a parameter is not applicable, enter 0.</sub>
 
     <Input {...inputProps('netIncome')}>$ Net Income</Input>
 
@@ -327,18 +333,38 @@ function ResultsWithContact(props: {
   };
 
   return <div>
-    { form.prediction === undefined ?
+    {form.prediction === undefined ?
       <div className={styles.loading}>
         Loading
       </div>
-    :
+      :
       <div>
         <h1>Estimate:</h1>
         <PriceRange price={Math.ceil(form.prediction)} />
       </div>}
 
-    <hr/>
+    <hr />
 
     <ContactForm back={props.back} onSubmit={onSubmit} />
   </div>;
+}
+
+function Thanks(props: {
+  home: ButtonAction
+}) {
+  const reset = () => {
+    window.location.reload();
+  };
+  
+  return (
+    <div>
+      <h1>Thank you for using MF Value!</h1>
+      <p>An agent will be in contact with you very soon to discuss your property.</p>
+
+      <div className={styles.controls}>
+        <button onClick={reset}>Estimate Another Property</button>
+        <button onClick={props.home}>Back to Home</button>
+      </div>
+    </div>
+  )
 }
