@@ -339,7 +339,8 @@ function ResultsWithContact(props: {
       </div>
       :
       <div>
-        <h1>Estimate:</h1>
+        <h1>Your Multifamily Estimate</h1>
+        <sub>Here is an AI predicted multifamily estimate based off your property information.</sub>
         <PriceRange price={Math.ceil(form.prediction)} />
       </div>}
 
