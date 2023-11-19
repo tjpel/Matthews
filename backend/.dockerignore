@@ -1,0 +1,2 @@
+app/ai/*.pkl
+!app/ai/v2_model/v2_modelRandom_Forest_Pipeline.pkl

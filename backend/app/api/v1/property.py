@@ -37,7 +37,9 @@ def predict_property_value(
 
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
+    print("Making prediction")
     # Store data in database
     prediction = ai.model.predict(user_inputs_df)[0]
+    print("Prediction complete")
 
     return {"prediction": prediction}
