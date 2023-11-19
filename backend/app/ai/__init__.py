@@ -1,22 +1,14 @@
 from pathlib import Path
 import pickle
-import os
-from typing import Dict, Any
 from sklearn.base import BaseEstimator
 
 current_dir = Path(__file__).parent.resolve()
 
-def load_all_models(directory: Path) -> Dict[str, BaseEstimator]:
-    models = {}
-    for dirpath, dirnames, filenames in os.walk(directory):
-        for filename in filenames:
-            if filename.endswith(".pkl"):
-                model_name = filename.split(".")[0]
-                path = Path(dirpath).joinpath(filename)
-                with open(path, "rb") as file:
-                    model = pickle.load(file)
-                models[model_name] = model
-    return models
+
+def load_model(path: Path) -> BaseEstimator:
+    with open(path, "rb") as file:
+        return pickle.load(file)
+
 
 # Load all models in the current directory and its subdirectories
-all_models = load_all_models(current_dir)
+model = load_model(current_dir.joinpath("./v2_model/v2_modelRandom_Forest_Pipeline.pkl"))

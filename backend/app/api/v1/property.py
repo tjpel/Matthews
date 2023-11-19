@@ -38,7 +38,6 @@ def predict_property_value(
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
     # Store data in database
-    model = ai.all_models.get("v2_modelRandom_Forest_Pipeline")
-    prediction = model.predict(user_inputs_df)[0]
+    prediction = ai.model.predict(user_inputs_df)[0]
 
     return {"prediction": prediction}
