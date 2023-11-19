@@ -8,4 +8,6 @@ routes = APIRouter(prefix="/data_collection")
 
 @routes.post("/record")
 def record(data: RecordedData):
+    print("Beginning record request")
+
     sheets.record(data)
