@@ -10,7 +10,5 @@ def load_model(path: Path) -> BaseEstimator:
         return pickle.load(file)
 
 
-print("Loading model")
 # Load all models in the current directory and its subdirectories
 model = load_model(current_dir.joinpath("./v2_model/v2_modelRandom_Forest_Pipeline.pkl"))
-print("Model loaded")

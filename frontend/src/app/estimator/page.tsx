@@ -25,6 +25,7 @@ import { ButtonAction } from './types';
 import { ContactForm } from './contact';
 import { PriceRange } from '@/components/price-range';
 import * as React from 'react';
+import { classes } from '@/util';
 
 // Prevents spam to Radar API
 const REQUEST_DELAY_MS = 500;
@@ -308,7 +309,8 @@ function ResultsWithContact(props: {
   back: ButtonAction
 }) {
   const { form, setForm } = useContext(FormStateContext);
-
+  const [pending, setPending] = useState(false);
+  
   useEffect(() => {
     bridge.predict(form.data.property as PropertyData).then(res => {
       setForm(form => {
@@ -318,6 +320,9 @@ function ResultsWithContact(props: {
   }, [form.data.property]);
 
   const onSubmit = async (data: ContactData) => {
+    if (pending) return;
+    setPending(true);
+    
     await bridge.record({
       name: data.name,
       email: data.email,
@@ -330,6 +335,7 @@ function ResultsWithContact(props: {
     setForm(form => {
       form.step += 1;
     });
+    setPending(false);
   };
 
   return <div>
@@ -347,6 +353,11 @@ function ResultsWithContact(props: {
     <hr />
 
     <ContactForm back={props.back} onSubmit={onSubmit} />
+
+    <div className={classes({
+      [styles.loader]: true,
+      [styles.shown]: pending
+    })} />
   </div>;
 }
 

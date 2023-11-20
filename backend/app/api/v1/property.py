@@ -12,9 +12,6 @@ routes = APIRouter(prefix="/property")
 def predict_property_value(
     user_inputs: UserInputs
 ):
-    # Get user inputs from request body
-    print(user_inputs)
-
     # Convert user_inputs to a Pandas DataFrame
     user_inputs_dict = user_inputs.model_dump()
 
@@ -37,9 +34,7 @@ def predict_property_value(
 
     user_inputs_df = pd.DataFrame([user_inputs_dict])
 
-    print("Making prediction")
     # Store data in database
     prediction = ai.model.predict(user_inputs_df)[0]
-    print("Prediction complete")
 
     return {"prediction": prediction}

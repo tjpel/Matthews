@@ -1,71 +1,104 @@
 .estimator {
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  ;
 
-    @media (max-width: 1000px) {
-        grid-template-columns: 1fr;
-        grid-template-rows: 2fr 1fr
-    }
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr
+  }
 
-    svg {
-        width: 1.25rem;
-    }
+  svg {
+    width: 1.25rem;
+  }
 }
 
 .formScroll {
-    --overflow: scroll;
+  --overflow: scroll;
 
-    display: grid;
-    width: 100%;
-    height: 100%;
+  display: grid;
+  width: 100%;
+  height: 100%;
 
-    padding: 1em 0;
-    overflow: var(--overflow);
+  padding: 1em 0;
+  overflow: var(--overflow);
 
-    @media (max-width: 1000px) {
-        box-shadow: var(--button-shadow);
-    }
+  @media (max-width: 1000px) {
+    box-shadow: var(--button-shadow);
+  }
 }
 
 .formWrapper {
-    max-width: 32em;
-    margin: 0 2em;
-    justify-self: center;
-    align-self: center;
+  max-width: 32em;
+  margin: 0 2em;
+  justify-self: center;
+  align-self: center;
 }
 
 .suggestions {
-    position: absolute;
+  position: absolute;
 
-    &.hidden {
-        display: none;
-    }
+  &.hidden {
+    display: none;
+  }
 }
 
 .controls {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: flex-start;
-    gap: 1em;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  gap: 1em;
 }
 
 .mapWrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: -1;
 }
 
 .map {
-    grid-area: map;
-    background-color: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  grid-area: map;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading {
-    text-align: center;
-    font-style: italic;;
+  text-align: center;
+  font-style: italic;
+  ;
+}
+
+.loader {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 0.5rem solid var(--input);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  animation: 1s linear infinite spin;
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &.shown {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
